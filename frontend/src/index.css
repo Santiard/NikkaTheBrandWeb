@@ -1,3 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&display=swap');
+
+@font-face {
+  font-family: 'Mont';
+  src: url('./fonds/mont/Mont-ExtraLightDEMO.otf') format('opentype');
+  font-weight: 200;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Mont';
+  src: url('./fonds/mont/Mont-HeavyDEMO.otf') format('opentype');
+  font-weight: 900;
+  font-style: normal;
+}
+
 :root {
   --text: #6b6375;
   --text-h: #08060d;
@@ -14,6 +29,8 @@
   --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
   --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
   --mono: ui-monospace, Consolas, monospace;
+  --font-heading: 'Mont', sans-serif;
+  --font-serif: 'Cormorant Garamond', serif;
 
   font: 18px/145% var(--sans);
   letter-spacing: 0.18px;
@@ -51,6 +68,11 @@
 }
 
 body {
+  margin: 0;
+  font-family: var(--font-serif);
+  color: var(--color-text-primary);
+  background: var(--color-bg);
+}
   margin: 0;
 }
 
