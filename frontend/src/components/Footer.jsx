@@ -1,18 +1,27 @@
 import React from 'react';
 import './Footer.css';
 
-export default function Footer() {
+export default function Footer({ onNavigate }) {
+  const handleLinkClick = (e, page, category) => {
+    e.preventDefault();
+    if (onNavigate) {
+      onNavigate(page, category);
+    }
+  };
+
   return (
     <footer className="footer">
       <div className="footer-links">
-        <a href="#" className="footer-link">Envíos y Devoluciones</a>
-        <a href="#" className="footer-link">Contáctanos</a>
-        <a href="#" className="footer-link">Gift Cards</a>
-        <a href="#" className="footer-link">Nuestra Historia</a>
-        <a href="#" className="footer-link">Instagram</a>
-        <a href="#" className="footer-link">TikTok</a>
+        <a href="#" className="footer-link" onClick={(e) => handleLinkClick(e, 'catalog', 'ver todo')}>catálogo</a>
+        <a href="#" className="footer-link">envíos y devoluciones</a>
+        <a href="#" className="footer-link">contáctanos</a>
+        <a href="#" className="footer-link" onClick={(e) => handleLinkClick(e, 'catalog', 'ver todo')}>gift cards</a>
+        <a href="#" className="footer-link">nuestra historia</a>
+        <a href="#" className="footer-link" onClick={(e) => { e.preventDefault(); window.open('https://instagram.com', '_blank'); }}>instagram</a>
+        <a href="#" className="footer-link" onClick={(e) => { e.preventDefault(); window.open('https://tiktok.com', '_blank'); }}>tiktok</a>
+        <span className="footer-brand">nikkathebrand 2026</span>
       </div>
-      <div className="footer-brand">Nikka the Brand © 2026</div>
     </footer>
   );
 }
+

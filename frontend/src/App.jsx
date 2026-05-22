@@ -1,122 +1,253 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
+import { useState, useRef, useEffect } from 'react'
 import './App.css'
 
+// Layout & Components
+import Header from './components/Header'
+import Footer from './components/Footer'
+import Sidebar from './components/Sidebar'
+import Catalog from './components/Catalog'
+import ProductDetail from './components/ProductDetail'
+
+// Mockup Images
+import newInImg from './images/new in.JPG'
+import sundayMorningImg from './images/pj set/nikka.png'
+import theFarmhouseImg from './images/the farmhouse.jpg'
+import duvetImg from './images/puffer bag/duvet.JPG'
+import toteBagsImg from './images/tote bag.png'
+import sizeGuideImg from './images/size.JPG'
+import lambsImg from './images/little lambs.png'
+
+// Data for the 6 cards matching the mockup
+const cardsData = [
+  { id: 'new-in', className: 'card-new-in', img: newInImg, title: 'new in' },
+  { id: 'sunday-morning', className: 'card-sunday-morning', img: sundayMorningImg, title: 'sunday morning' },
+  { id: 'the-farmhouse', className: 'card-the-farmhouse', img: theFarmhouseImg, title: 'the farmhouse' },
+  { id: 'duvet', className: 'card-duvet', img: duvetImg, title: 'duvet nikka x nc' },
+  { id: 'tote-bags', className: 'card-tote-bags', img: toteBagsImg, title: 'tote bags and mini bags' },
+  { id: 'size-guide', className: 'card-size-guide', img: sizeGuideImg, title: 'size guide' },
+];
+
 function App() {
-  const [count, setCount] = useState(0)
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  
+  // Navigation states: 'home', 'catalog', 'detail'
+  const [activePage, setActivePage] = useState('home');
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [selectedProductId, setSelectedProductId] = useState('bonnie-set');
+
+  // Drag-to-scroll & Infinite Scroll references
+  const scrollContainerRef = useRef(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [scrollLeftState, setScrollLeftState] = useState(0);
+
+  // Set initial scroll position to the middle set of cards for infinite scroll feel
+  useEffect(() => {
+    if (activePage === 'home') {
+      const container = scrollContainerRef.current;
+      if (container) {
+        const setWidth = container.scrollWidth / 3;
+        container.scrollLeft = setWidth;
+      }
+    }
+  }, [activePage]);
+
+  // Seamless Infinite Looping Scroll logic
+  const handleScroll = () => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
+    
+    const setWidth = container.scrollWidth / 3;
+    
+    // Seamlessly warp when scrolling near boundaries
+    if (container.scrollLeft >= setWidth * 2) {
+      container.scrollLeft -= setWidth;
+    } else if (container.scrollLeft <= 5) {
+      container.scrollLeft += setWidth;
+    }
+  };
+
+  // Drag-to-Scroll Event Handlers
+  const handleMouseDown = (e) => {
+    setIsDragging(true);
+    if (scrollContainerRef.current) {
+      setStartX(e.pageX - scrollContainerRef.current.offsetLeft);
+      setScrollLeftState(scrollContainerRef.current.scrollLeft);
+    }
+  };
+
+  const handleMouseLeave = () => {
+    setIsDragging(false);
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  };
+
+  const handleMouseMove = (e) => {
+    if (!isDragging || !scrollContainerRef.current) return;
+    e.preventDefault();
+    const x = e.pageX - scrollContainerRef.current.offsetLeft;
+    const walk = (x - startX) * 1.5; // Drag speed multiplier
+    scrollContainerRef.current.scrollLeft = scrollLeftState - walk;
+  };
+
+  // Navigation Controller
+  const handleNavigate = (page, categoryOrProductId = null) => {
+    setActivePage(page);
+    if (page === 'catalog') {
+      setSelectedCategory(categoryOrProductId);
+    } else if (page === 'detail') {
+      setSelectedProductId(categoryOrProductId);
+    }
+    // Scroll automatically to top on page transition
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  };
+
+  const handleLogoClick = () => {
+    handleNavigate('home');
+  };
+
+  // Card click handler inside carousel
+  const handleCardClick = (e, cardId) => {
+    e.preventDefault();
+    if (isDragging) return; // Prevent navigation if user was just dragging
+
+    if (cardId === 'new-in') {
+      handleNavigate('catalog', 'new');
+    } else if (cardId === 'sunday-morning') {
+      handleNavigate('detail', 'sunday-morning-pj');
+    } else if (cardId === 'duvet') {
+      handleNavigate('detail', 'duvet-bag');
+    } else if (cardId === 'tote-bags') {
+      handleNavigate('catalog', 'bags');
+    } else if (cardId === 'the-farmhouse') {
+      handleNavigate('catalog', 'ver todo');
+    } else if (cardId === 'size-guide') {
+      handleNavigate('catalog', 'ver todo'); // shortcut fallback
+    }
+  };
 
   return (
     <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+      {/* Navigation Header */}
+      <Header 
+        onMenuClick={() => setIsSidebarOpen(true)} 
+        onLogoClick={handleLogoClick} 
+      />
 
-      <div className="ticks"></div>
+      {/* Slide-out Sidebar */}
+      <Sidebar 
+        isOpen={isSidebarOpen} 
+        onClose={() => setIsSidebarOpen(false)} 
+        onNavigate={handleNavigate} 
+      />
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
+      {/* Dynamic Main Body Content based on activePage */}
+      {activePage === 'home' && (
+        <main className="home-container">
+          {/* Horizontal Drag-to-Scroll Carousel */}
+          <div 
+            className="home-carousel-container"
+            ref={scrollContainerRef}
+            onScroll={handleScroll}
+            onMouseDown={handleMouseDown}
+            onMouseLeave={handleMouseLeave}
+            onMouseUp={handleMouseUp}
+            onMouseMove={handleMouseMove}
+          >
+            <div className="home-carousel-track">
+              {/* Set 1 (Left Boundary Padding) */}
+              {cardsData.map((card, idx) => (
+                <a 
+                  key={`set1-${card.id}-${idx}`} 
+                  href="#" 
+                  className={`grid-card ${card.className}`}
+                  onClick={(e) => handleCardClick(e, card.id)}
+                  onDragStart={(e) => e.preventDefault()}
                 >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+                  <div className="image-wrapper">
+                    <img 
+                      src={card.img} 
+                      alt={card.title} 
+                      draggable="false" 
+                      onDragStart={(e) => e.preventDefault()} 
+                    />
+                  </div>
+                  <span className="card-title">{card.title}</span>
+                </a>
+              ))}
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
+              {/* Set 2 (Active Viewport Center) */}
+              {cardsData.map((card, idx) => (
+                <a 
+                  key={`set2-${card.id}-${idx}`} 
+                  href="#" 
+                  className={`grid-card ${card.className}`}
+                  onClick={(e) => handleCardClick(e, card.id)}
+                  onDragStart={(e) => e.preventDefault()}
+                >
+                  <div className="image-wrapper">
+                    <img 
+                      src={card.img} 
+                      alt={card.title} 
+                      draggable="false" 
+                      onDragStart={(e) => e.preventDefault()} 
+                    />
+                  </div>
+                  <span className="card-title">{card.title}</span>
+                </a>
+              ))}
+
+              {/* Set 3 (Right Boundary Padding) */}
+              {cardsData.map((card, idx) => (
+                <a 
+                  key={`set3-${card.id}-${idx}`} 
+                  href="#" 
+                  className={`grid-card ${card.className}`}
+                  onClick={(e) => handleCardClick(e, card.id)}
+                  onDragStart={(e) => e.preventDefault()}
+                >
+                  <div className="image-wrapper">
+                    <img 
+                      src={card.img} 
+                      alt={card.title} 
+                      draggable="false" 
+                      onDragStart={(e) => e.preventDefault()} 
+                    />
+                  </div>
+                  <span className="card-title">{card.title}</span>
+                </a>
+              ))}
+            </div>
+          </div>
+
+          {/* 3 Little Lambs Illustration at the bottom */}
+          <div className="lambs-container">
+            <img src={lambsImg} alt="little lambs" className="lambs-image" draggable="false" />
+          </div>
+        </main>
+      )}
+
+      {activePage === 'catalog' && (
+        <Catalog 
+          categoryFilter={selectedCategory} 
+          onProductClick={(productId) => handleNavigate('detail', productId)} 
+        />
+      )}
+
+      {activePage === 'detail' && (
+        <ProductDetail 
+          productId={selectedProductId} 
+          onBack={() => handleNavigate('catalog', selectedCategory || 'ver todo')} 
+        />
+      )}
+
+      {/* Footer Links (Fixed always at viewport bottom) */}
+      <Footer onNavigate={handleNavigate} />
     </>
   )
 }
 
-export default App
+export default App;
+

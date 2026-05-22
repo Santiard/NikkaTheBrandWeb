@@ -1,0 +1,53 @@
+/* Footer component – vintage premium style matching mockup */
+
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: #ffffff;
+  padding: 1.25rem 2.5rem;
+  border-top: 1px dotted #385B93;
+  border-bottom: 1px dotted #385B93;
+  z-index: 1000;
+  box-sizing: border-box;
+}
+
+.footer-links {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+.footer-link {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.15rem;
+  color: #385B93;
+  text-decoration: none;
+  text-transform: lowercase;
+  transition: opacity 0.2s;
+}
+
+.footer-link:hover {
+  opacity: 0.6;
+}
+
+.footer-brand {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.15rem;
+  color: #385B93;
+  text-transform: lowercase;
+  font-weight: normal;
+}
+
+@media (max-width: 768px) {
+  .footer-links {
+    justify-content: center;
+    flex-direction: column;
+    gap: 0.75rem;
+    text-align: center;
+  }
+}

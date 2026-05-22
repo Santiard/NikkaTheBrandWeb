@@ -1,0 +1,65 @@
+/* Sidebar stylesheet – matches the premium vintage layout */
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100svh;
+  width: 280px;
+  background-color: #ffffff;
+  z-index: 2000;
+  border-right: 1px dotted #385B93;
+  transform: translateX(-100%);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem 2rem;
+  box-sizing: border-box;
+  box-shadow: 10px 0 30px rgba(56, 91, 147, 0.05);
+}
+
+.sidebar.open {
+  transform: translateX(0);
+}
+
+.close-button {
+  align-self: flex-end;
+  background: transparent;
+  border: none;
+  font-size: 2rem;
+  font-weight: 300;
+  cursor: pointer;
+  color: #385B93;
+  font-family: 'Cormorant Garamond', serif;
+  line-height: 1;
+  padding: 0;
+  margin-bottom: 2rem;
+  transition: opacity 0.2s;
+}
+
+.close-button:hover {
+  opacity: 0.6;
+}
+
+.sidebar-nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.sidebar-item {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.3rem;
+  color: #385B93;
+  text-transform: lowercase;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  letter-spacing: 0.03em;
+}
+
+.sidebar-item:hover {
+  opacity: 0.6;
+}

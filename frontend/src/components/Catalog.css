@@ -1,0 +1,244 @@
+.catalog-section {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 80px 24px 180px 24px; /* Espacio extra abajo para que no choque con el footer fijo */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: var(--color-bg);
+}
+
+/* Cabecera / Título de la Categoría */
+.catalog-header-title {
+  text-align: center;
+  margin-bottom: 40px;
+  width: 100%;
+}
+
+.catalog-header-title h2 {
+  font-family: var(--font-serif);
+  font-size: 2.2rem;
+  font-weight: 300;
+  text-transform: lowercase;
+  letter-spacing: 0.15em;
+  margin: 0;
+  color: var(--color-primary);
+  position: relative;
+  display: inline-block;
+  padding-bottom: 8px;
+}
+
+.catalog-header-title h2::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 30%;
+  width: 40%;
+  border-bottom: 1px dotted var(--color-primary);
+}
+
+/* Grid de Productos - 4 Columnas en Desktop */
+.catalog-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 32px 24px;
+  width: 100%;
+  margin-bottom: 60px;
+}
+
+/* Tarjeta del Producto */
+.catalog-card {
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  background-color: var(--color-bg);
+  position: relative;
+  transition: transform 0.3s ease;
+}
+
+.catalog-card:hover {
+  transform: translateY(-4px);
+}
+
+/* Contenedor de Imagen */
+.catalog-image-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  background-color: #fafafa;
+  border: 1px solid rgba(56, 91, 147, 0.1);
+}
+
+.catalog-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+  pointer-events: none;
+  -webkit-user-drag: none;
+}
+
+.catalog-card:hover .catalog-image {
+  transform: scale(1.05);
+}
+
+/* Badge "NEW" */
+.badge-new {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  font-family: var(--font-heading), sans-serif;
+  font-size: 0.7rem;
+  font-weight: 900;
+  letter-spacing: 0.05em;
+  color: var(--color-primary);
+  background-color: rgba(255, 255, 255, 0.85);
+  padding: 4px 8px;
+  border-radius: 2px;
+  border: 1px solid var(--color-primary);
+}
+
+/* Detalles del Producto */
+.catalog-info {
+  margin-top: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.product-title {
+  font-family: var(--font-heading), sans-serif;
+  font-size: 0.75rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--color-primary);
+  margin: 0 0 6px 0;
+  transition: color 0.2s ease;
+}
+
+.catalog-card:hover .product-title {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.product-price {
+  font-family: var(--font-serif);
+  font-size: 0.95rem;
+  color: var(--color-primary);
+  margin: 0;
+  font-style: italic;
+}
+
+/* Paginación y Botón SEE MORE */
+.catalog-pagination-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 80px;
+  width: 100%;
+}
+
+.pagination-text {
+  font-family: var(--font-serif);
+  font-size: 0.9rem;
+  color: var(--color-primary);
+  font-style: italic;
+  letter-spacing: 0.05em;
+  margin: 0 0 16px 0;
+}
+
+/* Botón SEE MORE (Estilo Pink/Beige Pastel Rectangular del Mockup) */
+.see-more-button {
+  background-color: #ecdcd5; /* Color rosa pastel / beige suave del mockup */
+  color: var(--color-primary);
+  font-family: var(--font-heading), sans-serif;
+  font-size: 0.75rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  border: 1px solid var(--color-primary);
+  padding: 14px 48px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: auto;
+  min-width: 220px;
+  outline: none;
+}
+
+.see-more-button:hover {
+  background-color: var(--color-primary);
+  color: var(--color-bg);
+  letter-spacing: 0.24em;
+}
+
+/* Fila Editorial Lifestyle */
+.editorial-divider {
+  width: 100%;
+  border-top: 1px dotted var(--color-primary);
+  margin-bottom: 40px;
+}
+
+.editorial-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  width: 100%;
+}
+
+.editorial-item {
+  width: 100%;
+  aspect-ratio: 1 / 1.2;
+  overflow: hidden;
+  border: 1px solid rgba(56, 91, 147, 0.1);
+  background-color: #fafafa;
+}
+
+.editorial-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.8s ease;
+  pointer-events: none;
+  -webkit-user-drag: none;
+}
+
+.editorial-item:hover .editorial-image {
+  transform: scale(1.03);
+}
+
+/* Responsividad */
+@media (max-width: 1024px) {
+  .catalog-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  .editorial-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .catalog-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .catalog-section {
+    padding: 60px 16px 160px 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .catalog-grid {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+  .editorial-row {
+    grid-template-columns: 1fr;
+  }
+  .see-more-button {
+    width: 100%;
+  }
+}

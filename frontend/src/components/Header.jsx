@@ -1,19 +1,26 @@
 import React from 'react';
 import './Header.css';
-import logo from '../images/nikka.png';
+import logo from '../images/nikka logo.png';
 
-export default function Header({ onMenuClick }) {
+export default function Header({ onMenuClick, onLogoClick }) {
   return (
-    <header className="header">
-      <button className="menu-button" onClick={onMenuClick}>Menu</button>
-      <div className="logo-wrapper">
-        <img src={logo} alt="Nikka" className="logo" />
-        <span className="tagline">Designed for the love of vintage</span>
+    <div className="header-wrapper">
+      <div className="top-strip">
+        Designed for the love of vintage ..: 𓃶 :..
       </div>
-      <div className="header-actions">
-        <input type="text" placeholder="Search" className="search-input" />
-        <button className="cart-button">Cart</button>
-      </div>
-    </header>
+      <header className="header">
+        <div className="menu-btn-container">
+          <button className="menu-button" onClick={onMenuClick}>menu</button>
+        </div>
+        <div className="logo-wrapper" onClick={onLogoClick} style={{ cursor: 'pointer' }}>
+          <img src={logo} alt="nikka" className="logo" />
+        </div>
+        <div className="header-actions">
+          <button className="search-button">search</button>
+          <button className="cart-button">cart (0)</button>
+        </div>
+      </header>
+    </div>
   );
 }
+

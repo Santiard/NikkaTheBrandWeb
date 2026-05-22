@@ -1,80 +1,87 @@
-/* Header component – retro premium style */
-:root {
-  /* Font families */
-  --font-heading: 'Mont', sans-serif;
-  --font-serif: 'Cormorant Garamond', serif;
+/* Header component – retro premium style matching mockup */
+
+.header-wrapper {
+  width: 100%;
+  background-color: #ffffff;
+}
+
+.top-strip {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.1rem;
+  color: #385B93;
+  padding: 0.75rem 0;
+  text-align: center;
+  border-bottom: 1px dotted #385B93;
+  letter-spacing: 0.05em;
+  background-color: #ffffff;
 }
 
 .header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1rem 2rem;
-  background: var(--color-primary);
-  color: var(--color-white);
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-  box-shadow: var(--shadow-md);
+  padding: 1rem 2.5rem;
+  background: #ffffff;
+  border-bottom: 1px dotted #385B93;
+}
+
+.menu-btn-container {
+  flex: 1;
+  display: flex;
+  justify-content: flex-start;
 }
 
 .menu-button {
   background: transparent;
   border: none;
-  color: var(--color-white);
-  font-size: 1rem;
+  color: #385B93;
+  font-size: 1.15rem;
   cursor: pointer;
-  font-family: var(--font-heading);
+  font-family: 'Cormorant Garamond', serif;
+  text-transform: lowercase;
+  padding: 0;
+  transition: opacity 0.2s;
+}
+
+.menu-button:hover {
+  opacity: 0.6;
 }
 
 .logo-wrapper {
+  flex: 0 0 auto;
   display: flex;
-  flex-direction: column;
+  justify-content: center;
   align-items: center;
 }
 
 .logo {
   height: 48px;
   width: auto;
-  margin-bottom: 0.25rem;
-}
-
-.tagline {
-  font-family: var(--font-serif);
-  font-size: 0.875rem;
-  opacity: 0.9;
+  display: block;
 }
 
 .header-actions {
+  flex: 1;
   display: flex;
   align-items: center;
-  gap: 1rem;
+  justify-content: flex-end;
+  gap: 1.5rem;
 }
 
-.search-input {
-  padding: 0.5rem 1rem;
-  border: 2px solid var(--color-white);
-  border-radius: 4px;
-  background: rgba(255,255,255,0.1);
-  color: var(--color-white);
-  font-family: var(--font-serif);
-}
-
-.search-input::placeholder {
-  color: rgba(255,255,255,0.7);
-}
-
+.search-button,
 .cart-button {
-  background: var(--color-accent);
+  background: transparent;
   border: none;
-  color: var(--color-white);
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
-  font-family: var(--font-heading);
+  color: #385B93;
+  font-size: 1.15rem;
   cursor: pointer;
-  transition: background var(--shadow-sm);
+  font-family: 'Cormorant Garamond', serif;
+  text-transform: lowercase;
+  padding: 0;
+  transition: opacity 0.2s;
 }
 
+.search-button:hover,
 .cart-button:hover {
-  background: var(--color-primary-light);
+  opacity: 0.6;
 }
