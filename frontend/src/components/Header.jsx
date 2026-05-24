@@ -2,7 +2,7 @@ import React from 'react';
 import './Header.css';
 import logo from '../images/nikka logo.png';
 
-export default function Header({ onMenuClick, onLogoClick }) {
+export default function Header({ onMenuClick, onLogoClick, onCartClick, cartCount }) {
   return (
     <div className="header-wrapper">
       <div className="top-strip">
@@ -17,7 +17,7 @@ export default function Header({ onMenuClick, onLogoClick }) {
         </div>
         <div className="header-actions">
           <button className="search-button">search</button>
-          <button className="cart-button">cart (0)</button>
+          <button className="cart-button" onClick={onCartClick}>cart ({cartCount})</button>
         </div>
       </header>
     </div>

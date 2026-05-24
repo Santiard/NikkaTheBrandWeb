@@ -7,6 +7,8 @@ import Footer from './components/Footer'
 import Sidebar from './components/Sidebar'
 import Catalog from './components/Catalog'
 import ProductDetail from './components/ProductDetail'
+import Cart from './components/Cart'
+import AdminDashboard from './components/AdminDashboard'
 
 // Mockup Images
 import newInImg from './images/new in.JPG'
@@ -30,16 +32,36 @@ const cardsData = [
 function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   
-  // Navigation states: 'home', 'catalog', 'detail'
+  // Navigation states: 'home', 'catalog', 'detail', 'admin'
   const [activePage, setActivePage] = useState('home');
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedProductId, setSelectedProductId] = useState('bonnie-set');
+
+  // Estado del Carrito Global
+  const [cartItems, setCartItems] = useState([]);
+  const [isCartOpen, setIsCartOpen] = useState(false);
 
   // Drag-to-scroll & Infinite Scroll references
   const scrollContainerRef = useRef(null);
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
   const [scrollLeftState, setScrollLeftState] = useState(0);
+
+  // Enrutamiento de URL nativo para /nikiadministradora
+  useEffect(() => {
+    const handleUrlChange = () => {
+      const path = window.location.pathname;
+      const hash = window.location.hash;
+      if (path === '/nikiadministradora' || hash === '#/nikiadministradora' || hash === '#nikiadministradora') {
+        setActivePage('admin');
+      }
+    };
+
+    window.addEventListener('popstate', handleUrlChange);
+    handleUrlChange(); // Verificar al montar
+
+    return () => window.removeEventListener('popstate', handleUrlChange);
+  }, []);
 
   // Set initial scroll position to the middle set of cards for infinite scroll feel
   useEffect(() => {
@@ -100,7 +122,15 @@ function App() {
     } else if (page === 'detail') {
       setSelectedProductId(categoryOrProductId);
     }
-    // Scroll automatically to top on page transition
+
+    // Manejar URL para panel administrativo /nikiadministradora
+    if (page === 'admin') {
+      window.history.pushState(null, '', '/nikiadministradora');
+    } else if (window.location.pathname === '/nikiadministradora') {
+      window.history.pushState(null, '', '/');
+    }
+
+    // Scroll automáticamente arriba al cambiar de página
     window.scrollTo({ top: 0, behavior: 'instant' });
   };
 
@@ -128,12 +158,57 @@ function App() {
     }
   };
 
+  // ===================================================================
+  // CONTROLADORES DE CARRITO
+  // ===================================================================
+  const handleAddToCart = (product, size) => {
+    setCartItems(prev => {
+      const existingIdx = prev.findIndex(item => item.product.id === product.id && item.size === size);
+      if (existingIdx > -1) {
+        const newCart = [...prev];
+        newCart[existingIdx].quantity += 1;
+        return newCart;
+      } else {
+        return [...prev, { product, size, quantity: 1 }];
+      }
+    });
+    setIsCartOpen(true); // Abre la bolsa de compra automáticamente para feedback
+  };
+
+  const handleUpdateCartQuantity = (productId, size, newQty) => {
+    if (newQty < 1) return;
+    setCartItems(prev => prev.map(item => 
+      (item.product.id === productId && item.size === size) ? { ...item, quantity: newQty } : item
+    ));
+  };
+
+  const handleRemoveCartItem = (productId, size) => {
+    setCartItems(prev => prev.filter(item => !(item.product.id === productId && item.size === size)));
+  };
+
+  const handleClearCart = () => {
+    setCartItems([]);
+  };
+
+  const getCartCount = () => {
+    return cartItems.reduce((acc, item) => acc + item.quantity, 0);
+  };
+
+  // RENDERIZADO EXCLUSIVO PARA PANEL ADMINISTRATIVO
+  if (activePage === 'admin') {
+    return (
+      <AdminDashboard onBackToStore={() => handleNavigate('home')} />
+    );
+  }
+
   return (
     <>
       {/* Navigation Header */}
       <Header 
         onMenuClick={() => setIsSidebarOpen(true)} 
         onLogoClick={handleLogoClick} 
+        onCartClick={() => setIsCartOpen(true)}
+        cartCount={getCartCount()}
       />
 
       {/* Slide-out Sidebar */}
@@ -141,6 +216,16 @@ function App() {
         isOpen={isSidebarOpen} 
         onClose={() => setIsSidebarOpen(false)} 
         onNavigate={handleNavigate} 
+      />
+
+      {/* Bolsa de compras deslizante */}
+      <Cart 
+        isOpen={isCartOpen} 
+        onClose={() => setIsCartOpen(false)} 
+        cartItems={cartItems}
+        onUpdateQuantity={handleUpdateCartQuantity}
+        onRemoveItem={handleRemoveCartItem}
+        onClearCart={handleClearCart}
       />
 
       {/* Dynamic Main Body Content based on activePage */}
@@ -240,14 +325,14 @@ function App() {
         <ProductDetail 
           productId={selectedProductId} 
           onBack={() => handleNavigate('catalog', selectedCategory || 'ver todo')} 
+          onAddToCart={handleAddToCart}
         />
       )}
 
-      {/* Footer Links (Fixed always at viewport bottom) */}
+      {/* Footer Links */}
       <Footer onNavigate={handleNavigate} />
     </>
   )
 }
 
 export default App;
-

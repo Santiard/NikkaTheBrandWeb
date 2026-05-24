@@ -19,6 +19,11 @@ public class AdminProductController {
     @Autowired
     private ProductRepository productRepository;
 
+    @GetMapping
+    public ResponseEntity<java.util.List<Product>> getAllProducts() {
+        return ResponseEntity.ok(productRepository.findAll());
+    }
+
     @PostMapping
     public ResponseEntity<Product> createProduct(@RequestBody Product product) {
         // Enlazar imágenes y tallas con la entidad Product para mantener la integridad referencial en JPA
@@ -49,6 +54,9 @@ public class AdminProductController {
         existingProduct.setPrice(productDetails.getPrice());
         existingProduct.setDiscountPercentage(productDetails.getDiscountPercentage());
         existingProduct.setCategory(productDetails.getCategory());
+        if (productDetails.getActive() != null) {
+            existingProduct.setActive(productDetails.getActive());
+        }
 
         // Actualizar colección si se proporciona
         if (productDetails.getCollection() != null) {

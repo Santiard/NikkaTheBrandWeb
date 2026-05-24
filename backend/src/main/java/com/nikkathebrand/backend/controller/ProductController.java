@@ -19,14 +19,15 @@ public class ProductController {
     @GetMapping
     public ResponseEntity<List<Product>> getAllProducts(@RequestParam(required = false) String category) {
         if (category != null && !category.trim().isEmpty()) {
-            return ResponseEntity.ok(productRepository.findByCategory(category.trim().toLowerCase()));
+            return ResponseEntity.ok(productRepository.findByCategoryAndActiveTrue(category.trim().toLowerCase()));
         }
-        return ResponseEntity.ok(productRepository.findAll());
+        return ResponseEntity.ok(productRepository.findByActiveTrue());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Product> getProductById(@PathVariable Long id) {
         return productRepository.findById(id)
+                .filter(Product::getActive)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }

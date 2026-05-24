@@ -277,3 +277,34 @@
     width: 100%;
   }
 }
+
+/* Estilo para Tallas sin Stock (Diagonal vintage y dashed border) */
+.size-btn.out-of-stock {
+  opacity: 0.35;
+  cursor: not-allowed;
+  position: relative;
+  border: 1px dashed var(--color-primary);
+  background-color: rgba(56, 91, 147, 0.02);
+}
+
+.size-btn.out-of-stock::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 15%;
+  width: 70%;
+  height: 1px;
+  background-color: var(--color-primary);
+  transform: rotate(-45deg);
+}
+
+.size-btn.out-of-stock:hover {
+  background-color: rgba(56, 91, 147, 0.02);
+}
+
+/* Botón Añadido al Carrito (Feedback rosa/beige pastel) */
+.add-to-cart-btn.added {
+  background-color: #ecdcd5; /* Beige suave del mockup */
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+}

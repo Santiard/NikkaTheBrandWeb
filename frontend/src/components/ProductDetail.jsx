@@ -1,35 +1,112 @@
 import React, { useState, useEffect } from 'react';
-import { productsData } from '../services/products';
+import { apiService } from '../services/api';
 import lambsImg from '../images/little lambs.png';
 import './ProductDetail.css';
 
-export default function ProductDetail({ productId, onBack }) {
-  const product = productsData.find((p) => p.id === productId) || productsData[0];
+export default function ProductDetail({ productId, onBack, onAddToCart }) {
+  const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  
+  const [activeImage, setActiveImage] = useState('');
+  const [selectedSize, setSelectedSize] = useState('');
+  const [addedFeedback, setAddedFeedback] = useState(false);
 
-  const [activeImage, setActiveImage] = useState(product.mainImage);
-  const [selectedSize, setSelectedSize] = useState('S');
-
-  // Si cambia el producto, reiniciar la imagen activa y la talla seleccionada
   useEffect(() => {
-    if (product) {
-      setActiveImage(product.mainImage);
-      setSelectedSize('S');
-      // Subir arriba en la página
-      window.scrollTo(0, 0);
-    }
-  }, [productId, product]);
+    const loadProduct = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        let idToFetch = productId;
+        
+        // Resolver IDs de mockup estáticos del Home a IDs numéricos de PostgreSQL/H2
+        if (isNaN(Number(productId))) {
+          const allProducts = await apiService.getProducts();
+          const lowerId = String(productId).toLowerCase();
+          
+          if (lowerId.includes('bonnie') || lowerId.includes('sunday')) {
+            idToFetch = allProducts.find(p => p.name.includes('BONNIE'))?.id || allProducts[0]?.id;
+          } else if (lowerId.includes('duvet')) {
+            idToFetch = allProducts.find(p => p.name.includes('DUVET'))?.id || allProducts[0]?.id;
+          } else {
+            idToFetch = allProducts[0]?.id;
+          }
+        }
 
-  if (!product) {
+        if (!idToFetch) {
+          throw new Error('Producto no disponible.');
+        }
+
+        const data = await apiService.getProductById(idToFetch);
+        setProduct(data);
+        
+        // Configurar imagen por defecto
+        const mainImg = data.images && data.images.length > 0 
+          ? data.images.find(img => img.imageType === 'MAIN')?.imageUrl || data.images[0].imageUrl
+          : data.mainImage;
+        setActiveImage(mainImg);
+
+        // Preseleccionar la primera talla disponible que tenga stock
+        const sizesList = ['XS', 'S', 'M', 'L'];
+        const firstAvailable = sizesList.find(size => {
+          const stock = data.sizes?.find(s => s.size === size)?.stock || 0;
+          return stock > 0;
+        }) || 'S';
+        setSelectedSize(firstAvailable);
+
+      } catch (err) {
+        console.error(err);
+        setError('Lo sentimos, este producto no está disponible en este momento.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadProduct();
+  }, [productId]);
+
+  if (loading) {
     return (
       <div className="product-not-found">
-        <p>Producto no encontrado.</p>
+        <p className="vintage-italic">cargando detalles de la pieza...</p>
+      </div>
+    );
+  }
+
+  if (error || !product) {
+    return (
+      <div className="product-not-found">
+        <p>{error || 'Producto no encontrado.'}</p>
         <button onClick={onBack} className="back-link">volver al catálogo</button>
       </div>
     );
   }
 
-  // Agrupar todas las imágenes para la galería (principal + adicionales)
-  const allImages = [product.mainImage, ...(product.gallery || [])];
+  // Agrupar todas las imágenes para la galería
+  const allImages = product.images && product.images.length > 0
+    ? [
+        product.images.find(img => img.imageType === 'MAIN')?.imageUrl || product.images[0].imageUrl,
+        ...product.images.filter(img => img.imageType === 'DETAIL').map(img => img.imageUrl)
+      ]
+    : [product.mainImage, ...(product.gallery || [])];
+
+  const getStockForSize = (sizeName) => {
+    return product.sizes?.find(s => s.size === sizeName)?.stock ?? 5; // 5 por defecto si es mock
+  };
+
+  const hasDiscount = product.discountPercentage > 0;
+  const finalPrice = product.price - (product.price * (product.discountPercentage || 0) / 100);
+
+  const handleAddClick = () => {
+    if (!selectedSize) return;
+    onAddToCart(product, selectedSize);
+    
+    // Animar feedback visual temporal en el botón
+    setAddedFeedback(true);
+    setTimeout(() => {
+      setAddedFeedback(false);
+    }, 2000);
+  };
 
   return (
     <section className="detail-section">
@@ -52,7 +129,7 @@ export default function ProductDetail({ productId, onBack }) {
             />
           </div>
           <div className="thumbnail-row">
-            {allImages.map((imgSrc, idx) => (
+            {allImages.filter(Boolean).map((imgSrc, idx) => (
               <button 
                 key={`thumb-${idx}`} 
                 className={`thumbnail-button ${activeImage === imgSrc ? 'active' : ''}`}
@@ -75,40 +152,71 @@ export default function ProductDetail({ productId, onBack }) {
           <h1 className="detail-product-name">{product.name.toLowerCase()}</h1>
           
           <div className="price-status-row">
-            <span className="detail-price">${product.price.toFixed(2)} {product.currency}</span>
-            <span className="detail-status">{product.status}</span>
+            <span className="detail-price">
+              {hasDiscount ? (
+                <>
+                  <span style={{ textDecoration: 'line-through', opacity: 0.5, marginRight: '10px' }}>
+                    ${product.price.toFixed(2)}
+                  </span>
+                  <span>${finalPrice.toFixed(2)} USD</span>
+                </>
+              ) : (
+                <>${product.price.toFixed(2)} USD</>
+              )}
+            </span>
+            <span className="detail-status">
+              {getStockForSize(selectedSize) > 0 ? 'DISPONIBLE' : 'SIN STOCK'}
+            </span>
           </div>
 
           <div className="divider-dotted"></div>
 
-          {/* Selector de Tallas */}
+          {/* Selector de Tallas Completo (XS, S, M, L) */}
           <div className="size-selector-section">
             <span className="section-label">talla</span>
             <div className="size-buttons">
-              {['S', 'M'].map((size) => (
-                <button
-                  key={size}
-                  className={`size-btn ${selectedSize === size ? 'selected' : ''}`}
-                  onClick={() => setSelectedSize(size)}
-                >
-                  {size}
-                </button>
-              ))}
+              {['XS', 'S', 'M', 'L'].map((size) => {
+                const stock = getStockForSize(size);
+                const isOutOfStock = stock <= 0;
+
+                return (
+                  <button
+                    key={size}
+                    disabled={isOutOfStock}
+                    className={`size-btn ${selectedSize === size ? 'selected' : ''} ${isOutOfStock ? 'out-of-stock' : ''}`}
+                    onClick={() => setSelectedSize(size)}
+                    title={isOutOfStock ? `Talla ${size} sin existencias` : `Talla ${size} disponible`}
+                  >
+                    {size}
+                  </button>
+                );
+              })}
             </div>
           </div>
 
-          {/* Botón de Añadir al Carrito (Estilo Premium) */}
-          <button className="add-to-cart-btn">
-            añadir al carrito
+          {/* Botón de Añadir al Carrito */}
+          <button 
+            className={`add-to-cart-btn ${addedFeedback ? 'added' : ''}`}
+            onClick={handleAddClick}
+            disabled={getStockForSize(selectedSize) <= 0}
+          >
+            {addedFeedback ? '¡añadido a la bolsa!' : 'añadir al carrito'}
           </button>
 
           <div className="divider-dotted"></div>
 
           {/* Descripción Detallada del Producto */}
           <div className="detail-description">
-            {product.description.map((paragraph, idx) => (
-              <p key={`desc-${idx}`}>{paragraph}</p>
-            ))}
+            {/* Si es array (mock) o string largo (JPA) */}
+            {Array.isArray(product.description) ? (
+              product.description.map((paragraph, idx) => (
+                <p key={`desc-${idx}`}>{paragraph}</p>
+              ))
+            ) : (
+              product.description?.split('\n').map((paragraph, idx) => (
+                <p key={`desc-${idx}`}>{paragraph}</p>
+              ))
+            )}
           </div>
 
           {/* Ilustración de Corderos en la esquina inferior */}

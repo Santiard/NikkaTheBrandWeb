@@ -1,0 +1,394 @@
+/* Cart Backdrop & Drawer Container */
+.cart-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(56, 91, 147, 0.2); /* Fondo suave con tinte azul de la marca */
+  backdrop-filter: blur(4px); /* Difuminado de alta fidelidad */
+  z-index: 1100;
+  display: flex;
+  justify-content: flex-end;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.cart-drawer {
+  width: 480px;
+  max-width: 100%;
+  height: 100vh;
+  background-color: #fdfbf9; /* Crema muy suave de alta costura */
+  box-shadow: -10px 0 30px rgba(56, 91, 147, 0.08);
+  border-left: 1px dotted var(--color-primary);
+  display: flex;
+  flex-direction: column;
+  animation: slideLeft 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* Cabecera del Carrito */
+.cart-header {
+  padding: 30px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px dotted var(--color-primary);
+}
+
+.cart-header h2 {
+  font-family: var(--font-serif);
+  font-size: 1.8rem;
+  font-weight: 300;
+  color: var(--color-primary);
+  margin: 0;
+  text-transform: lowercase;
+  letter-spacing: 0.05em;
+}
+
+.cart-close-btn {
+  background: none;
+  border: none;
+  font-size: 2.2rem;
+  color: var(--color-primary);
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  transition: transform 0.2s ease;
+}
+
+.cart-close-btn:hover {
+  transform: rotate(90deg);
+}
+
+/* Contenido Principal con Scroll */
+.cart-content-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Estado de Bolsa Vacía */
+.empty-cart-message {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 40px 0;
+}
+
+.vintage-italic {
+  font-family: var(--font-serif);
+  font-size: 1.4rem;
+  font-style: italic;
+  color: var(--color-primary);
+  margin-bottom: 24px;
+}
+
+.continue-shopping-btn {
+  background-color: transparent;
+  color: var(--color-primary);
+  font-family: var(--font-heading), sans-serif;
+  font-size: 0.75rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  border: 1px solid var(--color-primary);
+  padding: 12px 30px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.continue-shopping-btn:hover {
+  background-color: var(--color-primary);
+  color: #ffffff;
+}
+
+/* Tarjeta de Producto en Carrito */
+.cart-item-card {
+  display: grid;
+  grid-template-columns: 80px 1fr auto;
+  gap: 16px;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px dotted rgba(56, 91, 147, 0.15);
+}
+
+.cart-item-img-wrapper {
+  width: 80px;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  border: 1px solid rgba(56, 91, 147, 0.1);
+  background-color: #fafafa;
+}
+
+.cart-item-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.cart-item-details {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.cart-item-title {
+  font-family: var(--font-heading), sans-serif;
+  font-size: 0.72rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin: 0 0 6px 0;
+  color: var(--color-primary);
+}
+
+.cart-item-spec {
+  font-family: var(--font-serif);
+  font-size: 0.85rem;
+  font-style: italic;
+  margin: 0 0 10px 0;
+  color: rgba(56, 91, 147, 0.7);
+}
+
+/* Controles de Cantidad */
+.quantity-controls {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--color-primary);
+  width: fit-content;
+  background-color: #ffffff;
+}
+
+.quantity-controls button {
+  background: none;
+  border: none;
+  font-family: var(--font-heading), sans-serif;
+  font-size: 0.8rem;
+  color: var(--color-primary);
+  width: 26px;
+  height: 26px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease;
+}
+
+.quantity-controls button:hover:not(:disabled) {
+  background-color: #f7f3ef;
+}
+
+.quantity-controls button:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.qty-val {
+  font-family: var(--font-heading), sans-serif;
+  font-size: 0.75rem;
+  font-weight: 900;
+  width: 28px;
+  text-align: center;
+  border-left: 1px solid rgba(56, 91, 147, 0.25);
+  border-right: 1px solid rgba(56, 91, 147, 0.25);
+  line-height: 26px;
+}
+
+/* Columna de Precios y Acciones */
+.cart-item-price-col {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: space-between;
+  height: 80px;
+}
+
+.item-price {
+  font-family: var(--font-serif);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--color-primary);
+  font-style: italic;
+}
+
+.remove-item-btn {
+  background: none;
+  border: none;
+  color: rgba(56, 91, 147, 0.6);
+  font-family: var(--font-serif);
+  font-size: 0.8rem;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 0;
+}
+
+.remove-item-btn:hover {
+  color: var(--color-primary);
+}
+
+.divider-dotted-cart {
+  width: 100%;
+  border-top: 1px dotted var(--color-primary);
+  margin: 15px 0 25px 0;
+}
+
+/* Contenedor del Formulario */
+.checkout-form-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.section-title-retro {
+  font-family: var(--font-serif);
+  font-size: 1.3rem;
+  font-weight: 400;
+  color: var(--color-primary);
+  text-align: center;
+  margin: 0 0 20px 0;
+  letter-spacing: 0.05em;
+  font-style: italic;
+}
+
+/* Formulario Retro de Alta Costura */
+.retro-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.form-group-retro {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-group-retro.half {
+  width: calc(50% - 8px);
+}
+
+.form-row-retro {
+  display: flex;
+  gap: 16px;
+  width: 100%;
+}
+
+.form-group-retro label {
+  font-family: var(--font-heading), sans-serif;
+  font-size: 0.62rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-primary);
+}
+
+.form-group-retro input {
+  background-color: transparent;
+  border: none;
+  border-bottom: 1px dotted var(--color-primary);
+  font-family: var(--font-serif);
+  font-size: 0.95rem;
+  color: var(--color-primary);
+  padding: 6px 4px;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.form-group-retro input::placeholder {
+  color: rgba(56, 91, 147, 0.35);
+  font-style: italic;
+}
+
+.form-group-retro input:focus {
+  border-bottom: 1px solid var(--color-primary);
+  background-color: rgba(56, 91, 147, 0.02);
+}
+
+/* Error de Compra */
+.checkout-error-message {
+  font-family: var(--font-serif);
+  font-size: 0.85rem;
+  color: #c94a4a;
+  background-color: rgba(201, 74, 74, 0.08);
+  border: 1px solid #c94a4a;
+  padding: 10px;
+  text-align: center;
+  margin-top: 10px;
+  font-style: italic;
+}
+
+/* Resumen del Total */
+.cart-total-summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 20px 0;
+  padding: 16px 0;
+  border-top: 1px dotted var(--color-primary);
+  border-bottom: 1px dotted var(--color-primary);
+}
+
+.total-label {
+  font-family: var(--font-serif);
+  font-size: 1.1rem;
+  color: var(--color-primary);
+  font-style: italic;
+}
+
+.total-val {
+  font-family: var(--font-heading), sans-serif;
+  font-size: 1.2rem;
+  font-weight: 900;
+  color: var(--color-primary);
+}
+
+/* Botón Finalizar Compra Beige/Rosa Pastel */
+.submit-checkout-btn {
+  background-color: #ecdcd5; /* Beige suave del mockup */
+  color: var(--color-primary);
+  font-family: var(--font-heading), sans-serif;
+  font-size: 0.75rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  border: 1px solid var(--color-primary);
+  padding: 16px 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  outline: none;
+  width: 100%;
+}
+
+.submit-checkout-btn:hover:not(:disabled) {
+  background-color: var(--color-primary);
+  color: #ffffff;
+  letter-spacing: 0.18em;
+}
+
+.submit-checkout-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideLeft {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+/* Responsividad para móviles */
+@media (max-width: 480px) {
+  .cart-drawer {
+    width: 100%;
+    border-left: none;
+  }
+}

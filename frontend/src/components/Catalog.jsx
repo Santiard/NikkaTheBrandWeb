@@ -1,22 +1,39 @@
 import React, { useState, useEffect } from 'react';
-import { productsData, editorialImages } from '../services/products';
+import { apiService } from '../services/api';
+import { editorialImages } from '../services/products';
 import './Catalog.css';
 
 export default function Catalog({ categoryFilter, onProductClick }) {
-  // Paginación: Mostrar de 8 en 8 al principio
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [visibleCount, setVisibleCount] = useState(8);
 
+  // Cargar productos desde el backend
+  useEffect(() => {
+    setLoading(true);
+    apiService.getProducts()
+      .then(data => {
+        setProducts(data);
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error('Error fetching products:', err);
+        setLoading(false);
+      });
+  }, []);
+
   // Filtrar productos según la categoría seleccionada
-  const filteredProducts = productsData.filter((product) => {
+  const filteredProducts = products.filter((product) => {
     if (!categoryFilter || categoryFilter.toLowerCase() === 'ver todo') {
       return true;
     }
     if (categoryFilter.toLowerCase() === 'new') {
-      return product.isNew;
+      // Simular nuevos usando el flag o ids específicos
+      return product.discountPercentage === 0;
     }
     if (categoryFilter.toLowerCase() === 'sale') {
-      // Para simular rebajas, mostramos un subconjunto o todos
-      return product.price < 130;
+      // Para simular rebajas, mostramos productos con descuento activo
+      return product.discountPercentage > 0 || product.price < 130;
     }
     return product.category.toLowerCase() === categoryFilter.toLowerCase();
   });
@@ -32,6 +49,17 @@ export default function Catalog({ categoryFilter, onProductClick }) {
 
   const hasMore = visibleCount < filteredProducts.length;
 
+  if (loading) {
+    return (
+      <section className="catalog-section">
+        <div className="catalog-header-title">
+          <h2>cargando catálogo...</h2>
+        </div>
+        <div className="admin-info-text">reuniendo las mejores piezas vintage para ti...</div>
+      </section>
+    );
+  }
+
   return (
     <section className="catalog-section">
       {/* Título de la Categoría */}
@@ -41,31 +69,50 @@ export default function Catalog({ categoryFilter, onProductClick }) {
 
       {/* Grid de Productos */}
       <div className="catalog-grid">
-        {filteredProducts.slice(0, visibleCount).map((product) => (
-          <div 
-            key={product.id} 
-            className="catalog-card"
-            onClick={() => onProductClick(product.id)}
-          >
-            <div className="catalog-image-wrapper">
-              <img 
-                src={product.mainImage} 
-                alt={product.name} 
-                className="catalog-image" 
-                draggable="false"
-              />
-              {product.isNew && (
-                <span className="badge-new">NEW</span>
-              )}
+        {filteredProducts.slice(0, visibleCount).map((product) => {
+          // Extraer la imagen principal o respaldo
+          const mainImg = product.images && product.images.length > 0 
+            ? product.images.find(img => img.imageType === 'MAIN')?.imageUrl || product.images[0].imageUrl
+            : product.mainImage; // Respaldo estático si no hay imágenes en la BD
+
+          const hasDiscount = product.discountPercentage > 0;
+          const finalPrice = product.price - (product.price * (product.discountPercentage || 0) / 100);
+
+          return (
+            <div 
+              key={product.id} 
+              className="catalog-card"
+              onClick={() => onProductClick(product.id)}
+            >
+              <div className="catalog-image-wrapper">
+                <img 
+                  src={mainImg} 
+                  alt={product.name} 
+                  className="catalog-image" 
+                  draggable="false"
+                />
+                {product.discountPercentage > 0 && (
+                  <span className="badge-new">-{product.discountPercentage}%</span>
+                )}
+              </div>
+              <div className="catalog-info">
+                <h3 className="product-title">{product.name.toLowerCase()}</h3>
+                <p className="product-price">
+                  {hasDiscount ? (
+                    <>
+                      <span style={{ textDecoration: 'line-through', opacity: 0.5, marginRight: '8px' }}>
+                        ${product.price.toFixed(2)}
+                      </span>
+                      <span>${finalPrice.toFixed(2)} USD</span>
+                    </>
+                  ) : (
+                    <>${product.price.toFixed(2)} USD</>
+                  )}
+                </p>
+              </div>
             </div>
-            <div className="catalog-info">
-              <h3 className="product-title">{product.name}</h3>
-              <p className="product-price">
-                ${product.price.toFixed(2)} {product.currency}
-              </p>
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       {/* Paginación y Botón SEE MORE */}

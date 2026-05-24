@@ -19,6 +19,7 @@ export default function Footer({ onNavigate }) {
         <a href="#" className="footer-link">nuestra historia</a>
         <a href="#" className="footer-link" onClick={(e) => { e.preventDefault(); window.open('https://instagram.com', '_blank'); }}>instagram</a>
         <a href="#" className="footer-link" onClick={(e) => { e.preventDefault(); window.open('https://tiktok.com', '_blank'); }}>tiktok</a>
+        <a href="#" className="footer-link" onClick={(e) => handleLinkClick(e, 'admin')}>administración</a>
         <span className="footer-brand">nikkathebrand 2026</span>
       </div>
     </footer>
