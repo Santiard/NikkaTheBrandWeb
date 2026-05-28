@@ -12,14 +12,12 @@ export default function Footer({ onNavigate }) {
   return (
     <footer className="footer">
       <div className="footer-links">
-        <a href="#" className="footer-link" onClick={(e) => handleLinkClick(e, 'catalog', 'ver todo')}>catálogo</a>
-        <a href="#" className="footer-link">envíos y devoluciones</a>
-        <a href="#" className="footer-link">contáctanos</a>
-        <a href="#" className="footer-link" onClick={(e) => handleLinkClick(e, 'catalog', 'ver todo')}>gift cards</a>
-        <a href="#" className="footer-link">nuestra historia</a>
-        <a href="#" className="footer-link" onClick={(e) => { e.preventDefault(); window.open('https://instagram.com', '_blank'); }}>instagram</a>
-        <a href="#" className="footer-link" onClick={(e) => { e.preventDefault(); window.open('https://tiktok.com', '_blank'); }}>tiktok</a>
-        <a href="#" className="footer-link" onClick={(e) => handleLinkClick(e, 'admin')}>administración</a>
+        <a href="#" className="footer-link" onClick={(e) => handleLinkClick(e, 'contact')}>contáctanos</a>
+        <a href="#" className="footer-link" onClick={(e) => handleLinkClick(e, 'faqs')}>FAQs</a>
+        <a href="#" className="footer-link" onClick={(e) => handleLinkClick(e, 'giftcard')}>gift cards</a>
+        <a href="#" className="footer-link" onClick={(e) => handleLinkClick(e, 'history')}>nuestra historia</a>
+        <a href="#" className="footer-link" onClick={(e) => { e.preventDefault(); window.open('https://www.instagram.com/nikkathebrand?igsh=MWdkOGdydmJqcWI3bg%3D%3D', '_blank'); }}>instagram</a>
+        <a href="#" className="footer-link" onClick={(e) => { e.preventDefault(); window.open('https://www.tiktok.com/@nikkathebrand?_r=1&_t=ZS-96iM6cjOBjl', '_blank'); }}>tiktok</a>
         <span className="footer-brand">nikkathebrand 2026</span>
       </div>
     </footer>

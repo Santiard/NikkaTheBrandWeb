@@ -1,0 +1,197 @@
+/* Contact Section Container */
+.contact-section {
+  width: 100%;
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 60px 24px 180px 24px; /* Espacio inferior para evitar solapar el footer */
+  background-color: var(--color-bg);
+  animation: fadeIn 0.4s ease-out;
+}
+
+/* Navegación Opcional de Volver */
+.contact-back-nav {
+  margin-bottom: 30px;
+  width: 100%;
+  display: flex;
+}
+
+.contact-back-btn {
+  background: none;
+  border: none;
+  font-family: var(--font-serif);
+  font-size: 1.05rem;
+  color: var(--color-primary);
+  cursor: pointer;
+  padding: 0;
+  text-decoration: none;
+  font-style: italic;
+  transition: opacity 0.2s ease;
+  outline: none;
+}
+
+.contact-back-btn:hover {
+  opacity: 0.7;
+}
+
+/* Contenedor Principal de Dos Columnas */
+.contact-container {
+  display: flex;
+  gap: 64px;
+  width: 100%;
+  align-items: flex-start;
+}
+
+/* Columna Izquierda: Imagen de Paisaje */
+.contact-image-col {
+  flex: 1.1; /* ~55% de la anchura */
+}
+
+.contact-img-wrapper {
+  width: 100%;
+  aspect-ratio: 4 / 3; /* Proporción apaisada rectangular del mockup */
+  overflow: hidden;
+  border: 1px solid rgba(56, 91, 147, 0.15);
+  box-shadow: 0 10px 30px rgba(56, 91, 147, 0.04);
+}
+
+.contact-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.contact-img-wrapper:hover .contact-img {
+  transform: scale(1.02);
+}
+
+/* Columna Derecha: Información y Canales */
+.contact-info-col {
+  flex: 0.9; /* ~45% de la anchura */
+  display: flex;
+  flex-direction: column;
+  padding-top: 10px; /* Alineación superior visual con la imagen */
+}
+
+/* Grupos de Información (Contacto, Colaboraciones, Canales) */
+.contact-group {
+  margin-bottom: 35px; /* Espacio de respiración entre bloques */
+}
+
+.contact-title {
+  font-family: var(--font-heading), sans-serif;
+  font-size: 0.82rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--color-primary);
+  margin: 0 0 10px 0;
+  line-height: 1.2;
+}
+
+.contact-detail-link {
+  font-family: var(--font-serif);
+  font-size: 0.98rem;
+  color: var(--color-primary);
+  margin: 0;
+  opacity: 0.85;
+}
+
+.contact-detail-link a,
+.contact-sales-channels a {
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+}
+
+.contact-detail-link a:hover,
+.contact-sales-channels a:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* Canales de Venta (WhatsApp e Instagram) */
+.contact-sales-channels {
+  font-family: var(--font-serif);
+  font-size: 0.98rem;
+  color: var(--color-primary);
+  line-height: 1.5;
+  opacity: 0.85;
+}
+
+.contact-sales-channels p {
+  margin: 0 0 6px 0;
+}
+
+.contact-sales-channels p:last-child {
+  margin-bottom: 0;
+}
+
+/* Texto de Ayuda / Footer del Formulario */
+.contact-footer-text {
+  border-top: 1px dotted rgba(56, 91, 147, 0.2);
+  padding-top: 25px;
+  margin-top: 15px;
+}
+
+.contact-footer-text p {
+  font-family: var(--font-serif);
+  font-size: 0.95rem;
+  line-height: 1.62;
+  color: var(--color-text-gray);
+  margin: 0 0 14px 0;
+  opacity: 0.85;
+}
+
+.contact-footer-text p:last-child {
+  margin-bottom: 0;
+}
+
+.vintage-question {
+  font-style: italic;
+  font-weight: 500;
+}
+
+/* Botón inline Faqs estilizado */
+.faqs-inline-btn {
+  background: none;
+  border: none;
+  font-family: var(--font-serif);
+  font-size: inherit;
+  color: var(--color-primary);
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 0;
+  font-style: italic;
+  outline: none;
+}
+
+.faqs-inline-btn:hover {
+  font-weight: 600;
+}
+
+/* ===================================================================
+   RESPONSIVIDAD PREMIUM
+   =================================================================== */
+@media (max-width: 900px) {
+  .contact-container {
+    flex-direction: column; /* Pasa a 1 columna vertical en móvil y tablet */
+    gap: 40px;
+  }
+  .contact-image-col,
+  .contact-info-col {
+    width: 100%;
+  }
+  .contact-img-wrapper {
+    aspect-ratio: 16 / 10; /* Proporción más horizontal en móvil */
+  }
+}
+
+@media (max-width: 480px) {
+  .contact-section {
+    padding: 40px 16px 140px 16px;
+  }
+  .contact-group {
+    margin-bottom: 28px;
+  }
+}

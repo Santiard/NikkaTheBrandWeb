@@ -9,6 +9,10 @@ import Catalog from './components/Catalog'
 import ProductDetail from './components/ProductDetail'
 import Cart from './components/Cart'
 import AdminDashboard from './components/AdminDashboard'
+import History from './components/History'
+import Contact from './components/Contact'
+import Faqs from './components/Faqs'
+import GiftCard from './components/GiftCard'
 
 // Mockup Images
 import newInImg from './images/new in.JPG'
@@ -325,6 +329,31 @@ function App() {
         <ProductDetail 
           productId={selectedProductId} 
           onBack={() => handleNavigate('catalog', selectedCategory || 'ver todo')} 
+          onAddToCart={handleAddToCart}
+        />
+      )}
+
+      {activePage === 'history' && (
+        <History 
+          onBackToCatalog={() => handleNavigate('catalog', 'ver todo')} 
+        />
+      )}
+
+      {activePage === 'contact' && (
+        <Contact 
+          onBackToCatalog={() => handleNavigate('catalog', 'ver todo')} 
+          onNavigateToFaqs={() => handleNavigate('faqs')}
+        />
+      )}
+
+      {activePage === 'faqs' && (
+        <Faqs 
+          onBackToCatalog={() => handleNavigate('catalog', 'ver todo')} 
+        />
+      )}
+
+      {activePage === 'giftcard' && (
+        <GiftCard 
           onAddToCart={handleAddToCart}
         />
       )}

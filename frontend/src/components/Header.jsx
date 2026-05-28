@@ -1,6 +1,6 @@
 import React from 'react';
 import './Header.css';
-import logo from '../images/nikka logo.png';
+import logo from '../images/nikka-logo.webp';
 
 export default function Header({ onMenuClick, onLogoClick, onCartClick, cartCount }) {
   return (

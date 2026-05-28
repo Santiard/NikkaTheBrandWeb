@@ -1,0 +1,146 @@
+/* History Section Container */
+.history-section {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 30px 24px 60px 24px; /* Reducido para eliminar scrollbars innecesarias en pantallas de escritorio */
+  background-color: var(--color-bg);
+  animation: fadeIn 0.4s ease-out;
+}
+
+/* Grid de 4 Columnas del Mockup */
+.history-grid {
+  display: grid;
+  grid-template-columns: 1.9fr 1.2fr 1.2fr 1.0fr; /* Ajuste final para lograr el balance perfecto del mockup */
+  gap: 48px;
+  width: 100%;
+  align-items: stretch; /* Estira todas las columnas al mismo alto para que la imagen abarque todo */
+}
+
+/* Columna de Imagen */
+.history-image-col {
+  height: 100%;
+}
+
+.history-img-wrapper {
+  width: 100%;
+  height: 100%; /* Ocupa el largo vertical total que ocupa el texto */
+  overflow: hidden;
+  border: 1px solid rgba(56, 91, 147, 0.15);
+  box-shadow: 0 10px 25px rgba(56, 91, 147, 0.03);
+}
+
+.history-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.history-img-wrapper:hover .history-img {
+  transform: scale(1.02);
+}
+
+/* Columnas de Texto */
+.history-col {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Columna 4: Futuro - Centrado vertical del contenido en desktop */
+.futuro-col {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Centra verticalmente el título y el párrafo */
+}
+
+.history-col-title {
+  font-family: var(--font-heading), sans-serif;
+  font-size: 0.8rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--color-primary);
+  margin: 0 0 20px 0;
+  line-height: 1.2;
+}
+
+/* Estructuración interna para subsecciones (Producción / Packaging) */
+.history-sub-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.history-sub-section.spacing-top {
+  margin-top: 40px; /* Separación elegante entre Producción y Packaging */
+}
+
+/* Contenido de Párrafos Serif de Alta Costura */
+.history-text-content p {
+  font-family: var(--font-serif);
+  font-size: 0.95rem;
+  line-height: 1.68; /* Altura de línea respirable del mockup */
+  color: var(--color-text-gray);
+  margin: 0 0 18px 0;
+  text-align: justify; /* Justificado como se ve en el mockup de Canva */
+  text-justify: inter-word;
+  opacity: 0.9;
+}
+
+.history-text-content p:last-child {
+  margin-bottom: 0;
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ===================================================================
+   RESPONSIVIDAD Y ADAPTABILIDAD PREMIUM
+   =================================================================== */
+@media (max-width: 1100px) {
+  .history-grid {
+    grid-template-columns: 1fr 1fr; /* Pasa a 2 columnas en pantallas medianas */
+    gap: 36px;
+    align-items: flex-start; /* Resetea el estiramiento para un flujo libre */
+  }
+  .history-image-col {
+    height: auto;
+  }
+  .history-img-wrapper {
+    height: auto;
+    aspect-ratio: 1 / 1.05;
+  }
+  .futuro-col {
+    justify-content: flex-start;
+    height: auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .history-grid {
+    grid-template-columns: 1fr; /* Colapsa verticalmente en móviles */
+    gap: 30px;
+    align-items: flex-start;
+  }
+  .history-section {
+    padding: 40px 16px 100px 16px;
+  }
+  .history-img-wrapper {
+    aspect-ratio: 1.2 / 1; /* Imagen más apaisada en móvil */
+    height: auto;
+  }
+  .history-sub-section.spacing-top {
+    margin-top: 30px;
+  }
+  .history-text-content p {
+    text-align: left; /* Alineado a la izquierda en móvil para mejor legibilidad */
+  }
+  .futuro-col {
+    justify-content: flex-start;
+    height: auto;
+  }
+}

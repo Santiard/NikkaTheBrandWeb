@@ -232,7 +232,7 @@
 .detail-description {
   font-family: var(--font-serif);
   font-size: 1.05rem;
-  color: var(--color-primary);
+  color: var(--color-text-gray);
   line-height: 1.6;
   margin-bottom: 30px;
 }

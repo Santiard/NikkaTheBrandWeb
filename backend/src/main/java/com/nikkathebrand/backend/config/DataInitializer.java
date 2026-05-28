@@ -114,5 +114,53 @@ public class DataInitializer implements CommandLineRunner {
 
             System.out.println("====== CATALOG DATA POPULATED SUCCESSFULLY ======");
         }
+
+        // 3. Inicializar E-Gift Cards si no existen
+        if (productRepository.findByCategoryAndActiveTrue("Gift Card").isEmpty()) {
+            System.out.println("====== SEEDING E-GIFT CARDS ======");
+            Product card50 = Product.builder()
+                    .name("E-GIFT CARD $50.000 COP")
+                    .description("Las tarjetas de regalo electrónicas (E-gift cards) pueden utilizarse para comprar cualquier artículo en nikka. Estas Gift Cards pueden usarse en cualquier momento y no tienen fecha de vencimiento.")
+                    .price(new BigDecimal("15.00"))
+                    .discountPercentage(0)
+                    .category("Gift Card")
+                    .active(true)
+                    .images(new ArrayList<>())
+                    .sizes(new ArrayList<>())
+                    .build();
+            card50.setImages(List.of(ProductImage.builder().imageUrl("/src/images/gift-card.webp").imageType("MAIN").product(card50).build()));
+            card50.setSizes(List.of(SizeInventory.builder().size("UNI").stock(9999).product(card50).build()));
+
+            Product card80 = Product.builder()
+                    .name("E-GIFT CARD $80.000 COP")
+                    .description("Las tarjetas de regalo electrónicas (E-gift cards) pueden utilizarse para comprar cualquier artículo en nikka. Estas Gift Cards pueden usarse en cualquier momento y no tienen fecha de vencimiento.")
+                    .price(new BigDecimal("25.00"))
+                    .discountPercentage(0)
+                    .category("Gift Card")
+                    .active(true)
+                    .images(new ArrayList<>())
+                    .sizes(new ArrayList<>())
+                    .build();
+            card80.setImages(List.of(ProductImage.builder().imageUrl("/src/images/gift-card.webp").imageType("MAIN").product(card80).build()));
+            card80.setSizes(List.of(SizeInventory.builder().size("UNI").stock(9999).product(card80).build()));
+
+            Product card150 = Product.builder()
+                    .name("E-GIFT CARD $150.000 COP")
+                    .description("Las tarjetas de regalo electrónicas (E-gift cards) pueden utilizarse para comprar cualquier artículo en nikka. Estas Gift Cards pueden usarse en cualquier momento y no tienen fecha de vencimiento.")
+                    .price(new BigDecimal("45.00"))
+                    .discountPercentage(0)
+                    .category("Gift Card")
+                    .active(true)
+                    .images(new ArrayList<>())
+                    .sizes(new ArrayList<>())
+                    .build();
+            card150.setImages(List.of(ProductImage.builder().imageUrl("/src/images/gift-card.webp").imageType("MAIN").product(card150).build()));
+            card150.setSizes(List.of(SizeInventory.builder().size("UNI").stock(9999).product(card150).build()));
+
+            productRepository.save(card50);
+            productRepository.save(card80);
+            productRepository.save(card150);
+            System.out.println("====== E-GIFT CARDS SEEDED SUCCESSFULLY ======");
+        }
     }
 }

@@ -16,6 +16,7 @@
 :root {
   --color-primary: #385B93;
   --color-bg: #ffffff;
+  --color-text-gray: #555555; /* Gris carbón premium para textos extensos */
   --font-serif: 'Cormorant Garamond', serif;
   --font-heading: 'Mont', sans-serif;
 }

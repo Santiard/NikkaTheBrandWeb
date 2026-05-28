@@ -1,0 +1,154 @@
+.faqs-section {
+  width: 100%;
+  max-width: 1300px; /* Matching history & contact max-width for visual coherence */
+  margin: 0 auto;
+  padding: 20px 24px 0px 24px;
+  background-color: var(--color-bg);
+  animation: fadeIn 0.4s ease-out;
+  overflow: hidden; /* Oculta de forma simple el scroll sin cortar ni distorsionar la imagen */
+}
+
+/* Back navigation */
+.faqs-back-nav {
+  margin-bottom: 35px;
+  width: 100%;
+  display: flex;
+}
+
+.faqs-back-btn {
+  background: none;
+  border: none;
+  font-family: var(--font-serif);
+  font-size: 1.05rem;
+  color: var(--color-primary);
+  cursor: pointer;
+  padding: 0;
+  text-decoration: none;
+  font-style: italic;
+  transition: opacity 0.2s ease;
+  outline: none;
+}
+
+.faqs-back-btn:hover {
+  opacity: 0.7;
+}
+
+/* Two-column layout grid matching mockup */
+.faqs-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px 80px; /* Reducido el gap vertical para compactar la sección */
+  width: 100%;
+  align-items: flex-start;
+}
+
+/* Main title styling - matches Mont font uppercase */
+.faqs-main-title {
+  font-family: var(--font-heading), sans-serif;
+  font-size: 1.25rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--color-primary);
+  margin: 0 0 15px 0; /* Más compacto */
+  line-height: 1.2;
+}
+
+/* Left & Right Column structures */
+.faqs-col {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Offset right column content on desktop to align vertically with first question on the left */
+.right-col-adjust {
+  padding-top: 35px; /* Ajustado al nuevo margen del título */
+}
+
+/* FAQ Item spacing */
+.faq-item {
+  margin-bottom: 18px; /* Reducido el margen entre preguntas para compactar */
+  display: flex;
+  flex-direction: column;
+}
+
+/* Question style - brand blue, Cormorant Garamond serif */
+.faq-question {
+  font-family: var(--font-serif);
+  font-size: 1.15rem;
+  font-weight: 500;
+  color: var(--color-primary);
+  margin: 0 0 10px 0;
+  line-height: 1.35;
+}
+
+/* Answer style - soft charcoal gray, excellent legibility, contrast constraint compliant */
+.faq-answer {
+  font-family: var(--font-serif);
+  font-size: 0.98rem;
+  line-height: 1.6;
+  color: var(--color-text-gray);
+  margin: 0;
+  opacity: 0.9;
+  text-align: justify;
+  text-justify: inter-word;
+}
+
+/* Centered lambs illustration at bottom */
+.faqs-lambs-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: -25px; /* Restaurado el margen óptimo y aireado de la ilustración */
+  padding-bottom: 0px;
+}
+
+.faqs-lambs-image {
+  width: 520px;
+  max-width: 95%;
+  height: auto;
+  opacity: 0.85;
+  user-select: none;
+  pointer-events: none;
+  display: block;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive adjustments for mobile and tablets */
+@media (max-width: 850px) {
+  .faqs-container {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+
+  .right-col-adjust {
+    padding-top: 0;
+  }
+
+  .faqs-section {
+    padding: 40px 16px 140px 16px;
+  }
+
+  .faqs-main-title {
+    margin-bottom: 25px;
+  }
+
+  .faq-item {
+    margin-bottom: 25px;
+  }
+
+  .faqs-lambs-container {
+    margin-top: 60px;
+  }
+}

@@ -6,9 +6,9 @@ const shortcuts = [
   { name: 'Intimates', action: () => 'intimates' },
   { name: 'Bags', action: () => 'bags' },
   { name: 'Accessories', action: () => 'accessories' },
-  { name: 'Gift Cards', action: () => 'ver todo' },
+  { name: 'Gift Cards', action: () => null },
   { name: 'Sale', action: () => 'sale' },
-  { name: 'Envíos y Devoluciones', action: () => null },
+  { name: 'FAQs', action: () => null },
   { name: 'Nuestra Historia', action: () => null },
   { name: 'Contáctanos', action: () => null }
 ];
@@ -16,6 +16,22 @@ const shortcuts = [
 export default function Sidebar({ isOpen, onClose, onNavigate }) {
   const handleItemClick = (item) => {
     onClose();
+    if (item.name === 'Nuestra Historia') {
+      onNavigate('history');
+      return;
+    }
+    if (item.name === 'Contáctanos') {
+      onNavigate('contact');
+      return;
+    }
+    if (item.name === 'FAQs') {
+      onNavigate('faqs');
+      return;
+    }
+    if (item.name === 'Gift Cards') {
+      onNavigate('giftcard');
+      return;
+    }
     if (item.action) {
       const category = item.action();
       if (category) {

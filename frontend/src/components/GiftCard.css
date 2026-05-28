@@ -1,0 +1,212 @@
+/* GiftCard Section Container */
+.giftcard-section {
+  width: 100%;
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 30px 24px 60px 24px; /* Reducido para evitar el scroll innecesario en pantallas estándar */
+  background-color: var(--color-bg);
+  animation: fadeIn 0.4s ease-out;
+}
+
+/* Contenedor Principal de Dos Columnas */
+.giftcard-container {
+  display: flex;
+  gap: 64px;
+  width: 100%;
+  align-items: flex-start;
+}
+
+/* Columna Izquierda: Imagen */
+.giftcard-image-col {
+  flex: 1.1; /* ~55% de ancho */
+}
+
+.giftcard-img-wrapper {
+  width: 100%;
+  aspect-ratio: 1 / 0.9; /* Proporción compacta premium */
+  overflow: hidden;
+  border: 1px solid rgba(56, 91, 147, 0.15);
+  box-shadow: 0 10px 30px rgba(56, 91, 147, 0.04);
+}
+
+.giftcard-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.giftcard-img-wrapper:hover .giftcard-img {
+  transform: scale(1.02);
+}
+
+/* Columna Derecha: Información y Canales */
+.giftcard-info-col {
+  flex: 0.9; /* ~45% de ancho */
+  display: flex;
+  flex-direction: column;
+  padding-top: 10px; /* Alineación superior visual con la imagen */
+}
+
+.giftcard-brand-sub {
+  font-family: var(--font-heading), sans-serif;
+  font-size: 0.72rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--color-primary);
+  margin-bottom: 6px; /* Más compacto */
+}
+
+.giftcard-main-title {
+  font-family: var(--font-heading), sans-serif;
+  font-size: 1.5rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--color-primary);
+  margin: 0 0 8px 0; /* Más compacto */
+}
+
+.giftcard-selected-price {
+  font-family: var(--font-serif);
+  font-size: 1.8rem;
+  font-weight: 400;
+  color: var(--color-primary);
+  margin: 0 0 15px 0; /* Más compacto */
+  letter-spacing: 0.02em;
+}
+
+/* Contenedor de Botones Circulares */
+.giftcard-price-options {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 25px; /* Más compacto */
+}
+
+.price-circle {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background-color: var(--color-primary);
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-serif);
+  font-size: 0.88rem;
+  font-style: italic;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+  text-align: center;
+  line-height: 1.3;
+  box-shadow: 0 4px 15px rgba(56, 91, 147, 0.08);
+  outline: none;
+  user-select: none;
+}
+
+.price-circle:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(56, 91, 147, 0.15);
+}
+
+.price-circle.active {
+  transform: scale(1.08);
+  box-shadow: 0 8px 25px rgba(56, 91, 147, 0.3);
+  border: 2px solid #ffffff;
+  outline: 1.5px solid var(--color-primary);
+}
+
+/* Descripciones en gris legibilidad */
+.giftcard-description {
+  margin-bottom: 25px;
+}
+
+.giftcard-description p {
+  font-family: var(--font-serif);
+  font-size: 0.98rem;
+  line-height: 1.55;
+  color: var(--color-text-gray);
+  margin: 0 0 8px 0; /* Más compacto */
+  opacity: 0.9;
+  text-align: justify;
+  text-justify: inter-word;
+}
+
+/* Botón Añadir al Carrito */
+.giftcard-add-btn {
+  width: 100%;
+  max-width: 320px;
+  background-color: var(--color-primary);
+  color: #ffffff;
+  border: none;
+  padding: 14px 20px;
+  font-family: var(--font-heading), sans-serif;
+  font-size: 0.75rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  outline: none;
+}
+
+.giftcard-add-btn:hover {
+  opacity: 0.85;
+  letter-spacing: 0.18em;
+}
+
+.giftcard-add-btn.added {
+  background-color: #4f8757; /* Verde premium para indicar éxito */
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsividad */
+@media (max-width: 850px) {
+  .giftcard-container {
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  .giftcard-image-col {
+    width: 100%;
+  }
+
+  .giftcard-info-col {
+    width: 100%;
+    padding-top: 0;
+  }
+
+  .giftcard-selected-price {
+    font-size: 1.6rem;
+    margin-bottom: 25px;
+  }
+
+  .giftcard-price-options {
+    gap: 15px;
+    margin-bottom: 30px;
+  }
+
+  .price-circle {
+    width: 80px;
+    height: 80px;
+    font-size: 0.8rem;
+  }
+
+  .giftcard-add-btn {
+    max-width: 100%;
+  }
+}
