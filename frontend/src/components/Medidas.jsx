@@ -1,39 +1,73 @@
-import React from 'react';
-import medidasMonedero from '../images/medidas/medidas monedero.webp';
-import medidasPuffer from '../images/medidas/medidas puffer.webp';
-import pjSetTalla from '../images/medidas/pj set talla.webp';
+import React, { useState } from 'react';
+import bgPattern from '../images/medidas/the farmhouse-3.webp';
+import img32 from '../images/medidas/32.webp';
+import img33 from '../images/medidas/33.webp';
+import img34 from '../images/medidas/34.webp';
+import img35 from '../images/medidas/35.webp';
 import './Medidas.css';
 
 export default function Medidas() {
+  const [selectedGuide, setSelectedGuide] = useState(null);
+
+  const handleOptionClick = (guideKey) => {
+    setSelectedGuide(guideKey);
+    // Para la siguiente parte asociaremos las redirecciones reales de las guías
+  };
+
   return (
     <section className="medidas-section">
-      <div className="medidas-header">
-        <span className="medidas-brand-sub">nikka the brand</span>
-        <h1 className="medidas-main-title">guía de medidas</h1>
-        <p className="medidas-subtitle">
-          Encuentra las dimensiones exactas de nuestras prendas y bolsos para elegir tu pieza ideal.
-        </p>
-      </div>
-
-      <div className="medidas-images-stack">
-        <div className="medidas-card">
-          <span className="medidas-card-title">Bonnie PJ Set & Sunday Morning</span>
-          <div className="medidas-img-wrapper">
-            <img src={pjSetTalla} alt="Medidas de Pijama Set" className="medidas-img" draggable="false" />
+      {/* Contenedor Banner de Tapizado en la mitad de la página */}
+      <div 
+        className="medidas-banner"
+        style={{ backgroundImage: `url(${bgPattern})` }}
+      >
+        <div className="medidas-options-row">
+          {/* Opción 1: Pj sets */}
+          <div className="medidas-option-card" onClick={() => handleOptionClick('pj-sets')}>
+            <div className="medidas-option-img-wrapper">
+              <img 
+                src={img32} 
+                alt="Pj sets" 
+                className="medidas-option-img" 
+                draggable="false"
+              />
+            </div>
           </div>
-        </div>
 
-        <div className="medidas-card">
-          <span className="medidas-card-title">Duvet Nikka Bag & Puffer Bags</span>
-          <div className="medidas-img-wrapper">
-            <img src={medidasPuffer} alt="Medidas de Puffer Bags" className="medidas-img" draggable="false" />
+          {/* Opción 2: Bags */}
+          <div className="medidas-option-card" onClick={() => handleOptionClick('bags')}>
+            <div className="medidas-option-img-wrapper">
+              <img 
+                src={img33} 
+                alt="bags" 
+                className="medidas-option-img" 
+                draggable="false"
+              />
+            </div>
           </div>
-        </div>
 
-        <div className="medidas-card">
-          <span className="medidas-card-title">Monederos & Mini Bags</span>
-          <div className="medidas-img-wrapper">
-            <img src={medidasMonedero} alt="Medidas de Monederos" className="medidas-img" draggable="false" />
+          {/* Opción 3: Coin purses */}
+          <div className="medidas-option-card" onClick={() => handleOptionClick('coin-purses')}>
+            <div className="medidas-option-img-wrapper">
+              <img 
+                src={img34} 
+                alt="coin purses" 
+                className="medidas-option-img" 
+                draggable="false"
+              />
+            </div>
+          </div>
+
+          {/* Opción 4: Mini bags */}
+          <div className="medidas-option-card" onClick={() => handleOptionClick('mini-bags')}>
+            <div className="medidas-option-img-wrapper">
+              <img 
+                src={img35} 
+                alt="mini bags" 
+                className="medidas-option-img" 
+                draggable="false"
+              />
+            </div>
           </div>
         </div>
       </div>
