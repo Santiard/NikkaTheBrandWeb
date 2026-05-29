@@ -52,18 +52,40 @@ function App() {
   const [startX, setStartX] = useState(0);
   const [scrollLeftState, setScrollLeftState] = useState(0);
 
-  // Enrutamiento de URL nativo para /nikiadministradora
+  // Enrutamiento de URL nativo avanzado para toda la aplicación
   useEffect(() => {
     const handleUrlChange = () => {
       const path = window.location.pathname;
-      const hash = window.location.hash;
-      if (path === '/nikiadministradora' || hash === '#/nikiadministradora' || hash === '#nikiadministradora') {
+      const searchParams = new URLSearchParams(window.location.search);
+      
+      if (path === '/nikiadministradora') {
         setActivePage('admin');
+      } else if (path.startsWith('/product/')) {
+        const productId = path.replace('/product/', '');
+        setActivePage('detail');
+        setSelectedProductId(productId);
+      } else if (path === '/catalog') {
+        const cat = searchParams.get('category');
+        setActivePage('catalog');
+        setSelectedCategory(cat);
+      } else if (path === '/history') {
+        setActivePage('history');
+      } else if (path === '/contact') {
+        setActivePage('contact');
+      } else if (path === '/faqs') {
+        setActivePage('faqs');
+      } else if (path === '/giftcard') {
+        setActivePage('giftcard');
+      } else if (path === '/medidas') {
+        setActivePage('medidas');
+      } else {
+        // Por defecto regresa al home
+        setActivePage('home');
       }
     };
 
     window.addEventListener('popstate', handleUrlChange);
-    handleUrlChange(); // Verificar al montar
+    handleUrlChange(); // Verificar al montar e inicializar la página correcta
 
     return () => window.removeEventListener('popstate', handleUrlChange);
   }, []);
@@ -122,17 +144,27 @@ function App() {
   // Navigation Controller
   const handleNavigate = (page, categoryOrProductId = null) => {
     setActivePage(page);
+    
+    // Sincronizar parámetros en el estado
     if (page === 'catalog') {
       setSelectedCategory(categoryOrProductId);
     } else if (page === 'detail') {
       setSelectedProductId(categoryOrProductId);
     }
 
-    // Manejar URL para panel administrativo /nikiadministradora
-    if (page === 'admin') {
+    // Registrar navegación real en el Historial del Navegador (History API / pushState)
+    if (page === 'catalog') {
+      const search = categoryOrProductId ? `?category=${encodeURIComponent(categoryOrProductId)}` : '';
+      window.history.pushState(null, '', `/catalog${search}`);
+    } else if (page === 'detail') {
+      window.history.pushState(null, '', `/product/${categoryOrProductId}`);
+    } else if (page === 'admin') {
       window.history.pushState(null, '', '/nikiadministradora');
-    } else if (window.location.pathname === '/nikiadministradora') {
+    } else if (page === 'home') {
       window.history.pushState(null, '', '/');
+    } else {
+      // Para páginas estáticas ('history', 'contact', 'faqs', 'giftcard', 'medidas')
+      window.history.pushState(null, '', `/${page}`);
     }
 
     // Scroll automáticamente arriba al cambiar de página

@@ -92,7 +92,7 @@ export const apiService = {
    * Obtiene todos los productos sin filtrar (activos e inactivos)
    */
   async adminGetProducts(auth) {
-    const response = await fetch(`${BASE_URL}/admin/products`, {
+    const response = await fetch(`${BASE_URL}/nikiadministradora/products`, {
       headers: getHeaders(auth)
     });
     if (!response.ok) throw new Error('No autorizado.');
@@ -103,7 +103,7 @@ export const apiService = {
    * Crea un nuevo producto (incluyendo imágenes y stock por tallas)
    */
   async adminCreateProduct(productData, auth) {
-    const response = await fetch(`${BASE_URL}/admin/products`, {
+    const response = await fetch(`${BASE_URL}/nikiadministradora/products`, {
       method: 'POST',
       headers: getHeaders(auth),
       body: JSON.stringify(productData)
@@ -116,7 +116,7 @@ export const apiService = {
    * Actualiza los datos de un producto existente
    */
   async adminUpdateProduct(id, productData, auth) {
-    const response = await fetch(`${BASE_URL}/admin/products/${id}`, {
+    const response = await fetch(`${BASE_URL}/nikiadministradora/products/${id}`, {
       method: 'PUT',
       headers: getHeaders(auth),
       body: JSON.stringify(productData)
@@ -129,7 +129,7 @@ export const apiService = {
    * Elimina un producto por su ID
    */
   async adminDeleteProduct(id, auth) {
-    const response = await fetch(`${BASE_URL}/admin/products/${id}`, {
+    const response = await fetch(`${BASE_URL}/nikiadministradora/products/${id}`, {
       method: 'DELETE',
       headers: getHeaders(auth)
     });
@@ -141,7 +141,7 @@ export const apiService = {
    * Obtiene el listado de todos los clientes registrados
    */
   async adminGetCustomers(auth) {
-    const response = await fetch(`${BASE_URL}/admin/customers`, {
+    const response = await fetch(`${BASE_URL}/nikiadministradora/customers`, {
       headers: getHeaders(auth)
     });
     if (!response.ok) throw new Error('Error al obtener clientes.');
@@ -152,7 +152,7 @@ export const apiService = {
    * Obtiene el listado histórico de pedidos
    */
   async adminGetOrders(auth) {
-    const response = await fetch(`${BASE_URL}/admin/orders`, {
+    const response = await fetch(`${BASE_URL}/nikiadministradora/orders`, {
       headers: getHeaders(auth)
     });
     if (!response.ok) throw new Error('Error al obtener pedidos.');
@@ -163,7 +163,7 @@ export const apiService = {
    * Obtiene las métricas y analíticas de la tienda
    */
   async adminGetAnalytics(auth) {
-    const response = await fetch(`${BASE_URL}/admin/analytics`, {
+    const response = await fetch(`${BASE_URL}/nikiadministradora/analytics`, {
       headers: getHeaders(auth)
     });
     if (!response.ok) throw new Error('Error al obtener analíticas.');
@@ -174,7 +174,7 @@ export const apiService = {
    * Crea una nueva colección
    */
   async adminCreateCollection(collectionData, auth) {
-    const response = await fetch(`${BASE_URL}/admin/collections`, {
+    const response = await fetch(`${BASE_URL}/nikiadministradora/collections`, {
       method: 'POST',
       headers: getHeaders(auth),
       body: JSON.stringify(collectionData)

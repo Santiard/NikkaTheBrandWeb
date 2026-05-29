@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class DataInitializer implements CommandLineRunner {
@@ -28,8 +29,9 @@ public class DataInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        // 1. Inicializar Usuario Administrador por Defecto si no existe
-        if (adminUserRepository.findByUsername("admin").isEmpty()) {
+        // 1. Inicializar Usuario Administrador por Defecto si no existe o migrar su contraseña si no está cifrada
+        Optional<AdminUser> existingAdmin = adminUserRepository.findByUsername("admin");
+        if (existingAdmin.isEmpty()) {
             AdminUser defaultAdmin = AdminUser.builder()
                     .username("admin")
                     .password(passwordEncoder.encode("admin123")) // Contraseña segura cifrada
@@ -41,6 +43,13 @@ public class DataInitializer implements CommandLineRunner {
             System.out.println("Username: admin");
             System.out.println("Password: admin123 (Crypted)");
             System.out.println("========================================");
+        } else {
+            AdminUser admin = existingAdmin.get();
+            if (!admin.getPassword().startsWith("$2a$") && !admin.getPassword().startsWith("$2b$") && !admin.getPassword().startsWith("$2y$")) {
+                admin.setPassword(passwordEncoder.encode("admin123"));
+                adminUserRepository.save(admin);
+                System.out.println("====== DEFAULT ADMIN USER PASSWORD MIGRATED TO BCRYPT ======");
+            }
         }
 
         // 2. Inicializar Datos de Ejemplo para el Catálogo si está vacío

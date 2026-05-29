@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/admin/products")
+@RequestMapping("/api/nikiadministradora/products")
 @CrossOrigin(origins = "*")
 public class AdminProductController {
 

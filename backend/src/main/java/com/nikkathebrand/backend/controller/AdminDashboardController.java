@@ -13,7 +13,7 @@ import java.math.BigDecimal;
 import java.util.*;
 
 @RestController
-@RequestMapping("/api/admin")
+@RequestMapping("/api/nikiadministradora")
 @CrossOrigin(origins = "*")
 public class AdminDashboardController {
 

@@ -4,6 +4,13 @@ import img32 from '../images/medidas/32.webp';
 import img33 from '../images/medidas/33.webp';
 import img34 from '../images/medidas/34.webp';
 import img35 from '../images/medidas/35.webp';
+
+// Importación de las guías de medidas respectivas
+import guidePjSets from '../images/medidas/pj set talla.webp';
+import guideBags from '../images/medidas/medidas puffer.webp';
+import guideCoinPurses from '../images/medidas/guiacp.webp';
+import guideMiniBags from '../images/medidas/guiami.webp';
+
 import './Medidas.css';
 
 export default function Medidas() {
@@ -11,8 +18,49 @@ export default function Medidas() {
 
   const handleOptionClick = (guideKey) => {
     setSelectedGuide(guideKey);
-    // Para la siguiente parte asociaremos las redirecciones reales de las guías
   };
+
+  const guidesData = {
+    'pj-sets': {
+      title: 'pj sets',
+      img: guidePjSets,
+    },
+    'bags': {
+      title: 'bags & totes',
+      img: guideBags,
+    },
+    'coin-purses': {
+      title: 'coin purses',
+      img: guideCoinPurses,
+    },
+    'mini-bags': {
+      title: 'mini bags',
+      img: guideMiniBags,
+    }
+  };
+
+  // Renderizado de la página de medidas individual cuando se hace clic
+  if (selectedGuide) {
+    const guide = guidesData[selectedGuide];
+    return (
+      <section className="medidas-section-detail">
+        <div className="medidas-detail-container">
+          <button className="medidas-back-button" onClick={() => setSelectedGuide(null)}>
+            ← volver
+          </button>
+          
+          <div className="medidas-detail-img-wrapper">
+            <img 
+              src={guide.img} 
+              alt={`Guía de medidas de ${guide.title}`} 
+              className="medidas-detail-img"
+              draggable="false"
+            />
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="medidas-section">

@@ -25,6 +25,7 @@ com\nikkathebrand\backend\model\Collection.class
 com\nikkathebrand\backend\model\Order.class
 com\nikkathebrand\backend\repository\ProductRepository.class
 com\nikkathebrand\backend\model\Promotion$PromotionBuilder.class
+com\nikkathebrand\backend\service\CustomUserDetailsService.class
 com\nikkathebrand\backend\model\OrderItem.class
 com\nikkathebrand\backend\model\Product.class
 com\nikkathebrand\backend\dto\CartItemRequest.class
