@@ -1,0 +1,128 @@
+/* Medidas Section Container */
+.medidas-section {
+  width: 100%;
+  max-width: 900px; /* Ancho cómodo y acotado para lectura vertical y visualización */
+  margin: 0 auto;
+  padding: 40px 24px 100px 24px;
+  background-color: var(--color-bg);
+  animation: fadeIn 0.4s ease-out;
+}
+
+/* Cabecera de la Guía */
+.medidas-header {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.medidas-brand-sub {
+  font-family: var(--font-heading), sans-serif;
+  font-size: 0.72rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--color-primary);
+  margin-bottom: 10px;
+  display: block;
+}
+
+.medidas-main-title {
+  font-family: var(--font-heading), sans-serif;
+  font-size: 1.6rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--color-primary);
+  margin: 0 0 15px 0;
+}
+
+.medidas-subtitle {
+  font-family: var(--font-serif);
+  font-size: 1.02rem;
+  color: var(--color-text-gray);
+  margin: 0 auto;
+  max-width: 600px;
+  line-height: 1.5;
+  opacity: 0.9;
+}
+
+/* Stack de imágenes verticales */
+.medidas-images-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 50px; /* Separación elegante entre tarjetas de medidas */
+  width: 100%;
+}
+
+/* Tarjeta individual */
+.medidas-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.medidas-card-title {
+  font-family: var(--font-serif);
+  font-size: 1.15rem;
+  font-style: italic;
+  color: var(--color-primary);
+  margin-bottom: 15px;
+  letter-spacing: 0.03em;
+  text-align: center;
+}
+
+.medidas-img-wrapper {
+  width: 100%;
+  max-width: 800px;
+  overflow: hidden;
+  border: 1px solid rgba(56, 91, 147, 0.15);
+  box-shadow: 0 10px 30px rgba(56, 91, 147, 0.05);
+  background-color: #ffffff;
+}
+
+.medidas-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.medidas-img-wrapper:hover .medidas-img {
+  transform: scale(1.015);
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsividad */
+@media (max-width: 768px) {
+  .medidas-section {
+    padding: 30px 16px 80px 16px;
+  }
+
+  .medidas-main-title {
+    font-size: 1.35rem;
+  }
+
+  .medidas-subtitle {
+    font-size: 0.95rem;
+  }
+
+  .medidas-images-stack {
+    gap: 35px;
+  }
+
+  .medidas-card-title {
+    font-size: 1.05rem;
+    margin-bottom: 10px;
+  }
+}

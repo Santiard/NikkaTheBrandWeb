@@ -4,13 +4,12 @@
   width: 100%;
   max-width: 100%;
   margin: 0 auto;
-  padding: 2.5rem 0;
+  padding: 10rem 0 0 0; /* Espaciado superior masivo para coincidir con el mockup oficial */
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
   overflow-x: hidden;
-  /* Extra bottom padding to ensure fixed footer does not cover the content */
-  padding-bottom: 8.5rem;
+  padding-bottom: 2rem;
 }
 
 /* Horizontal Carousel Container */
@@ -19,7 +18,7 @@
   overflow-x: auto;
   cursor: grab;
   user-select: none;
-  padding: 1rem 2.5rem;
+  padding: 0.5rem 2.5rem;
   box-sizing: border-box;
   /* Hide scrollbars */
   -ms-overflow-style: none;  /* IE and Edge */
@@ -38,20 +37,20 @@
 .home-carousel-track {
   display: flex;
   flex-direction: row;
-  gap: 3.5rem;
+  gap: 2.2rem; /* Compactado horizontalmente */
   width: max-content;
-  align-items: flex-start;
-  padding-bottom: 1.5rem;
+  align-items: flex-start; /* Alinea todas las cabeceras perfectamente en una línea horizontal */
+  padding-bottom: 1rem;
 }
 
-/* Grid Card Styles inside Carousel */
+/* Grid Card Styles inside Carousel – Ancho compacto ideal */
 .grid-card {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   text-decoration: none;
   color: inherit;
-  width: 300px; /* Fixed width so cards stay side-by-side */
+  width: 220px;
   flex-shrink: 0;
   user-select: none;
   -webkit-user-drag: none;
@@ -79,50 +78,57 @@
 
 .card-title {
   font-family: 'Cormorant Garamond', serif;
-  font-size: 1.15rem;
+  font-size: 1.02rem;
   color: #385B93;
   text-transform: lowercase;
-  margin-top: 0.65rem;
+  margin-top: 0.5rem;
   font-weight: 300;
   letter-spacing: 0.02em;
 }
 
-/* Custom Offset Margins to replicate "estética desordenada" in a single horizontal row */
-.card-new-in {
-  margin-top: 0;
-}
-
-.card-sunday-morning {
-  margin-top: 4.5rem;
-}
-
-.card-the-farmhouse {
-  margin-top: 1rem;
-}
-
-.card-duvet {
-  margin-top: 5rem;
-}
-
-.card-tote-bags {
-  margin-top: 2rem;
-}
-
+/* Todas las tarjetas quedan perfectamente alineadas arriba, tal como en el mockup oficial de Canva */
+.card-new-in,
+.card-sunday-morning,
+.card-the-farmhouse,
+.card-duvet,
+.card-tote-bags,
 .card-size-guide {
-  margin-top: 6rem;
+  margin-top: 0 !important;
 }
 
-/* Lambs Illustration - Made larger to match the mockup */
+/* Lambs Illustration - Ajustada al centro y compacta */
 .lambs-container {
   width: 100%;
   display: flex;
   justify-content: center;
-  margin: 2rem 0 1rem 0;
+  margin: 2rem 0 0 0; /* Margen elegante de respiración inferior */
 }
 
 .lambs-image {
-  width: 520px; /* Magnified even more to match mockup proportion */
+  width: 250px; /* Tamaño exacto de las ovejas proporcional al mockup */
   max-width: 95%;
   height: auto;
   display: block;
+  user-select: none;
+  pointer-events: none;
+}
+
+/* Responsivo para móviles */
+@media (max-width: 768px) {
+  .home-container {
+    padding-top: 2rem; /* Menos espacio superior en móvil */
+    padding-bottom: 4rem;
+  }
+  .home-carousel-container {
+    padding: 0.5rem 1rem;
+  }
+  .home-carousel-track {
+    gap: 1.5rem;
+  }
+  .grid-card {
+    width: 160px; /* Aún más compacto en móvil */
+  }
+  .lambs-image {
+    width: 180px;
+  }
 }

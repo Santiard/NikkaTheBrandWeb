@@ -8,6 +8,7 @@ const shortcuts = [
   { name: 'Accessories', action: () => 'accessories' },
   { name: 'Gift Cards', action: () => null },
   { name: 'Sale', action: () => 'sale' },
+  { name: 'Guía de Medidas', action: () => null },
   { name: 'FAQs', action: () => null },
   { name: 'Nuestra Historia', action: () => null },
   { name: 'Contáctanos', action: () => null }
@@ -30,6 +31,10 @@ export default function Sidebar({ isOpen, onClose, onNavigate }) {
     }
     if (item.name === 'Gift Cards') {
       onNavigate('giftcard');
+      return;
+    }
+    if (item.name === 'Guía de Medidas') {
+      onNavigate('medidas');
       return;
     }
     if (item.action) {

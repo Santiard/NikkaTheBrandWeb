@@ -13,24 +13,25 @@ import History from './components/History'
 import Contact from './components/Contact'
 import Faqs from './components/Faqs'
 import GiftCard from './components/GiftCard'
+import Medidas from './components/Medidas'
 
 // Mockup Images
-import newInImg from './images/new in.JPG'
-import sundayMorningImg from './images/pj set/nikka.png'
-import theFarmhouseImg from './images/the farmhouse.jpg'
+import newInImg from './images/new in.webp'
+import sundayMorningImg from './images/sunday morning.webp'
+import theFarmhouseImg from './images/THE FARMHOUSE.webp'
 import duvetImg from './images/puffer bag/duvet.JPG'
-import toteBagsImg from './images/tote bag.png'
-import sizeGuideImg from './images/size.JPG'
-import lambsImg from './images/little lambs.png'
+import toteBagsImg from './images/tote bags y mini bags.webp'
+import sizeGuideImg from './images/sizes.webp'
+import lambsImg from './images/little-lambs.webp'
 
 // Data for the 6 cards matching the mockup
 const cardsData = [
   { id: 'new-in', className: 'card-new-in', img: newInImg, title: 'new in' },
   { id: 'sunday-morning', className: 'card-sunday-morning', img: sundayMorningImg, title: 'sunday morning' },
-  { id: 'the-farmhouse', className: 'card-the-farmhouse', img: theFarmhouseImg, title: 'the farmhouse' },
+  { id: 'the-farmhouse', className: 'card-the-farmhouse', img: theFarmhouseImg, title: 'THE FARMHOUSE' },
   { id: 'duvet', className: 'card-duvet', img: duvetImg, title: 'duvet nikka x nc' },
-  { id: 'tote-bags', className: 'card-tote-bags', img: toteBagsImg, title: 'tote bags and mini bags' },
-  { id: 'size-guide', className: 'card-size-guide', img: sizeGuideImg, title: 'size guide' },
+  { id: 'tote-bags', className: 'card-tote-bags', img: toteBagsImg, title: 'tote bags y mini bags' },
+  { id: 'size-guide', className: 'card-size-guide', img: sizeGuideImg, title: 'sizes' },
 ];
 
 function App() {
@@ -158,7 +159,7 @@ function App() {
     } else if (cardId === 'the-farmhouse') {
       handleNavigate('catalog', 'ver todo');
     } else if (cardId === 'size-guide') {
-      handleNavigate('catalog', 'ver todo'); // shortcut fallback
+      handleNavigate('medidas');
     }
   };
 
@@ -356,6 +357,10 @@ function App() {
         <GiftCard 
           onAddToCart={handleAddToCart}
         />
+      )}
+
+      {activePage === 'medidas' && (
+        <Medidas />
       )}
 
       {/* Footer Links */}
