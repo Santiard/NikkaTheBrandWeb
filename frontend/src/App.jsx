@@ -41,6 +41,7 @@ function App() {
   const [activePage, setActivePage] = useState('home');
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedProductId, setSelectedProductId] = useState('bonnie-set');
+  const [adminTab, setAdminTab] = useState('products');
 
   // Estado del Carrito Global
   const [cartItems, setCartItems] = useState([]);
@@ -58,8 +59,18 @@ function App() {
       const path = window.location.pathname;
       const searchParams = new URLSearchParams(window.location.search);
       
-      if (path === '/nikiadministradora') {
+      if (path === '/nikiadministradora' || path.startsWith('/nikiadministradora/')) {
         setActivePage('admin');
+        const sub = path.replace('/nikiadministradora', '').replace(/^\//, '');
+        if (sub === 'promociones') {
+          setAdminTab('promotions');
+        } else if (sub === 'usuarios') {
+          setAdminTab('users');
+        } else if (sub === 'analiticas') {
+          setAdminTab('analytics');
+        } else {
+          setAdminTab('products');
+        }
       } else if (path.startsWith('/product/')) {
         const productId = path.replace('/product/', '');
         setActivePage('detail');
@@ -234,7 +245,19 @@ function App() {
   // RENDERIZADO EXCLUSIVO PARA PANEL ADMINISTRATIVO
   if (activePage === 'admin') {
     return (
-      <AdminDashboard onBackToStore={() => handleNavigate('home')} />
+      <AdminDashboard 
+        initialTab={adminTab}
+        onTabChange={(tab) => {
+          const subMap = {
+            'products': 'catalogo',
+            'promotions': 'promociones',
+            'users': 'usuarios',
+            'analytics': 'analiticas'
+          };
+          window.history.pushState(null, '', `/nikiadministradora/${subMap[tab]}`);
+        }}
+        onBackToStore={() => handleNavigate('home')} 
+      />
     );
   }
 

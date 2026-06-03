@@ -80,6 +80,11 @@ public class AdminProductController {
             }
         }
 
+        if (productDetails.getPromotions() != null) {
+            existingProduct.getPromotions().clear();
+            existingProduct.getPromotions().addAll(productDetails.getPromotions());
+        }
+
         Product updated = productRepository.save(existingProduct);
         return ResponseEntity.ok(updated);
     }

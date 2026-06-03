@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { apiService } from '../services/api';
 import './AdminDashboard.css';
 
-export default function AdminDashboard({ onBackToStore }) {
+export default function AdminDashboard({ onBackToStore, initialTab, onTabChange }) {
   // Estado de Autenticación
   const [auth, setAuth] = useState(null); // { username, password }
   const [loginData, setLoginData] = useState({ username: '', password: '' });
@@ -10,7 +10,28 @@ export default function AdminDashboard({ onBackToStore }) {
   const [loginLoading, setLoginLoading] = useState(false);
 
   // Navegación interna del Admin: 'products', 'promotions', 'users', 'analytics'
-  const [activeTab, setActiveTab] = useState('products');
+  const [activeTab, setActiveTab] = useState(initialTab || 'products');
+
+  // Sincronizar la pestaña si cambia externamente (ej: popstate de URL)
+  useEffect(() => {
+    if (initialTab) {
+      setActiveTab(initialTab);
+    }
+  }, [initialTab]);
+
+  // Sincronizar URL en la barra de direcciones cuando se loguea
+  useEffect(() => {
+    if (auth && onTabChange) {
+      onTabChange(activeTab);
+    }
+  }, [auth]);
+
+  // Sincronizar URL al montar
+  useEffect(() => {
+    if (onTabChange) {
+      onTabChange(activeTab);
+    }
+  }, []);
 
   // Estados de datos
   const [products, setProducts] = useState([]);
@@ -38,11 +59,13 @@ export default function AdminDashboard({ onBackToStore }) {
     stockXS: '5',
     stockS: '10',
     stockM: '10',
-    stockL: '5'
+    stockL: '5',
+    selectedPromotions: []
   });
 
   // Estado del Modal de Promoción
   const [isPromoModalOpen, setIsPromoModalOpen] = useState(false);
+  const [editingPromo, setEditingPromo] = useState(null); // null para nuevo
   const [promoForm, setPromoForm] = useState({
     name: '',
     discountPercentage: '10',
@@ -63,9 +86,11 @@ export default function AdminDashboard({ onBackToStore }) {
       if (activeTab === 'products') {
         const data = await apiService.adminGetProducts(auth);
         setProducts(data);
+        const promoData = await apiService.adminGetPromotions(auth);
+        setPromotions(promoData);
       } else if (activeTab === 'promotions') {
-        // Fallback si no hay promociones creadas aún
-        setPromotions([]);
+        const data = await apiService.adminGetPromotions(auth);
+        setPromotions(data);
       } else if (activeTab === 'users') {
         const data = await apiService.adminGetCustomers(auth);
         setCustomers(data);
@@ -99,6 +124,13 @@ export default function AdminDashboard({ onBackToStore }) {
   const handleLogout = () => {
     setAuth(null);
     setLoginData({ username: '', password: '' });
+  };
+
+  const handleTabClick = (tab) => {
+    setActiveTab(tab);
+    if (onTabChange) {
+      onTabChange(tab);
+    }
   };
 
   // ===================================================================
@@ -241,6 +273,86 @@ export default function AdminDashboard({ onBackToStore }) {
     }
   };
 
+  // ===================================================================
+  // ACCIONES DE PROMOCIONES
+  // ===================================================================
+
+  // Abrir modal para crear nueva promoción
+  const handleNewPromoClick = () => {
+    setEditingPromo(null);
+    setPromoForm({
+      name: '',
+      discountPercentage: '10',
+      isActive: true
+    });
+    setIsPromoModalOpen(true);
+  };
+
+  // Abrir modal para editar promoción existente
+  const handleEditPromoClick = (promo) => {
+    setEditingPromo(promo);
+    setPromoForm({
+      name: promo.name,
+      discountPercentage: String(promo.discountPercentage),
+      isActive: promo.isActive
+    });
+    setIsPromoModalOpen(true);
+  };
+
+  // Guardar (Crear o Editar) promoción
+  const handlePromoFormSubmit = async (e) => {
+    e.preventDefault();
+    setError(null);
+    try {
+      const promoPayload = {
+        name: promoForm.name.toUpperCase(),
+        discountPercentage: parseInt(promoForm.discountPercentage) || 0,
+        isActive: promoForm.isActive
+      };
+
+      if (editingPromo) {
+        // Modo Edición
+        await apiService.adminUpdatePromotion(editingPromo.id, promoPayload, auth);
+      } else {
+        // Modo Creación
+        await apiService.adminCreatePromotion(promoPayload, auth);
+      }
+
+      setIsPromoModalOpen(false);
+      fetchData();
+    } catch (err) {
+      console.error(err);
+      setError('Error al guardar la promoción. Por favor revisa los datos.');
+    }
+  };
+
+  // Toggle directo de Activo / Inactivo en Promociones
+  const handleTogglePromoActive = async (promo) => {
+    try {
+      const updatedPayload = {
+        ...promo,
+        isActive: !promo.isActive
+      };
+      await apiService.adminUpdatePromotion(promo.id, updatedPayload, auth);
+      fetchData();
+    } catch (err) {
+      console.error(err);
+      alert('Error al cambiar el estado de la promoción.');
+    }
+  };
+
+  // Eliminar promoción
+  const handleDeletePromo = async (id) => {
+    if (!window.confirm('¿Estás seguro de que deseas eliminar permanentemente esta campaña promocional?')) return;
+    try {
+      await apiService.adminDeletePromotion(id, auth);
+      fetchData();
+    } catch (err) {
+      console.error(err);
+      alert('Error al eliminar la promoción.');
+    }
+  };
+
   return (
     <div className="admin-container">
       {/* VISTA 1: LOGIN ADMINISTRATIVO */}
@@ -300,25 +412,25 @@ export default function AdminDashboard({ onBackToStore }) {
             <nav className="admin-nav">
               <button 
                 className={`admin-nav-item ${activeTab === 'products' ? 'active' : ''}`}
-                onClick={() => setActiveTab('products')}
+                onClick={() => handleTabClick('products')}
               >
                 catálogo de productos
               </button>
               <button 
                 className={`admin-nav-item ${activeTab === 'promotions' ? 'active' : ''}`}
-                onClick={() => setActiveTab('promotions')}
+                onClick={() => handleTabClick('promotions')}
               >
                 promociones
               </button>
               <button 
                 className={`admin-nav-item ${activeTab === 'users' ? 'active' : ''}`}
-                onClick={() => setActiveTab('users')}
+                onClick={() => handleTabClick('users')}
               >
                 usuarios registrados
               </button>
               <button 
                 className={`admin-nav-item ${activeTab === 'analytics' ? 'active' : ''}`}
-                onClick={() => setActiveTab('analytics')}
+                onClick={() => handleTabClick('analytics')}
               >
                 analíticas & ventas
               </button>
@@ -420,49 +532,52 @@ export default function AdminDashboard({ onBackToStore }) {
                 <div className="admin-table-wrapper">
                   <div className="admin-sub-header">
                     <h2>campañas activas</h2>
-                    <button className="admin-action-btn-main small" onClick={() => setIsPromoModalOpen(true)}>
+                    <button className="admin-action-btn-main small" onClick={handleNewPromoClick}>
                       + nueva promoción
                     </button>
                   </div>
                   
-                  <table className="admin-table">
-                    <thead>
-                      <tr>
-                        <th>nombre de campaña</th>
-                        <th>descuento global</th>
-                        <th>estado</th>
-                        <th>acciones</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td className="admin-bold">rebajas de primavera 2026</td>
-                        <td className="admin-italic">15% de descuento</td>
-                        <td>
-                          <label className="admin-switch">
-                            <input type="checkbox" defaultChecked />
-                            <span className="admin-slider"></span>
-                          </label>
-                        </td>
-                        <td>
-                          <button className="admin-row-btn delete">eliminar</button>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="admin-bold">descuento especial bolsos</td>
-                        <td className="admin-italic">10% de descuento</td>
-                        <td>
-                          <label className="admin-switch">
-                            <input type="checkbox" />
-                            <span className="admin-slider"></span>
-                          </label>
-                        </td>
-                        <td>
-                          <button className="admin-row-btn delete">eliminar</button>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
+                  {loading ? <p className="admin-info-text">Cargando promociones...</p> : (
+                    <table className="admin-table">
+                      <thead>
+                        <tr>
+                          <th>nombre de campaña</th>
+                          <th>descuento global</th>
+                          <th>estado</th>
+                          <th>acciones</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {promotions.map(promo => (
+                          <tr key={promo.id}>
+                            <td className="admin-bold">{promo.name.toLowerCase()}</td>
+                            <td className="admin-italic">{promo.discountPercentage}% de descuento</td>
+                            <td>
+                              <label className="admin-switch">
+                                <input 
+                                  type="checkbox" 
+                                  checked={promo.isActive} 
+                                  onChange={() => handleTogglePromoActive(promo)}
+                                />
+                                <span className="admin-slider"></span>
+                              </label>
+                            </td>
+                            <td>
+                              <div className="admin-actions-cell">
+                                <button className="admin-row-btn edit" onClick={() => handleEditPromoClick(promo)}>editar</button>
+                                <button className="admin-row-btn delete" onClick={() => handleDeletePromo(promo.id)}>eliminar</button>
+                              </div>
+                            </td>
+                          </tr>
+                        ))}
+                        {promotions.length === 0 && (
+                          <tr>
+                            <td colSpan="4" className="admin-empty-row">no hay campañas o promociones creadas aún.</td>
+                          </tr>
+                        )}
+                      </tbody>
+                    </table>
+                  )}
                 </div>
               )}
 
@@ -752,50 +867,52 @@ export default function AdminDashboard({ onBackToStore }) {
         </div>
       )}
 
-      {/* MODAL 2: CREACIÓN DE PROMOCIÓN */}
+      {/* MODAL 2: CREACIÓN / EDICIÓN DE PROMOCIÓN */}
       {isPromoModalOpen && (
         <div className="admin-modal-backdrop" onClick={() => setIsPromoModalOpen(false)}>
           <div className="admin-modal-card promo-modal" onClick={(e) => e.stopPropagation()}>
             <header className="admin-modal-header">
-              <h2>nueva promoción global</h2>
+              <h2>{editingPromo ? 'editar promoción' : 'nueva promoción global'}</h2>
               <button className="admin-modal-close" onClick={() => setIsPromoModalOpen(false)}>×</button>
             </header>
-            <form onSubmit={(e) => { e.preventDefault(); setIsPromoModalOpen(false); }} className="admin-modal-form">
-              <div className="admin-form-group">
-                <label>nombre de la campaña</label>
-                <input 
-                  type="text" 
-                  value={promoForm.name}
-                  onChange={(e) => setPromoForm(p => ({ ...p, name: e.target.value }))}
-                  placeholder="ej. REBAJAS BLACK FRIDAY" 
-                  required 
-                />
-              </div>
-              <div className="admin-form-row">
-                <div className="admin-form-group half">
-                  <label>porcentaje descuento</label>
+            <form onSubmit={handlePromoFormSubmit} className="admin-modal-form">
+              <div className="modal-form-scroll">
+                <div className="admin-form-group">
+                  <label>nombre de la campaña</label>
                   <input 
-                    type="number" 
-                    value={promoForm.discountPercentage}
-                    onChange={(e) => setPromoForm(p => ({ ...p, discountPercentage: e.target.value }))}
-                    placeholder="15" 
+                    type="text" 
+                    value={promoForm.name}
+                    onChange={(e) => setPromoForm(p => ({ ...p, name: e.target.value }))}
+                    placeholder="ej. REBAJAS BLACK FRIDAY" 
                     required 
                   />
                 </div>
-                <div className="admin-form-group half checkbox-group">
-                  <label className="checkbox-label-retro">
+                <div className="admin-form-row">
+                  <div className="admin-form-group half">
+                    <label>porcentaje descuento</label>
                     <input 
-                      type="checkbox" 
-                      checked={promoForm.isActive}
-                      onChange={(e) => setPromoForm(p => ({ ...p, isActive: e.target.checked }))}
+                      type="number" 
+                      value={promoForm.discountPercentage}
+                      onChange={(e) => setPromoForm(p => ({ ...p, discountPercentage: e.target.value }))}
+                      placeholder="15" 
+                      required 
                     />
-                    activar de inmediato
-                  </label>
+                  </div>
+                  <div className="admin-form-group half checkbox-group">
+                    <label className="checkbox-label-retro">
+                      <input 
+                        type="checkbox" 
+                        checked={promoForm.isActive}
+                        onChange={(e) => setPromoForm(p => ({ ...p, isActive: e.target.checked }))}
+                      />
+                      activar de inmediato
+                    </label>
+                  </div>
                 </div>
               </div>
               <footer className="admin-modal-footer">
                 <button type="button" className="modal-btn-cancel" onClick={() => setIsPromoModalOpen(false)}>cancelar</button>
-                <button type="submit" className="modal-btn-submit">crear campaña</button>
+                <button type="submit" className="modal-btn-submit">{editingPromo ? 'guardar cambios' : 'crear campaña'}</button>
               </footer>
             </form>
           </div>

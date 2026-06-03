@@ -27,6 +27,9 @@ public class DataInitializer implements CommandLineRunner {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private PromotionRepository promotionRepository;
+
     @Override
     public void run(String... args) throws Exception {
         // 1. Inicializar Usuario Administrador por Defecto si no existe o migrar su contraseña si no está cifrada
@@ -170,6 +173,24 @@ public class DataInitializer implements CommandLineRunner {
             productRepository.save(card80);
             productRepository.save(card150);
             System.out.println("====== E-GIFT CARDS SEEDED SUCCESSFULLY ======");
+        }
+
+        // 4. Inicializar Promociones de Ejemplo si no existen
+        if (promotionRepository.count() == 0) {
+            System.out.println("====== SEEDING DEFAULT PROMOTIONS ======");
+            Promotion springPromo = Promotion.builder()
+                    .name("REBAJAS DE PRIMAVERA 2026")
+                    .discountPercentage(15)
+                    .isActive(true)
+                    .build();
+            Promotion bagsPromo = Promotion.builder()
+                    .name("DESCUENTO ESPECIAL BOLSOS")
+                    .discountPercentage(10)
+                    .isActive(false)
+                    .build();
+            promotionRepository.save(springPromo);
+            promotionRepository.save(bagsPromo);
+            System.out.println("====== PROMOTIONS SEEDED SUCCESSFULLY ======");
         }
     }
 }

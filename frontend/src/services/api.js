@@ -181,5 +181,54 @@ export const apiService = {
     });
     if (!response.ok) throw new Error('Error al crear colección.');
     return response.json();
+  },
+
+  /**
+   * Obtiene todas las promociones sin filtrar
+   */
+  async adminGetPromotions(auth) {
+    const response = await fetch(`${BASE_URL}/nikiadministradora/promotions`, {
+      headers: getHeaders(auth)
+    });
+    if (!response.ok) throw new Error('Error al obtener promociones.');
+    return response.json();
+  },
+
+  /**
+   * Crea una nueva promoción
+   */
+  async adminCreatePromotion(promoData, auth) {
+    const response = await fetch(`${BASE_URL}/nikiadministradora/promotions`, {
+      method: 'POST',
+      headers: getHeaders(auth),
+      body: JSON.stringify(promoData)
+    });
+    if (!response.ok) throw new Error('Error al crear promoción.');
+    return response.json();
+  },
+
+  /**
+   * Actualiza una promoción existente
+   */
+  async adminUpdatePromotion(id, promoData, auth) {
+    const response = await fetch(`${BASE_URL}/nikiadministradora/promotions/${id}`, {
+      method: 'PUT',
+      headers: getHeaders(auth),
+      body: JSON.stringify(promoData)
+    });
+    if (!response.ok) throw new Error('Error al actualizar promoción.');
+    return response.json();
+  },
+
+  /**
+   * Elimina una promoción por su ID
+   */
+  async adminDeletePromotion(id, auth) {
+    const response = await fetch(`${BASE_URL}/nikiadministradora/promotions/${id}`, {
+      method: 'DELETE',
+      headers: getHeaders(auth)
+    });
+    if (!response.ok) throw new Error('Error al eliminar promoción.');
+    return response;
   }
 };

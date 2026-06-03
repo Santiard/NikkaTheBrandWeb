@@ -43,7 +43,7 @@ public class Product {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "collection_id")
-    @JsonIgnoreProperties("products")
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "products"})
     private Collection collection;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -62,4 +62,20 @@ public class Product {
     )
     @JsonIgnoreProperties("products")
     private Set<Promotion> promotions = new HashSet<>();
+
+    public Integer getDiscountPercentage() {
+        int maxPromoDiscount = 0;
+        if (promotions != null) {
+            for (Promotion promo : promotions) {
+                if (Boolean.TRUE.equals(promo.getIsActive())) {
+                    if (promo.getDiscountPercentage() > maxPromoDiscount) {
+                        maxPromoDiscount = promo.getDiscountPercentage();
+                    }
+                }
+            }
+        }
+        return (this.discountPercentage != null && this.discountPercentage > maxPromoDiscount) 
+            ? this.discountPercentage 
+            : maxPromoDiscount;
+    }
 }

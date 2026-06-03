@@ -25,6 +25,6 @@ public class ProductImage {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", nullable = false)
-    @JsonIgnoreProperties("images")
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "images"})
     private Product product;
 }

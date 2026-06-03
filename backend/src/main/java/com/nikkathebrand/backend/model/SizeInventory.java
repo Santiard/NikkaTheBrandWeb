@@ -25,6 +25,6 @@ public class SizeInventory {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", nullable = false)
-    @JsonIgnoreProperties("sizes")
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "sizes"})
     private Product product;
 }

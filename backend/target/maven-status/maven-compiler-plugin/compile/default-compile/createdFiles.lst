@@ -16,6 +16,7 @@ com\nikkathebrand\backend\model\ProductImage$ProductImageBuilder.class
 com\nikkathebrand\backend\model\SizeInventory$SizeInventoryBuilder.class
 com\nikkathebrand\backend\controller\CollectionController.class
 com\nikkathebrand\backend\model\Collection$CollectionBuilder.class
+com\nikkathebrand\backend\controller\AdminPromotionController.class
 com\nikkathebrand\backend\model\AdminUser.class
 com\nikkathebrand\backend\dto\OrderResponse$OrderResponseBuilder.class
 com\nikkathebrand\backend\repository\CollectionRepository.class
