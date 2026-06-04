@@ -656,7 +656,7 @@
 }
 
 .admin-modal-card.promo-modal {
-  width: 480px;
+  width: 540px;
 }
 
 .admin-modal-header {
@@ -886,4 +886,47 @@
   .analytics-tables-row {
     grid-template-columns: 1fr;
   }
+}
+
+/* Estilos de la lista de productos con checkboxes en modal de promociones */
+.admin-products-checkbox-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 200px;
+  overflow-y: auto;
+  border: 1px solid rgba(56, 91, 147, 0.2);
+  padding: 12px;
+  background-color: #faf8f5;
+  margin-top: 6px;
+}
+
+.admin-product-checkbox-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-serif);
+  font-size: 0.9rem;
+  color: var(--color-primary);
+  cursor: pointer;
+  padding: 4px 0;
+  transition: background-color 0.2s ease;
+}
+
+.admin-product-checkbox-item:hover {
+  background-color: rgba(56, 91, 147, 0.03);
+}
+
+.admin-product-checkbox-item input {
+  cursor: pointer;
+  accent-color: var(--color-primary);
+  width: 15px;
+  height: 15px;
+}
+
+.admin-product-checkbox-meta {
+  font-size: 0.78rem;
+  color: var(--color-text-gray);
+  font-style: italic;
+  margin-left: 4px;
 }

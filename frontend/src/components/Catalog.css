@@ -89,7 +89,7 @@
   position: absolute;
   top: 12px;
   left: 12px;
-  font-family: var(--font-heading), sans-serif;
+  font-family: Arial, sans-serif; /* Evitar que el demo font Mont reemplace el % por | */
   font-size: 0.7rem;
   font-weight: 900;
   letter-spacing: 0.05em;
@@ -98,6 +98,28 @@
   padding: 4px 8px;
   border-radius: 2px;
   border: 1px solid var(--color-primary);
+}
+
+/* Badge "SIN STOCK" / "AGOTADO" */
+.badge-out-of-stock {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  font-family: Arial, sans-serif;
+  font-size: 0.65rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #777777;
+  background-color: rgba(255, 255, 255, 0.85);
+  padding: 4px 8px;
+  border-radius: 2px;
+  border: 1px solid #777777;
+}
+
+.out-of-stock-img {
+  opacity: 0.6;
+  filter: grayscale(40%);
 }
 
 /* Detalles del Producto */

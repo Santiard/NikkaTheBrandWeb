@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { apiService } from '../services/api';
-import lambsImg from '../images/little lambs.png';
+import lambsVideo from '../images/lambs_video.mp4';
 import './ProductDetail.css';
 
 export default function ProductDetail({ productId, onBack, onAddToCart }) {
@@ -156,12 +156,12 @@ export default function ProductDetail({ productId, onBack, onAddToCart }) {
               {hasDiscount ? (
                 <>
                   <span style={{ textDecoration: 'line-through', opacity: 0.5, marginRight: '10px' }}>
-                    ${product.price.toFixed(2)}
+                    ${Math.round(product.price).toLocaleString('es-CO')}
                   </span>
-                  <span>${finalPrice.toFixed(2)} USD</span>
+                  <span>${Math.round(finalPrice).toLocaleString('es-CO')}</span>
                 </>
               ) : (
-                <>${product.price.toFixed(2)} USD</>
+                <>${Math.round(product.price).toLocaleString('es-CO')}</>
               )}
             </span>
             <span className="detail-status">
@@ -195,13 +195,22 @@ export default function ProductDetail({ productId, onBack, onAddToCart }) {
           </div>
 
           {/* Botón de Añadir al Carrito */}
-          <button 
-            className={`add-to-cart-btn ${addedFeedback ? 'added' : ''}`}
-            onClick={handleAddClick}
-            disabled={getStockForSize(selectedSize) <= 0}
-          >
-            {addedFeedback ? '¡añadido a la bolsa!' : 'añadir al carrito'}
-          </button>
+          {(() => {
+            const isAllOutOfStock = ['XS', 'S', 'M', 'L'].every(size => getStockForSize(size) <= 0);
+            return (
+              <button 
+                className={`add-to-cart-btn ${addedFeedback ? 'added' : ''} ${isAllOutOfStock ? 'disabled-btn' : ''}`}
+                onClick={handleAddClick}
+                disabled={isAllOutOfStock || getStockForSize(selectedSize) <= 0}
+              >
+                {isAllOutOfStock 
+                  ? 'agotado' 
+                  : addedFeedback 
+                    ? '¡añadido a la bolsa!' 
+                    : 'añadir al carrito'}
+              </button>
+            );
+          })()}
 
           <div className="divider-dotted"></div>
 
@@ -219,9 +228,17 @@ export default function ProductDetail({ productId, onBack, onAddToCart }) {
             )}
           </div>
 
-          {/* Ilustración de Corderos en la esquina inferior */}
+          {/* Video de Corderos Animados en la esquina inferior */}
           <div className="detail-lambs-container">
-            <img src={lambsImg} alt="little lambs" className="detail-lambs-img" draggable="false" />
+            <video 
+              src={lambsVideo} 
+              className="detail-lambs-img" 
+              autoPlay 
+              loop 
+              muted 
+              playsInline 
+              draggable="false"
+            />
           </div>
         </div>
       </div>

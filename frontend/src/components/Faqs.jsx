@@ -1,5 +1,5 @@
 import React from 'react';
-import lambsImg from '../images/little lambs.png';
+import lambsVideo from '../images/lambs_video.mp4';
 import './Faqs.css';
 
 export default function Faqs({ onBackToCatalog }) {
@@ -80,12 +80,15 @@ export default function Faqs({ onBackToCatalog }) {
         </div>
       </div>
 
-      {/* Ilustración de Corderos al final (Centrada como en el mockup) */}
+      {/* Video de Corderos Animados al final (Centrado como en el mockup) */}
       <div className="faqs-lambs-container">
-        <img 
-          src={lambsImg} 
-          alt="little lambs" 
+        <video 
+          src={lambsVideo} 
           className="faqs-lambs-image"
+          autoPlay 
+          loop 
+          muted 
+          playsInline 
           draggable="false"
         />
       </div>

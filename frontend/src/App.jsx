@@ -14,6 +14,7 @@ import Contact from './components/Contact'
 import Faqs from './components/Faqs'
 import GiftCard from './components/GiftCard'
 import Medidas from './components/Medidas'
+import { apiService } from './services/api'
 
 // Mockup Images
 import newInImg from './images/new in.webp'
@@ -22,7 +23,7 @@ import theFarmhouseImg from './images/THE FARMHOUSE.webp'
 import duvetImg from './images/puffer bag/duvet.JPG'
 import toteBagsImg from './images/tote bags y mini bags.webp'
 import sizeGuideImg from './images/sizes.webp'
-import lambsImg from './images/little-lambs.webp'
+import lambsVideo from './images/lambs_video.mp4'
 
 // Data for the 6 cards matching the mockup
 const cardsData = [
@@ -46,6 +47,19 @@ function App() {
   // Estado del Carrito Global
   const [cartItems, setCartItems] = useState([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [hasActivePromotions, setHasActivePromotions] = useState(false);
+
+  // Consultar si existen promociones activas al cambiar de página
+  useEffect(() => {
+    if (activePage !== 'admin') {
+      apiService.getProducts()
+        .then(data => {
+          const hasDiscount = data.some(p => p.discountPercentage > 0);
+          setHasActivePromotions(hasDiscount);
+        })
+        .catch(err => console.error('Error checking active promotions:', err));
+    }
+  }, [activePage]);
 
   // Drag-to-scroll & Infinite Scroll references
   const scrollContainerRef = useRef(null);
@@ -276,6 +290,7 @@ function App() {
         isOpen={isSidebarOpen} 
         onClose={() => setIsSidebarOpen(false)} 
         onNavigate={handleNavigate} 
+        hasActivePromotions={hasActivePromotions}
       />
 
       {/* Bolsa de compras deslizante */}
@@ -367,9 +382,17 @@ function App() {
             </div>
           </div>
 
-          {/* 3 Little Lambs Illustration at the bottom */}
+          {/* Video de Corderos Animados al final */}
           <div className="lambs-container">
-            <img src={lambsImg} alt="little lambs" className="lambs-image" draggable="false" />
+            <video 
+              src={lambsVideo} 
+              className="lambs-image" 
+              autoPlay 
+              loop 
+              muted 
+              playsInline 
+              draggable="false" 
+            />
           </div>
         </main>
       )}

@@ -14,7 +14,14 @@ const shortcuts = [
   { name: 'Contáctanos', action: () => null }
 ];
 
-export default function Sidebar({ isOpen, onClose, onNavigate }) {
+export default function Sidebar({ isOpen, onClose, onNavigate, hasActivePromotions }) {
+  const filteredShortcuts = shortcuts.filter(item => {
+    if (item.name === 'Sale') {
+      return hasActivePromotions;
+    }
+    return true;
+  });
+
   const handleItemClick = (item) => {
     onClose();
     if (item.name === 'Nuestra Historia') {
@@ -50,7 +57,7 @@ export default function Sidebar({ isOpen, onClose, onNavigate }) {
       <button className="close-button" onClick={onClose} aria-label="Cerrar menú">×</button>
       <nav className="sidebar-nav">
         <ul>
-          {shortcuts.map((item) => (
+          {filteredShortcuts.map((item) => (
             <li 
               key={item.name} 
               className="sidebar-item"

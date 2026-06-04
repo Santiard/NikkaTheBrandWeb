@@ -23,20 +23,20 @@ export default function Catalog({ categoryFilter, onProductClick }) {
   }, []);
 
   // Filtrar productos según la categoría seleccionada
-  const filteredProducts = products.filter((product) => {
-    if (!categoryFilter || categoryFilter.toLowerCase() === 'ver todo') {
+  let filteredProducts = products.filter((product) => {
+    if (!categoryFilter || categoryFilter.toLowerCase() === 'ver todo' || categoryFilter.toLowerCase() === 'new') {
       return true;
     }
-    if (categoryFilter.toLowerCase() === 'new') {
-      // Simular nuevos usando el flag o ids específicos
-      return product.discountPercentage === 0;
-    }
     if (categoryFilter.toLowerCase() === 'sale') {
-      // Para simular rebajas, mostramos productos con descuento activo
-      return product.discountPercentage > 0 || product.price < 130;
+      return product.discountPercentage > 0;
     }
     return product.category.toLowerCase() === categoryFilter.toLowerCase();
   });
+
+  // Si el filtro es 'new', ordenar de ID más nuevo (mayor) a más viejo (menor)
+  if (categoryFilter && categoryFilter.toLowerCase() === 'new') {
+    filteredProducts = [...filteredProducts].sort((a, b) => b.id - a.id);
+  }
 
   // Si cambia el filtro de categoría, reiniciar la paginación a 8
   useEffect(() => {
@@ -78,6 +78,11 @@ export default function Catalog({ categoryFilter, onProductClick }) {
           const hasDiscount = product.discountPercentage > 0;
           const finalPrice = product.price - (product.price * (product.discountPercentage || 0) / 100);
 
+          // Verificar si no tiene stock en ninguna de las tallas
+          const isProductOutOfStock = product.sizes && product.sizes.length > 0
+            ? product.sizes.every(s => s.stock <= 0)
+            : false;
+
           return (
             <div 
               key={product.id} 
@@ -88,11 +93,15 @@ export default function Catalog({ categoryFilter, onProductClick }) {
                 <img 
                   src={mainImg} 
                   alt={product.name} 
-                  className="catalog-image" 
+                  className={`catalog-image ${isProductOutOfStock ? 'out-of-stock-img' : ''}`} 
                   draggable="false"
                 />
-                {product.discountPercentage > 0 && (
-                  <span className="badge-new">-{product.discountPercentage}%</span>
+                {isProductOutOfStock ? (
+                  <span className="badge-out-of-stock">sin stock</span>
+                ) : (
+                  product.discountPercentage > 0 && (
+                    <span className="badge-new">-{product.discountPercentage}%</span>
+                  )
                 )}
               </div>
               <div className="catalog-info">
@@ -101,12 +110,12 @@ export default function Catalog({ categoryFilter, onProductClick }) {
                   {hasDiscount ? (
                     <>
                       <span style={{ textDecoration: 'line-through', opacity: 0.5, marginRight: '8px' }}>
-                        ${product.price.toFixed(2)}
+                        ${Math.round(product.price).toLocaleString('es-CO')}
                       </span>
-                      <span>${finalPrice.toFixed(2)} USD</span>
+                      <span>${Math.round(finalPrice).toLocaleString('es-CO')}</span>
                     </>
                   ) : (
-                    <>${product.price.toFixed(2)} USD</>
+                    <>${Math.round(product.price).toLocaleString('es-CO')}</>
                   )}
                 </p>
               </div>

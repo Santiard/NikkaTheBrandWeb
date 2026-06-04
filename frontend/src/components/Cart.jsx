@@ -28,9 +28,15 @@ export default function Cart({ isOpen, onClose, cartItems, onUpdateQuantity, onR
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+    let filteredValue = value;
+    if (name === 'customerName' || name === 'customerCity' || name === 'customerDepartment') {
+      filteredValue = value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑüÜ ]/g, '');
+    } else if (name === 'customerPhone') {
+      filteredValue = value.replace(/[^0-9]/g, '');
+    }
     setShippingData(prev => ({
       ...prev,
-      [name]: value
+      [name]: filteredValue
     }));
   };
 
@@ -121,7 +127,7 @@ export default function Cart({ isOpen, onClose, cartItems, onUpdateQuantity, onR
                         </div>
                       </div>
                       <div className="cart-item-price-col">
-                        <span className="item-price">${(finalPrice * item.quantity).toFixed(2)} USD</span>
+                        <span className="item-price">${Math.round(finalPrice * item.quantity).toLocaleString('es-CO')}</span>
                         <button className="remove-item-btn" onClick={() => onRemoveItem(item.product.id, item.size)}>eliminar</button>
                       </div>
                     </div>
@@ -205,7 +211,7 @@ export default function Cart({ isOpen, onClose, cartItems, onUpdateQuantity, onR
 
                   <div className="cart-total-summary">
                     <span className="total-label">total estimado:</span>
-                    <span className="total-val">${calculateSubtotal().toFixed(2)} USD</span>
+                    <span className="total-val">${Math.round(calculateSubtotal()).toLocaleString('es-CO')}</span>
                   </div>
 
                   <button 

@@ -2,16 +2,17 @@
   width: 100%;
   max-width: 1300px;
   margin: 0 auto;
-  padding: 80px 24px 180px 24px; /* Espacio para el footer fijo */
+  padding: 40px 24px 180px 24px; /* Espacio para el footer fijo, reducido de 80px */
   background-color: var(--color-bg);
+  position: relative; /* Habilitar posicionamiento absoluto para el botón de volver */
 }
 
 /* Botón de Volver */
 .back-navigation {
-  margin-bottom: 24px;
-  width: 100%;
-  display: flex;
-  justify-content: flex-start;
+  position: absolute;
+  top: 10px;
+  left: 24px;
+  z-index: 10;
 }
 
 .back-button {
@@ -226,6 +227,22 @@
 .add-to-cart-btn:hover {
   background-color: transparent;
   color: var(--color-primary);
+}
+
+.add-to-cart-btn:disabled,
+.add-to-cart-btn.disabled-btn {
+  background-color: #e5e5e5;
+  border-color: #d5d5d5;
+  color: #888888;
+  cursor: not-allowed;
+  opacity: 0.8;
+}
+
+.add-to-cart-btn:disabled:hover,
+.add-to-cart-btn.disabled-btn:hover {
+  background-color: #e5e5e5;
+  color: #888888;
+  border-color: #d5d5d5;
 }
 
 /* Descripción Detallada */

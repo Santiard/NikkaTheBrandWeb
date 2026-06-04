@@ -40,7 +40,7 @@ export default function Contact({ onBackToCatalog, onNavigateToFaqs }) {
             <h2 className="contact-title">canal de ventas</h2>
             <div className="contact-sales-channels">
               <p>
-                WhatsApp <a href="https://wa.me/57333333333" target="_blank" rel="noopener noreferrer">333333333</a>
+                WhatsApp <a href="https://wa.me/573223113632" target="_blank" rel="noopener noreferrer">3223113632</a>
               </p>
               <p>
                 Instagram <a href="https://instagram.com/nikkathebrand" target="_blank" rel="noopener noreferrer">nikkathebrand</a>

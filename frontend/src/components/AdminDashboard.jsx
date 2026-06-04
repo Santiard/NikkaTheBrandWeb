@@ -36,6 +36,7 @@ export default function AdminDashboard({ onBackToStore, initialTab, onTabChange 
   // Estados de datos
   const [products, setProducts] = useState([]);
   const [promotions, setPromotions] = useState([]);
+  const [collections, setCollections] = useState([]);
   const [customers, setCustomers] = useState([]);
   const [analytics, setAnalytics] = useState(null);
   
@@ -60,16 +61,19 @@ export default function AdminDashboard({ onBackToStore, initialTab, onTabChange 
     stockS: '10',
     stockM: '10',
     stockL: '5',
+    collectionId: '',
     selectedPromotions: []
   });
 
   // Estado del Modal de Promoción
   const [isPromoModalOpen, setIsPromoModalOpen] = useState(false);
   const [editingPromo, setEditingPromo] = useState(null); // null para nuevo
+  const [promoProductSearch, setPromoProductSearch] = useState('');
   const [promoForm, setPromoForm] = useState({
     name: '',
     discountPercentage: '10',
-    isActive: true
+    isActive: true,
+    selectedProducts: []
   });
 
   // Cargar datos cuando el admin esté autenticado y cambie de pestaña
@@ -88,9 +92,13 @@ export default function AdminDashboard({ onBackToStore, initialTab, onTabChange 
         setProducts(data);
         const promoData = await apiService.adminGetPromotions(auth);
         setPromotions(promoData);
+        const colData = await apiService.getCollections();
+        setCollections(colData);
       } else if (activeTab === 'promotions') {
         const data = await apiService.adminGetPromotions(auth);
         setPromotions(data);
+        const prodData = await apiService.adminGetProducts(auth);
+        setProducts(prodData);
       } else if (activeTab === 'users') {
         const data = await apiService.adminGetCustomers(auth);
         setCustomers(data);
@@ -154,7 +162,9 @@ export default function AdminDashboard({ onBackToStore, initialTab, onTabChange 
       stockXS: '5',
       stockS: '10',
       stockM: '10',
-      stockL: '5'
+      stockL: '5',
+      collectionId: '',
+      selectedPromotions: []
     });
     setIsProductModalOpen(true);
   };
@@ -186,7 +196,9 @@ export default function AdminDashboard({ onBackToStore, initialTab, onTabChange 
       stockXS: String(getStock('XS')),
       stockS: String(getStock('S')),
       stockM: String(getStock('M')),
-      stockL: String(getStock('L'))
+      stockL: String(getStock('L')),
+      collectionId: product.collection ? String(product.collection.id) : '',
+      selectedPromotions: product.promotions ? product.promotions.map(p => p.id) : []
     });
     setIsProductModalOpen(true);
   };
@@ -227,7 +239,8 @@ export default function AdminDashboard({ onBackToStore, initialTab, onTabChange 
         category: productForm.category,
         active: productForm.active,
         images: imagesList,
-        sizes: sizesList
+        sizes: sizesList,
+        collection: productForm.collectionId ? { id: parseInt(productForm.collectionId) } : null
       };
 
       if (editingProduct) {
@@ -280,10 +293,12 @@ export default function AdminDashboard({ onBackToStore, initialTab, onTabChange 
   // Abrir modal para crear nueva promoción
   const handleNewPromoClick = () => {
     setEditingPromo(null);
+    setPromoProductSearch('');
     setPromoForm({
       name: '',
       discountPercentage: '10',
-      isActive: true
+      isActive: true,
+      selectedProducts: []
     });
     setIsPromoModalOpen(true);
   };
@@ -291,10 +306,12 @@ export default function AdminDashboard({ onBackToStore, initialTab, onTabChange 
   // Abrir modal para editar promoción existente
   const handleEditPromoClick = (promo) => {
     setEditingPromo(promo);
+    setPromoProductSearch('');
     setPromoForm({
       name: promo.name,
       discountPercentage: String(promo.discountPercentage),
-      isActive: promo.isActive
+      isActive: promo.isActive,
+      selectedProducts: promo.products ? promo.products.map(p => p.id) : []
     });
     setIsPromoModalOpen(true);
   };
@@ -307,7 +324,8 @@ export default function AdminDashboard({ onBackToStore, initialTab, onTabChange 
       const promoPayload = {
         name: promoForm.name.toUpperCase(),
         discountPercentage: parseInt(promoForm.discountPercentage) || 0,
-        isActive: promoForm.isActive
+        isActive: promoForm.isActive,
+        products: promoForm.selectedProducts.map(id => ({ id: parseInt(id) }))
       };
 
       if (editingPromo) {
@@ -493,7 +511,7 @@ export default function AdminDashboard({ onBackToStore, initialTab, onTabChange 
                               </td>
                               <td className="admin-bold">{product.name.toLowerCase()}</td>
                               <td>{product.category}</td>
-                              <td className="admin-italic">${product.price.toFixed(2)}</td>
+                              <td className="admin-italic">${Math.round(product.price).toLocaleString('es-CO')}</td>
                               <td>{product.discountPercentage}%</td>
                               <td>
                                 <span className="stock-tag">XS: {stockXS}</span>
@@ -625,7 +643,7 @@ export default function AdminDashboard({ onBackToStore, initialTab, onTabChange 
                   <div className="analytics-widget-row">
                     <div className="analytics-card">
                       <span className="analytics-card-title">ventas totales</span>
-                      <h2 className="analytics-card-val">${analytics.totalSales?.toFixed(2) || '0.00'} USD</h2>
+                      <h2 className="analytics-card-val">${Math.round(analytics.totalSales || 0).toLocaleString('es-CO')} COP</h2>
                       <p className="analytics-card-desc">ventas acumuladas netas</p>
                     </div>
 
@@ -657,7 +675,7 @@ export default function AdminDashboard({ onBackToStore, initialTab, onTabChange 
                           {Object.entries(analytics.salesByCategory || {}).map(([cat, rev]) => (
                             <tr key={cat}>
                               <td className="admin-bold">{cat}</td>
-                              <td className="admin-italic">${rev.toFixed(2)} USD</td>
+                              <td className="admin-italic">${Math.round(rev).toLocaleString('es-CO')} COP</td>
                             </tr>
                           ))}
                         </tbody>
@@ -721,24 +739,21 @@ export default function AdminDashboard({ onBackToStore, initialTab, onTabChange 
 
                 <div className="admin-form-row">
                   <div className="admin-form-group half">
-                    <label>precio (USD)</label>
+                    <label>precio (COP)</label>
                     <input 
-                      type="number" 
-                      step="0.01"
+                      type="text" 
                       value={productForm.price}
-                      onChange={(e) => setProductForm(p => ({ ...p, price: e.target.value }))}
-                      placeholder="129.00"
+                      onChange={(e) => setProductForm(p => ({ ...p, price: e.target.value.replace(/[^0-9]/g, '') }))}
+                      placeholder="129000"
                       required
                     />
                   </div>
                   <div className="admin-form-group half">
                     <label>descuento (%)</label>
                     <input 
-                      type="number" 
-                      min="0"
-                      max="99"
+                      type="text" 
                       value={productForm.discountPercentage}
-                      onChange={(e) => setProductForm(p => ({ ...p, discountPercentage: e.target.value }))}
+                      onChange={(e) => setProductForm(p => ({ ...p, discountPercentage: e.target.value.replace(/[^0-9]/g, '') }))}
                       placeholder="0"
                     />
                   </div>
@@ -756,16 +771,29 @@ export default function AdminDashboard({ onBackToStore, initialTab, onTabChange 
                       <option value="accessories">accessories</option>
                     </select>
                   </div>
-                  <div className="admin-form-group half checkbox-group">
-                    <label className="checkbox-label-retro">
-                      <input 
-                        type="checkbox" 
-                        checked={productForm.active}
-                        onChange={(e) => setProductForm(p => ({ ...p, active: e.target.checked }))}
-                      />
-                      producto activo en catálogo
-                    </label>
+                  <div className="admin-form-group half">
+                    <label>colección</label>
+                    <select 
+                      value={productForm.collectionId}
+                      onChange={(e) => setProductForm(p => ({ ...p, collectionId: e.target.value }))}
+                    >
+                      <option value="">sin colección / ninguna</option>
+                      {collections.map(col => (
+                        <option key={col.id} value={col.id}>{col.name.toLowerCase()}</option>
+                      ))}
+                    </select>
                   </div>
+                </div>
+
+                <div className="admin-form-group checkbox-group" style={{ height: 'auto', margin: '5px 0 16px 0' }}>
+                  <label className="checkbox-label-retro">
+                    <input 
+                      type="checkbox" 
+                      checked={productForm.active}
+                      onChange={(e) => setProductForm(p => ({ ...p, active: e.target.checked }))}
+                    />
+                    producto activo en catálogo
+                  </label>
                 </div>
 
                 <div className="admin-form-group">
@@ -818,40 +846,36 @@ export default function AdminDashboard({ onBackToStore, initialTab, onTabChange 
                   <div className="admin-form-group quarter">
                     <label>talla XS</label>
                     <input 
-                      type="number" 
-                      min="0"
+                      type="text" 
                       value={productForm.stockXS}
-                      onChange={(e) => setProductForm(p => ({ ...p, stockXS: e.target.value }))}
+                      onChange={(e) => setProductForm(p => ({ ...p, stockXS: e.target.value.replace(/[^0-9]/g, '') }))}
                       required
                     />
                   </div>
                   <div className="admin-form-group quarter">
                     <label>talla S</label>
                     <input 
-                      type="number" 
-                      min="0"
+                      type="text" 
                       value={productForm.stockS}
-                      onChange={(e) => setProductForm(p => ({ ...p, stockS: e.target.value }))}
+                      onChange={(e) => setProductForm(p => ({ ...p, stockS: e.target.value.replace(/[^0-9]/g, '') }))}
                       required
                     />
                   </div>
                   <div className="admin-form-group quarter">
                     <label>talla M</label>
                     <input 
-                      type="number" 
-                      min="0"
+                      type="text" 
                       value={productForm.stockM}
-                      onChange={(e) => setProductForm(p => ({ ...p, stockM: e.target.value }))}
+                      onChange={(e) => setProductForm(p => ({ ...p, stockM: e.target.value.replace(/[^0-9]/g, '') }))}
                       required
                     />
                   </div>
                   <div className="admin-form-group quarter">
                     <label>talla L</label>
                     <input 
-                      type="number" 
-                      min="0"
+                      type="text" 
                       value={productForm.stockL}
-                      onChange={(e) => setProductForm(p => ({ ...p, stockL: e.target.value }))}
+                      onChange={(e) => setProductForm(p => ({ ...p, stockL: e.target.value.replace(/[^0-9]/g, '') }))}
                       required
                     />
                   </div>
@@ -891,9 +915,9 @@ export default function AdminDashboard({ onBackToStore, initialTab, onTabChange 
                   <div className="admin-form-group half">
                     <label>porcentaje descuento</label>
                     <input 
-                      type="number" 
+                      type="text" 
                       value={promoForm.discountPercentage}
-                      onChange={(e) => setPromoForm(p => ({ ...p, discountPercentage: e.target.value }))}
+                      onChange={(e) => setPromoForm(p => ({ ...p, discountPercentage: e.target.value.replace(/[^0-9]/g, '') }))}
                       placeholder="15" 
                       required 
                     />
@@ -907,6 +931,68 @@ export default function AdminDashboard({ onBackToStore, initialTab, onTabChange 
                       />
                       activar de inmediato
                     </label>
+                  </div>
+                </div>
+
+                <div className="modal-divider-dotted"></div>
+
+                <div className="admin-form-group">
+                  <label>aplicar a los siguientes productos</label>
+                  
+                  {/* Buscador de Productos por Nombre */}
+                  <input 
+                    type="text"
+                    value={promoProductSearch}
+                    onChange={(e) => setPromoProductSearch(e.target.value)}
+                    placeholder="buscar producto por nombre..."
+                    className="promo-search-input"
+                    style={{
+                      backgroundColor: '#faf8f5',
+                      border: '1px solid rgba(56, 91, 147, 0.2)',
+                      fontFamily: 'var(--font-serif)',
+                      fontSize: '0.85rem',
+                      color: 'var(--color-primary)',
+                      padding: '8px 12px',
+                      outline: 'none',
+                      marginBottom: '10px',
+                      width: '100%',
+                      boxSizing: 'border-box'
+                    }}
+                  />
+
+                  <div className="admin-products-checkbox-list">
+                    {products
+                      .filter(prod => prod.name.toLowerCase().includes(promoProductSearch.toLowerCase()))
+                      .map(prod => {
+                        const isChecked = promoForm.selectedProducts.includes(prod.id);
+                        return (
+                          <label key={prod.id} className="admin-product-checkbox-item">
+                            <input 
+                              type="checkbox"
+                              checked={isChecked}
+                              onChange={(e) => {
+                                if (e.target.checked) {
+                                  setPromoForm(prev => ({
+                                    ...prev,
+                                    selectedProducts: [...prev.selectedProducts, prod.id]
+                                  }));
+                                } else {
+                                  setPromoForm(prev => ({
+                                    ...prev,
+                                    selectedProducts: prev.selectedProducts.filter(id => id !== prod.id)
+                                  }));
+                                }
+                              }}
+                            />
+                            <span>
+                              {prod.name.toLowerCase()} <span className="admin-product-checkbox-meta">({prod.category} - ${Math.round(prod.price).toLocaleString('es-CO')})</span>
+                            </span>
+                          </label>
+                        );
+                      })}
+                    {products.filter(prod => prod.name.toLowerCase().includes(promoProductSearch.toLowerCase())).length === 0 && (
+                      <p className="admin-info-text small">no se encontraron productos.</p>
+                    )}
                   </div>
                 </div>
               </div>
