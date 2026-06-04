@@ -58,10 +58,8 @@ public class AdminProductController {
             existingProduct.setActive(productDetails.getActive());
         }
 
-        // Actualizar colección si se proporciona
-        if (productDetails.getCollection() != null) {
-            existingProduct.setCollection(productDetails.getCollection());
-        }
+        // Actualizar colección (permite desvincular enviando null)
+        existingProduct.setCollection(productDetails.getCollection());
 
         // Actualizar imágenes y tallas
         if (productDetails.getImages() != null) {
