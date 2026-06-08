@@ -54,6 +54,15 @@ export const apiService = {
   },
 
   /**
+   * Obtiene las categorías de la tienda
+   */
+  async getCategories() {
+    const response = await fetch(`${BASE_URL}/categories`, { headers: getHeaders() });
+    if (!response.ok) throw new Error('Error al obtener categorías.');
+    return response.json();
+  },
+
+  /**
    * Procesa el checkout del carrito y obtiene el enlace de redirección a WhatsApp
    */
   async checkout(orderRequest) {
@@ -229,6 +238,49 @@ export const apiService = {
       headers: getHeaders(auth)
     });
     if (!response.ok) throw new Error('Error al eliminar promoción.');
+    return response;
+  },
+
+  /**
+   * Elimina una colección
+   */
+  async adminDeleteCollection(id, auth) {
+    const response = await fetch(`${BASE_URL}/nikiadministradora/collections/${id}`, {
+      method: 'DELETE',
+      headers: getHeaders(auth)
+    });
+    if (!response.ok) throw new Error('Error al eliminar colección.');
+    return response;
+  },
+
+  /**
+   * Crea una nueva categoría
+   */
+  async adminCreateCategory(categoryData, auth) {
+    const response = await fetch(`${BASE_URL}/nikiadministradora/categories`, {
+      method: 'POST',
+      headers: getHeaders(auth),
+      body: JSON.stringify(categoryData)
+    });
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(errorText || 'Error al crear categoría.');
+    }
+    return response.json();
+  },
+
+  /**
+   * Elimina una categoría
+   */
+  async adminDeleteCategory(id, auth) {
+    const response = await fetch(`${BASE_URL}/nikiadministradora/categories/${id}`, {
+      method: 'DELETE',
+      headers: getHeaders(auth)
+    });
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(errorText || 'Error al eliminar categoría.');
+    }
     return response;
   }
 };

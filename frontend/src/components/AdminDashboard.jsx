@@ -39,6 +39,10 @@ export default function AdminDashboard({ onBackToStore, initialTab, onTabChange 
   const [collections, setCollections] = useState([]);
   const [customers, setCustomers] = useState([]);
   const [analytics, setAnalytics] = useState(null);
+  const [categories, setCategories] = useState([]);
+  const [newCategoryName, setNewCategoryName] = useState('');
+  const [newCollectionName, setNewCollectionName] = useState('');
+  const [newCollectionDesc, setNewCollectionDesc] = useState('');
   
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -94,6 +98,8 @@ export default function AdminDashboard({ onBackToStore, initialTab, onTabChange 
         setPromotions(promoData);
         const colData = await apiService.getCollections();
         setCollections(colData);
+        const catData = await apiService.getCategories();
+        setCategories(catData);
       } else if (activeTab === 'promotions') {
         const data = await apiService.adminGetPromotions(auth);
         setPromotions(data);
@@ -105,6 +111,11 @@ export default function AdminDashboard({ onBackToStore, initialTab, onTabChange 
       } else if (activeTab === 'analytics') {
         const data = await apiService.adminGetAnalytics(auth);
         setAnalytics(data);
+      } else if (activeTab === 'categories') {
+        const catData = await apiService.getCategories();
+        setCategories(catData);
+        const colData = await apiService.getCollections();
+        setCollections(colData);
       }
     } catch (err) {
       console.error(err);
@@ -153,7 +164,7 @@ export default function AdminDashboard({ onBackToStore, initialTab, onTabChange 
       description: '',
       price: '',
       discountPercentage: '0',
-      category: 'intimates',
+      category: categories[0]?.name || '',
       active: true,
       mainImageUrl: '',
       detailImageUrl1: '',
@@ -371,6 +382,66 @@ export default function AdminDashboard({ onBackToStore, initialTab, onTabChange 
     }
   };
 
+  // ===================================================================
+  // ACCIONES DE CATEGORÍAS Y COLECCIONES
+  // ===================================================================
+
+  const handleCreateCategory = async (e) => {
+    e.preventDefault();
+    if (!newCategoryName.trim()) return;
+    setError(null);
+    try {
+      await apiService.adminCreateCategory({ name: newCategoryName.trim() }, auth);
+      setNewCategoryName('');
+      fetchData();
+    } catch (err) {
+      console.error(err);
+      setError(err.message || 'Error al crear la categoría.');
+    }
+  };
+
+  const handleDeleteCategory = async (id) => {
+    if (!window.confirm('¿Estás seguro de que deseas eliminar esta categoría?')) return;
+    setError(null);
+    try {
+      await apiService.adminDeleteCategory(id, auth);
+      fetchData();
+    } catch (err) {
+      console.error(err);
+      setError(err.message || 'Error al eliminar la categoría. Asegúrate de que no haya productos asociados.');
+    }
+  };
+
+  const handleCreateCollection = async (e) => {
+    e.preventDefault();
+    if (!newCollectionName.trim()) return;
+    setError(null);
+    try {
+      await apiService.adminCreateCollection({
+        name: newCollectionName.trim(),
+        description: newCollectionDesc.trim()
+      }, auth);
+      setNewCollectionName('');
+      setNewCollectionDesc('');
+      fetchData();
+    } catch (err) {
+      console.error(err);
+      setError(err.message || 'Error al crear la colección.');
+    }
+  };
+
+  const handleDeleteCollection = async (id) => {
+    if (!window.confirm('¿Estás seguro de que deseas eliminar esta colección? Los productos asociados quedarán sin colección (no se eliminarán).')) return;
+    setError(null);
+    try {
+      await apiService.adminDeleteCollection(id, auth);
+      fetchData();
+    } catch (err) {
+      console.error(err);
+      setError(err.message || 'Error al eliminar la colección.');
+    }
+  };
+
   return (
     <div className="admin-container">
       {/* VISTA 1: LOGIN ADMINISTRATIVO */}
@@ -452,6 +523,12 @@ export default function AdminDashboard({ onBackToStore, initialTab, onTabChange 
               >
                 analíticas & ventas
               </button>
+              <button 
+                className={`admin-nav-item ${activeTab === 'categories' ? 'active' : ''}`}
+                onClick={() => handleTabClick('categories')}
+              >
+                categorías y colecciones
+              </button>
             </nav>
 
             <div className="admin-sidebar-footer">
@@ -466,7 +543,8 @@ export default function AdminDashboard({ onBackToStore, initialTab, onTabChange 
               <h1>{activeTab === 'products' ? 'gestión de catálogo' :
                    activeTab === 'promotions' ? 'campañas y promociones' :
                    activeTab === 'users' ? 'usuarios y clientes' :
-                   'centro de analíticas'}</h1>
+                   activeTab === 'analytics' ? 'centro de analíticas' :
+                   'categorías & colecciones'}</h1>
               {activeTab === 'products' && (
                 <button className="admin-action-btn-main" onClick={handleNewProductClick}>
                   + agregar producto nuevo
@@ -709,6 +787,130 @@ export default function AdminDashboard({ onBackToStore, initialTab, onTabChange 
                   </div>
                 </div>
               )}
+
+              {/* TAB 5: CATEGORÍAS Y COLECCIONES */}
+              {activeTab === 'categories' && (
+                <div className="admin-categories-collections-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '30px', marginTop: '20px' }}>
+                  {/* Columna Categorías */}
+                  <div className="admin-card" style={{ padding: '24px' }}>
+                    <h3 className="section-title-retro" style={{ marginBottom: '15px', borderBottom: '1px solid rgba(56, 91, 147, 0.15)', paddingBottom: '10px' }}>gestión de categorías</h3>
+                    <form onSubmit={handleCreateCategory} className="retro-form" style={{ display: 'flex', gap: '10px', marginBottom: '20px', alignItems: 'flex-end' }}>
+                      <div className="form-group-retro" style={{ flex: 1, marginBottom: 0 }}>
+                        <label>nueva categoría</label>
+                        <input 
+                          type="text" 
+                          placeholder="ej. vestidos" 
+                          value={newCategoryName}
+                          onChange={(e) => setNewCategoryName(e.target.value)}
+                          required
+                        />
+                      </div>
+                      <button type="submit" className="admin-action-btn-main" style={{ whiteSpace: 'nowrap', height: '42px', padding: '0 20px' }}>agregar</button>
+                    </form>
+
+                    <div className="admin-table-wrapper" style={{ maxHeight: '400px', overflowY: 'auto' }}>
+                      <table className="admin-table">
+                        <thead>
+                          <tr>
+                            <th>nombre</th>
+                            <th>acciones</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {categories.map(cat => (
+                            <tr key={cat.id}>
+                              <td className="admin-bold">{cat.name.toLowerCase()}</td>
+                              <td>
+                                <button 
+                                  className="admin-row-btn delete" 
+                                  onClick={() => handleDeleteCategory(cat.id)}
+                                >
+                                  eliminar
+                                </button>
+                              </td>
+                            </tr>
+                          ))}
+                          {categories.length === 0 && (
+                            <tr>
+                              <td colSpan="2" className="admin-empty-row">no hay categorías creadas.</td>
+                            </tr>
+                          )}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+
+                  {/* Columna Colecciones */}
+                  <div className="admin-card" style={{ padding: '24px' }}>
+                    <h3 className="section-title-retro" style={{ marginBottom: '15px', borderBottom: '1px solid rgba(56, 91, 147, 0.15)', paddingBottom: '10px' }}>gestión de colecciones</h3>
+                    <form onSubmit={handleCreateCollection} className="retro-form" style={{ marginBottom: '20px' }}>
+                      <div className="form-group-retro">
+                        <label>nombre de colección</label>
+                        <input 
+                          type="text" 
+                          placeholder="ej. Otoño Retro 2026" 
+                          value={newCollectionName}
+                          onChange={(e) => setNewCollectionName(e.target.value)}
+                          required
+                        />
+                      </div>
+                      <div className="form-group-retro" style={{ marginTop: '10px' }}>
+                        <label>descripción (opcional)</label>
+                        <textarea 
+                          rows="2"
+                          placeholder="Descripción corta..." 
+                          value={newCollectionDesc}
+                          onChange={(e) => setNewCollectionDesc(e.target.value)}
+                          style={{
+                            width: '100%',
+                            padding: '8px',
+                            border: '1px solid rgba(56, 91, 147, 0.2)',
+                            borderRadius: '2px',
+                            fontFamily: 'var(--font-sans)',
+                            backgroundColor: '#faf8f5',
+                            outline: 'none',
+                            boxSizing: 'border-box'
+                          }}
+                        />
+                      </div>
+                      <button type="submit" className="admin-action-btn-main" style={{ width: '100%', marginTop: '10px' }}>agregar colección</button>
+                    </form>
+
+                    <div className="admin-table-wrapper" style={{ maxHeight: '250px', overflowY: 'auto' }}>
+                      <table className="admin-table">
+                        <thead>
+                          <tr>
+                            <th>nombre</th>
+                            <th>descripción</th>
+                            <th>acciones</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {collections.map(col => (
+                            <tr key={col.id}>
+                              <td className="admin-bold">{col.name.toLowerCase()}</td>
+                              <td className="admin-italic" style={{ fontSize: '0.8rem' }}>{col.description || 'sin descripción'}</td>
+                              <td>
+                                <button 
+                                  className="admin-row-btn delete" 
+                                  onClick={() => handleDeleteCollection(col.id)}
+                                >
+                                  eliminar
+                                </button>
+                              </td>
+                            </tr>
+                          ))}
+                          {collections.length === 0 && (
+                            <tr>
+                              <td colSpan="3" className="admin-empty-row">no hay colecciones creadas.</td>
+                            </tr>
+                          )}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </main>
         </div>
@@ -765,10 +967,12 @@ export default function AdminDashboard({ onBackToStore, initialTab, onTabChange 
                     <select 
                       value={productForm.category}
                       onChange={(e) => setProductForm(p => ({ ...p, category: e.target.value }))}
+                      required
                     >
-                      <option value="intimates">intimates</option>
-                      <option value="bags">bags</option>
-                      <option value="accessories">accessories</option>
+                      <option value="">seleccionar categoría...</option>
+                      {categories.map(cat => (
+                        <option key={cat.id} value={cat.name}>{cat.name.toLowerCase()}</option>
+                      ))}
                     </select>
                   </div>
                   <div className="admin-form-group half">

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { apiService } from '../services/api';
-import { editorialImages } from '../services/products';
 import './Catalog.css';
 
 export default function Catalog({ categoryFilter, onProductClick }) {
@@ -134,21 +133,6 @@ export default function Catalog({ categoryFilter, onProductClick }) {
             SEE MORE
           </button>
         )}
-      </div>
-
-      {/* Fila inferior de 4 Imágenes Editoriales/Lifestyle */}
-      <div className="editorial-divider"></div>
-      <div className="editorial-row">
-        {editorialImages.map((imgSrc, idx) => (
-          <div key={`editorial-${idx}`} className="editorial-item">
-            <img 
-              src={imgSrc} 
-              alt={`Lifestyle Nikka ${idx + 1}`} 
-              className="editorial-image"
-              draggable="false"
-            />
-          </div>
-        ))}
       </div>
     </section>
   );
