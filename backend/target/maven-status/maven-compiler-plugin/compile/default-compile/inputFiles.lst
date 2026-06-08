@@ -1,10 +1,14 @@
 C:\Users\JAAL\Documents\NikkaTheBrandWeb\backend\src\main\java\com\nikkathebrand\backend\model\Promotion.java
+C:\Users\JAAL\Documents\NikkaTheBrandWeb\backend\src\main\java\com\nikkathebrand\backend\controller\AdminCategoryController.java
 C:\Users\JAAL\Documents\NikkaTheBrandWeb\backend\src\main\java\com\nikkathebrand\backend\model\OrderItem.java
 C:\Users\JAAL\Documents\NikkaTheBrandWeb\backend\src\main\java\com\nikkathebrand\backend\controller\AuthController.java
+C:\Users\JAAL\Documents\NikkaTheBrandWeb\backend\src\main\java\com\nikkathebrand\backend\model\Category.java
 C:\Users\JAAL\Documents\NikkaTheBrandWeb\backend\src\main\java\com\nikkathebrand\backend\repository\PromotionRepository.java
 C:\Users\JAAL\Documents\NikkaTheBrandWeb\backend\src\main\java\com\nikkathebrand\backend\repository\CustomerRepository.java
 C:\Users\JAAL\Documents\NikkaTheBrandWeb\backend\src\main\java\com\nikkathebrand\backend\model\ProductImage.java
+C:\Users\JAAL\Documents\NikkaTheBrandWeb\backend\src\main\java\com\nikkathebrand\backend\repository\CategoryRepository.java
 C:\Users\JAAL\Documents\NikkaTheBrandWeb\backend\src\main\java\com\nikkathebrand\backend\BackendApplication.java
+C:\Users\JAAL\Documents\NikkaTheBrandWeb\backend\src\main\java\com\nikkathebrand\backend\controller\CategoryController.java
 C:\Users\JAAL\Documents\NikkaTheBrandWeb\backend\src\main\java\com\nikkathebrand\backend\dto\OrderRequest.java
 C:\Users\JAAL\Documents\NikkaTheBrandWeb\backend\src\main\java\com\nikkathebrand\backend\controller\OrderController.java
 C:\Users\JAAL\Documents\NikkaTheBrandWeb\backend\src\main\java\com\nikkathebrand\backend\dto\CartItemRequest.java

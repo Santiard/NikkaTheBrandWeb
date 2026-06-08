@@ -1,11 +1,13 @@
 package com.nikkathebrand.backend.controller;
 
 import com.nikkathebrand.backend.model.Collection;
+import com.nikkathebrand.backend.model.Product;
 import com.nikkathebrand.backend.repository.CollectionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.transaction.annotation.Transactional;
 
 @RestController
 @RequestMapping("/api/nikiadministradora/collections")
@@ -22,11 +24,22 @@ public class AdminCollectionController {
     }
 
     @DeleteMapping("/{id}")
+    @Transactional
     public ResponseEntity<Void> deleteCollection(@PathVariable Long id) {
-        if (!collectionRepository.existsById(id)) {
+        Collection collection = collectionRepository.findById(id).orElse(null);
+        if (collection == null) {
             return ResponseEntity.notFound().build();
         }
-        collectionRepository.deleteById(id);
+
+        // Desasociar todos los productos vinculados antes de eliminar la colección
+        if (collection.getProducts() != null) {
+            for (Product product : collection.getProducts()) {
+                product.setCollection(null);
+            }
+            collection.getProducts().clear();
+        }
+
+        collectionRepository.delete(collection);
         return ResponseEntity.noContent().build();
     }
 }

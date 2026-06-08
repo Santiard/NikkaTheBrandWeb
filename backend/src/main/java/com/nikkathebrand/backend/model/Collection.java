@@ -25,7 +25,7 @@ public class Collection {
     @Column(length = 1000)
     private String description;
 
-    @OneToMany(mappedBy = "collection", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "collection")
     @JsonIgnoreProperties("collection")
     private List<Product> products = new ArrayList<>();
 }

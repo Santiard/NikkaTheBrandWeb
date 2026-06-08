@@ -30,8 +30,19 @@ public class DataInitializer implements CommandLineRunner {
     @Autowired
     private PromotionRepository promotionRepository;
 
+    @Autowired
+    private CategoryRepository categoryRepository;
+
     @Override
     public void run(String... args) throws Exception {
+        // Inicializar Categorías por Defecto
+        if (categoryRepository.count() == 0) {
+            categoryRepository.save(Category.builder().name("intimates").build());
+            categoryRepository.save(Category.builder().name("bags").build());
+            categoryRepository.save(Category.builder().name("accessories").build());
+            categoryRepository.save(Category.builder().name("Gift Card").build());
+            System.out.println("====== DEFAULT CATEGORIES SEEDED ======");
+        }
         // 1. Inicializar Usuario Administrador por Defecto si no existe o migrar su contraseña si no está cifrada
         Optional<AdminUser> existingAdmin = adminUserRepository.findByUsername("admin");
         if (existingAdmin.isEmpty()) {
