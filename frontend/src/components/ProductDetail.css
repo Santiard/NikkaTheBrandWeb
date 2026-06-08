@@ -36,22 +36,24 @@
 /* Layout Principal - 2 Columnas */
 .detail-container {
   display: flex;
-  gap: 60px;
+  gap: 56px;
   width: 100%;
   align-items: flex-start;
 }
 
 /* Columna Izquierda: Galería */
 .detail-gallery {
-  flex: 1.2; /* Proporción ~55% */
+  flex: 1.15; /* Proporción ~55% */
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 14px;
+  min-width: 0;
 }
 
 .main-preview-wrapper {
   width: 100%;
-  aspect-ratio: 3 / 4;
+  aspect-ratio: 4 / 5;
+  max-height: min(72vh, 740px);
   overflow: hidden;
   border: 1px solid rgba(56, 91, 147, 0.1);
   background-color: #fafafa;
@@ -60,20 +62,24 @@
 .main-preview-image {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   pointer-events: none;
   -webkit-user-drag: none;
+  display: block;
 }
 
 .thumbnail-row {
   display: flex;
   gap: 12px;
   width: 100%;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  padding-bottom: 4px;
 }
 
 .thumbnail-button {
-  flex: 1;
-  aspect-ratio: 3 / 4;
+  flex: 0 0 112px;
+  aspect-ratio: 1 / 1;
   padding: 0;
   border: 1px solid rgba(56, 91, 147, 0.15);
   background: none;
@@ -292,6 +298,25 @@
   }
   .detail-gallery, .detail-info {
     width: 100%;
+  }
+
+  .main-preview-wrapper {
+    max-height: 68vh;
+  }
+
+  .thumbnail-button {
+    flex-basis: 92px;
+  }
+}
+
+@media (max-width: 560px) {
+  .detail-section {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .thumbnail-button {
+    flex-basis: 84px;
   }
 }
 

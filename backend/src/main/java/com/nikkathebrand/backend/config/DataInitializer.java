@@ -97,9 +97,8 @@ public class DataInitializer implements CommandLineRunner {
             );
             bonnie.setImages(bonnieImages);
 
-            // Agregar existencias por talla
+            // Agregar existencias por talla (sin XS)
             List<SizeInventory> bonnieSizes = List.of(
-                    SizeInventory.builder().size("XS").stock(5).product(bonnie).build(),
                     SizeInventory.builder().size("S").stock(10).product(bonnie).build(),
                     SizeInventory.builder().size("M").stock(8).product(bonnie).build(),
                     SizeInventory.builder().size("L").stock(4).product(bonnie).build()
@@ -124,7 +123,6 @@ public class DataInitializer implements CommandLineRunner {
             duvetBag.setImages(duvetImages);
 
             List<SizeInventory> duvetSizes = List.of(
-                    SizeInventory.builder().size("XS").stock(0).product(duvetBag).build(), // Sin stock
                     SizeInventory.builder().size("S").stock(15).product(duvetBag).build(),
                     SizeInventory.builder().size("M").stock(20).product(duvetBag).build(),
                     SizeInventory.builder().size("L").stock(15).product(duvetBag).build()

@@ -61,7 +61,6 @@ export default function AdminDashboard({ onBackToStore, initialTab, onTabChange 
     detailImageUrl1: '',
     detailImageUrl2: '',
     detailImageUrl3: '',
-    stockXS: '5',
     stockS: '10',
     stockM: '10',
     stockL: '5',
@@ -170,7 +169,6 @@ export default function AdminDashboard({ onBackToStore, initialTab, onTabChange 
       detailImageUrl1: '',
       detailImageUrl2: '',
       detailImageUrl3: '',
-      stockXS: '5',
       stockS: '10',
       stockM: '10',
       stockL: '5',
@@ -189,9 +187,6 @@ export default function AdminDashboard({ onBackToStore, initialTab, onTabChange 
     const detailImgs = product.images?.filter(img => img.imageType === 'DETAIL') || [];
     
     // Obtener existencias por tallas
-    const getStock = (sizeName) => {
-      return product.sizes?.find(s => s.size === sizeName)?.stock || '0';
-    };
 
     setProductForm({
       name: product.name,
@@ -204,10 +199,9 @@ export default function AdminDashboard({ onBackToStore, initialTab, onTabChange 
       detailImageUrl1: detailImgs[0]?.imageUrl || '',
       detailImageUrl2: detailImgs[1]?.imageUrl || '',
       detailImageUrl3: detailImgs[2]?.imageUrl || '',
-      stockXS: String(getStock('XS')),
-      stockS: String(getStock('S')),
-      stockM: String(getStock('M')),
-      stockL: String(getStock('L')),
+      stockS: String(product.sizes?.find(s => s.size === 'S')?.stock || '0'),
+      stockM: String(product.sizes?.find(s => s.size === 'M')?.stock || '0'),
+      stockL: String(product.sizes?.find(s => s.size === 'L')?.stock || '0'),
       collectionId: product.collection ? String(product.collection.id) : '',
       selectedPromotions: product.promotions ? product.promotions.map(p => p.id) : []
     });
@@ -236,7 +230,6 @@ export default function AdminDashboard({ onBackToStore, initialTab, onTabChange 
 
       // 2. Construir existencias
       const sizesList = [
-        { size: 'XS', stock: parseInt(productForm.stockXS) || 0 },
         { size: 'S', stock: parseInt(productForm.stockS) || 0 },
         { size: 'M', stock: parseInt(productForm.stockM) || 0 },
         { size: 'L', stock: parseInt(productForm.stockL) || 0 }
@@ -567,7 +560,7 @@ export default function AdminDashboard({ onBackToStore, initialTab, onTabChange 
                           <th>categoría</th>
                           <th>precio</th>
                           <th>descuento</th>
-                          <th>existencias (XS/S/M/L)</th>
+                          <th>existencias (S/M/L)</th>
                           <th>estado</th>
                           <th>acciones</th>
                         </tr>
@@ -575,7 +568,6 @@ export default function AdminDashboard({ onBackToStore, initialTab, onTabChange 
                       <tbody>
                         {products.map(product => {
                           const mainImg = product.images?.find(i => i.imageType === 'MAIN')?.imageUrl || '';
-                          const stockXS = product.sizes?.find(s => s.size === 'XS')?.stock || 0;
                           const stockS = product.sizes?.find(s => s.size === 'S')?.stock || 0;
                           const stockM = product.sizes?.find(s => s.size === 'M')?.stock || 0;
                           const stockL = product.sizes?.find(s => s.size === 'L')?.stock || 0;
@@ -592,7 +584,6 @@ export default function AdminDashboard({ onBackToStore, initialTab, onTabChange 
                               <td className="admin-italic">${Math.round(product.price).toLocaleString('es-CO')}</td>
                               <td>{product.discountPercentage}%</td>
                               <td>
-                                <span className="stock-tag">XS: {stockXS}</span>
                                 <span className="stock-tag">S: {stockS}</span>
                                 <span className="stock-tag">M: {stockM}</span>
                                 <span className="stock-tag">L: {stockL}</span>
@@ -1047,15 +1038,6 @@ export default function AdminDashboard({ onBackToStore, initialTab, onTabChange 
 
                 <h3 className="modal-section-title">existencias físicas por talla</h3>
                 <div className="admin-form-row four-cols">
-                  <div className="admin-form-group quarter">
-                    <label>talla XS</label>
-                    <input 
-                      type="text" 
-                      value={productForm.stockXS}
-                      onChange={(e) => setProductForm(p => ({ ...p, stockXS: e.target.value.replace(/[^0-9]/g, '') }))}
-                      required
-                    />
-                  </div>
                   <div className="admin-form-group quarter">
                     <label>talla S</label>
                     <input 

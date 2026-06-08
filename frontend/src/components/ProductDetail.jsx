@@ -46,8 +46,8 @@ export default function ProductDetail({ productId, onBack, onAddToCart }) {
           : data.mainImage;
         setActiveImage(mainImg);
 
-        // Preseleccionar la primera talla disponible que tenga stock
-        const sizesList = ['XS', 'S', 'M', 'L'];
+        // Preseleccionar la primera talla disponible que tenga stock (S/M/L)
+        const sizesList = ['S', 'M', 'L'];
         const firstAvailable = sizesList.find(size => {
           const stock = data.sizes?.find(s => s.size === size)?.stock || 0;
           return stock > 0;
@@ -175,7 +175,7 @@ export default function ProductDetail({ productId, onBack, onAddToCart }) {
           <div className="size-selector-section">
             <span className="section-label">talla</span>
             <div className="size-buttons">
-              {['XS', 'S', 'M', 'L'].map((size) => {
+              {['S', 'M', 'L'].map((size) => {
                 const stock = getStockForSize(size);
                 const isOutOfStock = stock <= 0;
 
@@ -196,7 +196,7 @@ export default function ProductDetail({ productId, onBack, onAddToCart }) {
 
           {/* Botón de Añadir al Carrito */}
           {(() => {
-            const isAllOutOfStock = ['XS', 'S', 'M', 'L'].every(size => getStockForSize(size) <= 0);
+            const isAllOutOfStock = ['S', 'M', 'L'].every(size => getStockForSize(size) <= 0);
             return (
               <button 
                 className={`add-to-cart-btn ${addedFeedback ? 'added' : ''} ${isAllOutOfStock ? 'disabled-btn' : ''}`}
