@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: nikka-backend
+    ports:
+      - "8081:8081"
+    environment:
+      # Conectamos directamente al contenedor MariaDB existente de casa-glass a través de la red de Docker
+      - SPRING_DATASOURCE_URL=jdbc:mariadb://compose-mariadb-1:3306/nikka_db?createDatabaseIfNotExist=true&useSSL=false
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=admin123 # DEBE coincidir con la de casa-glass
+    networks:
+      - default
+      - casa_glass_network
+    restart: always
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        - VITE_API_URL=https://app2.casa-glass.com/api
+    container_name: nikka-frontend
+    ports:
+      - "3002:3002"
+    depends_on:
+      - backend
+    restart: always
+
+networks:
+  casa_glass_network:
+    external: true
+    name: compose_default # Nombre típico de la red creada por el compose de /opt/proyecto/compose
