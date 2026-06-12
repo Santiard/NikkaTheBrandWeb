@@ -120,25 +120,23 @@ public class OrderService {
         Customer c = order.getCustomer();
         StringBuilder sb = new StringBuilder();
 
-        sb.append("¡Hola Nikka The Brand! 𓃶 Me encantaría realizar un pedido:\n\n");
-        sb.append("📌 *DATOS DE ENVÍO*:\n");
-        sb.append("• *Nombre:* ").append(c.getName()).append("\n");
-        sb.append("• *Teléfono:* ").append(c.getPhone()).append("\n");
-        sb.append("• *Dirección:* ").append(c.getAddress()).append("\n");
-        sb.append("• *Ciudad:* ").append(c.getCity()).append("\n");
-        sb.append("• *Departamento:* ").append(c.getDepartment()).append("\n\n");
+        sb.append("Hola Nikka The Brand \uD83D\uDC11 Me encantaría realizar un pedido:\n\n");
+        sb.append("DATOS DE ENVÍO:\n");
+        sb.append("* Nombre: ").append(c.getName()).append("\n");
+        sb.append("* Teléfono: ").append(c.getPhone()).append("\n");
+        sb.append("* Dirección: ").append(c.getAddress()).append("\n");
+        sb.append("* Ciudad: ").append(c.getCity()).append("\n\n");
 
-        sb.append("🛍️ *DETALLE DE TU COMPRA* (Orden #").append(order.getId()).append("):\n");
+        sb.append("\uD83E\uDDFACDETALLE DE TU COMPRA (Orden #").append(order.getId()).append("):\n");
 
         for (OrderItem item : order.getOrderItems()) {
-            sb.append("• ").append(item.getQuantity()).append("x ")
+            sb.append("* ").append(item.getQuantity()).append("x ")
               .append(item.getProduct().getName())
-              .append(" - Talla: *").append(item.getSize()).append("*")
+              .append(" - Talla: ").append(item.getSize())
               .append(" - C/U: $").append(item.getUnitPrice().setScale(2)).append(" USD\n");
         }
 
-        sb.append("\n💵 *TOTAL A PAGAR:* $").append(order.getTotalAmount().setScale(2)).append(" USD\n\n");
-        sb.append("Quedo atento a tus datos de pago para finalizar mi compra. ¡Muchas gracias! ✨");
+        sb.append("\nTOTAL A PAGAR: $").append(order.getTotalAmount().setScale(2)).append(" USD");
 
         String encodedText = URLEncoder.encode(sb.toString(), StandardCharsets.UTF_8);
         return "https://api.whatsapp.com/send?phone=" + whatsappPhone + "&text=" + encodedText;

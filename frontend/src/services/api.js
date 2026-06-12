@@ -1,7 +1,7 @@
 // Central API Service - Nikka The Brand
 // Conecta el Frontend en React (Vite) con el Backend en Spring Boot (Puerto 8080)
 
-const BASE_URL = 'http://localhost:8080/api';
+const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8081/api';
 
 /**
  * Genera la cabecera de autorización básica (HTTP Basic Auth) a partir de las credenciales del admin

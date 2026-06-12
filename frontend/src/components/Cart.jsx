@@ -69,7 +69,7 @@ export default function Cart({ isOpen, onClose, cartItems, onUpdateQuantity, onR
 
       // Redirigir al cliente a WhatsApp
       if (response.whatsappUrl) {
-        window.location.href = response.whatsappUrl;
+        window.open(response.whatsappUrl, '_blank');
       }
     } catch (err) {
       console.error(err);

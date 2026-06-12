@@ -6,7 +6,7 @@ export default function Header({ onMenuClick, onLogoClick, onCartClick, cartCoun
   return (
     <div className="header-wrapper">
       <div className="top-strip">
-        Designed for the love of vintage ..: 𓃶 :..
+        Designed for the love of vintage⣠⠞𐙚⢷
       </div>
       <header className="header">
         <div className="menu-btn-container">
