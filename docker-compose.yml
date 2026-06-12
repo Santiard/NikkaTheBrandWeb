@@ -9,10 +9,13 @@ services:
     ports:
       - "8081:8081"
     environment:
-      # Conexión directa a través de la IP del VPS como especifica tu manual
-      - SPRING_DATASOURCE_URL=jdbc:mariadb://148.230.87.167:3306/nikka_db?createDatabaseIfNotExist=true&useSSL=false
+      # Conectamos usando el nombre interno del contenedor de tu VPS
+      - SPRING_DATASOURCE_URL=jdbc:mariadb://compose-mariadb-1:3306/nikka_db?createDatabaseIfNotExist=true&useSSL=false
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=Tangoleyro007
+    networks:
+      - default
+      - casa_glass_network
     restart: always
 
   frontend:
@@ -27,3 +30,8 @@ services:
     depends_on:
       - backend
     restart: always
+
+networks:
+  casa_glass_network:
+    external: true
+    name: compose_default
