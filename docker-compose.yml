@@ -6,16 +6,14 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     container_name: nikka-backend
-    ports:
-      - "8081:8081"
+    # network_mode "host" hace que el contenedor comparta la red real del VPS.
+    # Ya no hace falta mapear puertos (ports: - "8081:8081") porque tomará el 8081 nativo.
+    network_mode: "host"
     environment:
-      # Conectamos usando el nombre interno del contenedor de tu VPS
-      - SPRING_DATASOURCE_URL=jdbc:mariadb://compose-mariadb-1:3306/nikka_db?createDatabaseIfNotExist=true&useSSL=false
+      # Ahora puede conectarse a localhost tal como si estuviera instalado en el VPS nativamente
+      - SPRING_DATASOURCE_URL=jdbc:mariadb://127.0.0.1:3306/nikka_db?createDatabaseIfNotExist=true&useSSL=false
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=Tangoleyro007
-    networks:
-      - default
-      - casa_glass_network
     restart: always
 
   frontend:
@@ -27,11 +25,4 @@ services:
     container_name: nikka-frontend
     ports:
       - "3002:3002"
-    depends_on:
-      - backend
     restart: always
-
-networks:
-  casa_glass_network:
-    external: true
-    name: compose_default
