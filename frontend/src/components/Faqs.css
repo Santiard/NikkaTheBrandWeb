@@ -99,14 +99,16 @@
   width: 100%;
   display: flex;
   justify-content: center;
-  margin-top: -25px; /* Restaurado el margen óptimo y aireado de la ilustración */
+  margin-top: 40px; /* Separación superior para que no se pegue al texto de las FAQs */
   padding-bottom: 0px;
 }
 
 .faqs-lambs-image {
-  width: 390px;
+  width: 250px; /* Igualado al tamaño exacto de la página principal (Home) */
   max-width: 95%;
   height: auto;
+  max-height: 200px;
+  object-fit: contain;
   opacity: 0.85;
   user-select: none;
   pointer-events: none;

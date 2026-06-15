@@ -279,6 +279,8 @@
 .detail-lambs-img {
   width: 140px;
   height: auto;
+  max-height: 90px;
+  object-fit: contain;
   opacity: 0.85;
   pointer-events: none;
   -webkit-user-drag: none;

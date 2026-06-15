@@ -115,31 +115,7 @@ function App() {
     return () => window.removeEventListener('popstate', handleUrlChange);
   }, []);
 
-  // Set initial scroll position to the middle set of cards for infinite scroll feel
-  useEffect(() => {
-    if (activePage === 'home') {
-      const container = scrollContainerRef.current;
-      if (container) {
-        const setWidth = container.scrollWidth / 3;
-        container.scrollLeft = setWidth;
-      }
-    }
-  }, [activePage]);
 
-  // Seamless Infinite Looping Scroll logic
-  const handleScroll = () => {
-    const container = scrollContainerRef.current;
-    if (!container) return;
-    
-    const setWidth = container.scrollWidth / 3;
-    
-    // Seamlessly warp when scrolling near boundaries
-    if (container.scrollLeft >= setWidth * 2) {
-      container.scrollLeft -= setWidth;
-    } else if (container.scrollLeft <= 5) {
-      container.scrollLeft += setWidth;
-    }
-  };
 
   // Drag-to-Scroll Event Handlers
   const handleMouseDown = (e) => {
@@ -310,59 +286,16 @@ function App() {
           <div 
             className="home-carousel-container"
             ref={scrollContainerRef}
-            onScroll={handleScroll}
             onMouseDown={handleMouseDown}
             onMouseLeave={handleMouseLeave}
             onMouseUp={handleMouseUp}
             onMouseMove={handleMouseMove}
           >
             <div className="home-carousel-track">
-              {/* Set 1 (Left Boundary Padding) */}
+              {/* Set Único de Tarjetas */}
               {cardsData.map((card, idx) => (
                 <a 
-                  key={`set1-${card.id}-${idx}`} 
-                  href="#" 
-                  className={`grid-card ${card.className}`}
-                  onClick={(e) => handleCardClick(e, card.id)}
-                  onDragStart={(e) => e.preventDefault()}
-                >
-                  <div className="image-wrapper">
-                    <img 
-                      src={card.img} 
-                      alt={card.title} 
-                      draggable="false" 
-                      onDragStart={(e) => e.preventDefault()} 
-                    />
-                  </div>
-                  <span className="card-title">{card.title}</span>
-                </a>
-              ))}
-
-              {/* Set 2 (Active Viewport Center) */}
-              {cardsData.map((card, idx) => (
-                <a 
-                  key={`set2-${card.id}-${idx}`} 
-                  href="#" 
-                  className={`grid-card ${card.className}`}
-                  onClick={(e) => handleCardClick(e, card.id)}
-                  onDragStart={(e) => e.preventDefault()}
-                >
-                  <div className="image-wrapper">
-                    <img 
-                      src={card.img} 
-                      alt={card.title} 
-                      draggable="false" 
-                      onDragStart={(e) => e.preventDefault()} 
-                    />
-                  </div>
-                  <span className="card-title">{card.title}</span>
-                </a>
-              ))}
-
-              {/* Set 3 (Right Boundary Padding) */}
-              {cardsData.map((card, idx) => (
-                <a 
-                  key={`set3-${card.id}-${idx}`} 
+                  key={`set-${card.id}-${idx}`} 
                   href="#" 
                   className={`grid-card ${card.className}`}
                   onClick={(e) => handleCardClick(e, card.id)}

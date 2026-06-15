@@ -3,13 +3,15 @@
 .home-container {
   width: 100%;
   max-width: 100%;
+  height: calc(100vh - 160px); /* Altura exacta de pantalla menos Header y Footer */
   margin: 0 auto;
-  padding: 10rem 0 0 0; /* Espaciado superior masivo para coincidir con el mockup oficial */
+  padding: 0; /* Eliminamos el padding estático gigante que causaba el desborde */
   display: flex;
   flex-direction: column;
+  justify-content: center; /* Centra el carrusel y los corderos verticalmente en el espacio disponible */
+  align-items: center;
   box-sizing: border-box;
-  overflow-x: hidden;
-  padding-bottom: 2rem;
+  overflow: hidden; /* Evita cualquier scroll no deseado */
 }
 
 /* Horizontal Carousel Container */
@@ -41,6 +43,7 @@
   width: max-content;
   align-items: flex-start; /* Alinea todas las cabeceras perfectamente en una línea horizontal */
   padding-bottom: 1rem;
+  margin: 0 auto; /* Centra las imágenes si la pantalla es más ancha que las fotos juntas */
 }
 
 /* Grid Card Styles inside Carousel – Ancho compacto ideal */
@@ -101,13 +104,16 @@
   width: 100%;
   display: flex;
   justify-content: center;
-  margin: 2rem 0 0 0; /* Margen elegante de respiración inferior */
+  margin: 3vh 0 0 0; /* Margen dinámico basado en la altura de la pantalla */
+  flex-shrink: 1; /* Permite que el contenedor se encoja si falta espacio */
 }
 
 .lambs-image {
   width: 250px; /* Tamaño exacto de las ovejas proporcional al mockup */
   max-width: 95%;
   height: auto;
+  max-height: min(150px, 15vh); /* Si la pantalla es muy corta, se achica dramáticamente para no desbordar */
+  object-fit: contain; /* Asegura proporción estricta */
   display: block;
   user-select: none;
   pointer-events: none;
