@@ -76,7 +76,10 @@ public class SecurityConfig {
             .headers(headers -> headers.frameOptions(frame -> frame.disable()))
             
             // Habilitar autenticación básica HTTP para endpoints protegidos
-            .httpBasic(Customizer.withDefaults());
+            .httpBasic(basic -> basic.authenticationEntryPoint((request, response, authException) -> {
+                response.setStatus(jakarta.servlet.http.HttpServletResponse.SC_UNAUTHORIZED);
+                // Omitir el header WWW-Authenticate evita que el navegador muestre la ventana nativa
+            }));
 
         return http.build();
     }
