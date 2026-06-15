@@ -31,7 +31,7 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
         // Permitir explícitamente los orígenes del frontend (Vite local y producción)
-        config.setAllowedOrigins(List.of("http://localhost:5173", "http://127.0.0.1:5173", "http://localhost:3002", "http://127.0.0.1:3002", "http://148.230.87.167:3002", "https://app2.casa-glass.com"));
+        config.setAllowedOrigins(List.of("http://localhost:5173", "http://127.0.0.1:5173", "http://localhost:3002", "http://127.0.0.1:3002", "http://148.230.87.167:3002", "https://app2.casa-glass.com", "https://nikkathebrand.com", "https://www.nikkathebrand.com"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type"));
         config.setAllowCredentials(true); // Requerido para Basic Auth
