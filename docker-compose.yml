@@ -21,7 +21,7 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
       args:
-        - VITE_API_URL=https://app2.casa-glass.com/api
+        - VITE_API_URL=https://nikkathebrand.com/api
     container_name: nikka-frontend
     ports:
       - "3002:3002"
