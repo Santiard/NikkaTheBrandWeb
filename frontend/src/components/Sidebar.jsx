@@ -5,6 +5,7 @@ const shortcuts = [
   { name: 'New', action: () => 'new' },
   { name: 'Intimates', action: () => 'intimates' },
   { name: 'Bags', action: () => 'bags' },
+  { name: 'PJ Sets', action: () => 'pj sets' },
   { name: 'Accessories', action: () => 'accessories' },
   { name: 'Gift Cards', action: () => null },
   { name: 'Sale', action: () => 'sale' },

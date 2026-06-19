@@ -14,6 +14,7 @@ import Contact from './components/Contact'
 import Faqs from './components/Faqs'
 import GiftCard from './components/GiftCard'
 import Medidas from './components/Medidas'
+import SearchOverlay from './components/SearchOverlay'
 import { apiService } from './services/api'
 
 // Mockup Images
@@ -49,11 +50,16 @@ function App() {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [hasActivePromotions, setHasActivePromotions] = useState(false);
 
-  // Consultar si existen promociones activas al cambiar de página
+  // Estado del Buscador
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [allProducts, setAllProducts] = useState([]);
+
+  // Consultar si existen promociones activas al cambiar de página y almacenar productos
   useEffect(() => {
     if (activePage !== 'admin') {
       apiService.getProducts()
         .then(data => {
+          setAllProducts(data);
           const hasDiscount = data.some(p => p.discountPercentage > 0);
           setHasActivePromotions(hasDiscount);
         })
@@ -184,13 +190,13 @@ function App() {
     if (cardId === 'new-in') {
       handleNavigate('catalog', 'new');
     } else if (cardId === 'sunday-morning') {
-      handleNavigate('detail', 'sunday-morning-pj');
+      handleNavigate('catalog', 'col:sunday morning');
     } else if (cardId === 'duvet') {
-      handleNavigate('detail', 'duvet-bag');
+      handleNavigate('catalog', 'col:duvet');
     } else if (cardId === 'tote-bags') {
       handleNavigate('catalog', 'bags');
     } else if (cardId === 'the-farmhouse') {
-      handleNavigate('catalog', 'ver todo');
+      handleNavigate('catalog', 'col:the farmhouse');
     } else if (cardId === 'size-guide') {
       handleNavigate('medidas');
     }
@@ -258,6 +264,7 @@ function App() {
         onMenuClick={() => setIsSidebarOpen(true)} 
         onLogoClick={handleLogoClick} 
         onCartClick={() => setIsCartOpen(true)}
+        onSearchClick={() => setIsSearchOpen(true)}
         cartCount={getCartCount()}
       />
 
@@ -277,6 +284,14 @@ function App() {
         onUpdateQuantity={handleUpdateCartQuantity}
         onRemoveItem={handleRemoveCartItem}
         onClearCart={handleClearCart}
+      />
+
+      {/* Buscador de Productos */}
+      <SearchOverlay 
+        isOpen={isSearchOpen}
+        onClose={() => setIsSearchOpen(false)}
+        products={allProducts}
+        onNavigate={handleNavigate}
       />
 
       {/* Dynamic Main Body Content based on activePage */}

@@ -38,6 +38,17 @@
   border-bottom: 1px dotted var(--color-primary);
 }
 
+.catalog-collection-desc {
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  color: var(--color-primary);
+  opacity: 0.8;
+  max-width: 600px;
+  margin: 15px auto 0 auto;
+  line-height: 1.5;
+  font-weight: 300;
+  text-transform: none;
+}
 /* Grid de Productos - 4 Columnas en Desktop */
 .catalog-grid {
   display: grid;
@@ -263,4 +274,32 @@
   .see-more-button {
     width: 100%;
   }
+}
+
+/* Empty State Styling */
+.catalog-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 40px;
+  width: 100%;
+}
+
+.catalog-empty-video {
+  width: 100%;
+  max-width: 400px;
+  border-radius: 8px;
+  object-fit: cover;
+  margin-bottom: 20px;
+}
+
+.catalog-empty-text {
+  font-family: var(--font-sans);
+  font-size: 1.1rem;
+  color: var(--color-primary);
+  text-transform: lowercase;
+  font-weight: 300;
+  letter-spacing: 0.05em;
+  text-align: center;
 }

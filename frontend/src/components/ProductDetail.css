@@ -212,6 +212,16 @@
   color: var(--color-bg);
 }
 
+.size-btn.one-size-btn {
+  width: auto;
+  min-width: 120px;
+  border-radius: 20px;
+  padding: 0 20px;
+  font-weight: 500;
+  text-transform: lowercase;
+  letter-spacing: 0.05em;
+}
+
 /* Botón Añadir al Carrito */
 .add-to-cart-btn {
   background-color: var(--color-primary);

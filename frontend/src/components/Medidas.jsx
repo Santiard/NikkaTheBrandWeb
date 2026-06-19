@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import bgPattern from '../images/medidas/the farmhouse-3.webp';
 import img32 from '../images/medidas/32.webp';
 import img33 from '../images/medidas/33.webp';
 import img34 from '../images/medidas/34.webp';
@@ -65,10 +64,7 @@ export default function Medidas() {
   return (
     <section className="medidas-section">
       {/* Contenedor Banner de Tapizado en la mitad de la página */}
-      <div 
-        className="medidas-banner"
-        style={{ backgroundImage: `url(${bgPattern})` }}
-      >
+      <div className="medidas-banner">
         <div className="medidas-options-row">
           {/* Opción 1: Pj sets */}
           <div className="medidas-option-card" onClick={() => handleOptionClick('pj-sets')}>

@@ -169,9 +169,11 @@ export default function AdminDashboard({ onBackToStore, initialTab, onTabChange 
       detailImageUrl1: '',
       detailImageUrl2: '',
       detailImageUrl3: '',
+      isOneSize: false,
       stockS: '10',
       stockM: '10',
       stockL: '5',
+      stockU: '10',
       collectionId: '',
       selectedPromotions: []
     });
@@ -199,9 +201,14 @@ export default function AdminDashboard({ onBackToStore, initialTab, onTabChange 
       detailImageUrl1: detailImgs[0]?.imageUrl || '',
       detailImageUrl2: detailImgs[1]?.imageUrl || '',
       detailImageUrl3: detailImgs[2]?.imageUrl || '',
+      
+      // Detectar si es talla única
+      isOneSize: product.sizes?.length === 1 && (product.sizes[0].size.toUpperCase() === 'U' || product.sizes[0].size.toLowerCase().includes('unica')),
+      
       stockS: String(product.sizes?.find(s => s.size === 'S')?.stock || '0'),
       stockM: String(product.sizes?.find(s => s.size === 'M')?.stock || '0'),
       stockL: String(product.sizes?.find(s => s.size === 'L')?.stock || '0'),
+      stockU: (product.sizes?.length === 1) ? String(product.sizes[0].stock) : '10',
       collectionId: product.collection ? String(product.collection.id) : '',
       selectedPromotions: product.promotions ? product.promotions.map(p => p.id) : []
     });
@@ -229,11 +236,18 @@ export default function AdminDashboard({ onBackToStore, initialTab, onTabChange 
       }
 
       // 2. Construir existencias
-      const sizesList = [
-        { size: 'S', stock: parseInt(productForm.stockS) || 0 },
-        { size: 'M', stock: parseInt(productForm.stockM) || 0 },
-        { size: 'L', stock: parseInt(productForm.stockL) || 0 }
-      ];
+      let sizesList = [];
+      if (productForm.isOneSize) {
+        sizesList = [
+          { size: 'U', stock: parseInt(productForm.stockU) || 0 }
+        ];
+      } else {
+        sizesList = [
+          { size: 'S', stock: parseInt(productForm.stockS) || 0 },
+          { size: 'M', stock: parseInt(productForm.stockM) || 0 },
+          { size: 'L', stock: parseInt(productForm.stockL) || 0 }
+        ];
+      }
 
       const productPayload = {
         name: productForm.name.toUpperCase(),
@@ -1036,35 +1050,60 @@ export default function AdminDashboard({ onBackToStore, initialTab, onTabChange 
 
                 <div className="modal-divider-dotted"></div>
 
-                <h3 className="modal-section-title">existencias físicas por talla</h3>
+                <h3 className="modal-section-title" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  existencias físicas por talla
+                  <label className="checkbox-label-retro" style={{ fontSize: '0.85rem', fontWeight: 'normal', textTransform: 'none' }}>
+                    <input 
+                      type="checkbox" 
+                      checked={productForm.isOneSize}
+                      onChange={(e) => setProductForm(p => ({ ...p, isOneSize: e.target.checked }))}
+                    />
+                    producto de talla única
+                  </label>
+                </h3>
+                
                 <div className="admin-form-row four-cols">
-                  <div className="admin-form-group quarter">
-                    <label>talla S</label>
-                    <input 
-                      type="text" 
-                      value={productForm.stockS}
-                      onChange={(e) => setProductForm(p => ({ ...p, stockS: e.target.value.replace(/[^0-9]/g, '') }))}
-                      required
-                    />
-                  </div>
-                  <div className="admin-form-group quarter">
-                    <label>talla M</label>
-                    <input 
-                      type="text" 
-                      value={productForm.stockM}
-                      onChange={(e) => setProductForm(p => ({ ...p, stockM: e.target.value.replace(/[^0-9]/g, '') }))}
-                      required
-                    />
-                  </div>
-                  <div className="admin-form-group quarter">
-                    <label>talla L</label>
-                    <input 
-                      type="text" 
-                      value={productForm.stockL}
-                      onChange={(e) => setProductForm(p => ({ ...p, stockL: e.target.value.replace(/[^0-9]/g, '') }))}
-                      required
-                    />
-                  </div>
+                  {productForm.isOneSize ? (
+                    <div className="admin-form-group half">
+                      <label>stock total (talla única)</label>
+                      <input 
+                        type="text" 
+                        value={productForm.stockU}
+                        onChange={(e) => setProductForm(p => ({ ...p, stockU: e.target.value.replace(/[^0-9]/g, '') }))}
+                        required
+                      />
+                    </div>
+                  ) : (
+                    <>
+                      <div className="admin-form-group quarter">
+                        <label>talla S</label>
+                        <input 
+                          type="text" 
+                          value={productForm.stockS}
+                          onChange={(e) => setProductForm(p => ({ ...p, stockS: e.target.value.replace(/[^0-9]/g, '') }))}
+                          required={!productForm.isOneSize}
+                        />
+                      </div>
+                      <div className="admin-form-group quarter">
+                        <label>talla M</label>
+                        <input 
+                          type="text" 
+                          value={productForm.stockM}
+                          onChange={(e) => setProductForm(p => ({ ...p, stockM: e.target.value.replace(/[^0-9]/g, '') }))}
+                          required={!productForm.isOneSize}
+                        />
+                      </div>
+                      <div className="admin-form-group quarter">
+                        <label>talla L</label>
+                        <input 
+                          type="text" 
+                          value={productForm.stockL}
+                          onChange={(e) => setProductForm(p => ({ ...p, stockL: e.target.value.replace(/[^0-9]/g, '') }))}
+                          required={!productForm.isOneSize}
+                        />
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
 

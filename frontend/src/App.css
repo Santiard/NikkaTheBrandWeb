@@ -20,7 +20,7 @@
   overflow-x: auto;
   cursor: grab;
   user-select: none;
-  padding: 0.5rem 2.5rem;
+  padding: 2.5rem 2.5rem 0.5rem 2.5rem; /* Aumentado el padding superior para separarla del header */
   box-sizing: border-box;
   /* Hide scrollbars */
   -ms-overflow-style: none;  /* IE and Edge */
@@ -39,11 +39,12 @@
 .home-carousel-track {
   display: flex;
   flex-direction: row;
-  gap: 2.2rem; /* Compactado horizontalmente */
-  width: max-content;
+  gap: 2%; /* Gap proporcional a la pantalla */
+  width: 100%; /* Toma todo el ancho disponible del contenedor */
+  justify-content: center; /* Centra todo el bloque */
   align-items: flex-start; /* Alinea todas las cabeceras perfectamente en una línea horizontal */
   padding-bottom: 1rem;
-  margin: 0 auto; /* Centra las imágenes si la pantalla es más ancha que las fotos juntas */
+  margin: 0 auto;
 }
 
 /* Grid Card Styles inside Carousel – Ancho compacto ideal */
@@ -53,8 +54,9 @@
   align-items: flex-start;
   text-decoration: none;
   color: inherit;
-  width: 220px;
-  flex-shrink: 0;
+  /* 6 tarjetas y 5 espacios del 2% (10%). Dividimos el 90% restante en 6 */
+  width: calc(90% / 6); 
+  flex-shrink: 1; /* Permite que se encojan en celulares */
   user-select: none;
   -webkit-user-drag: none;
 }

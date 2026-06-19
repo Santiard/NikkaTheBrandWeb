@@ -46,12 +46,16 @@ export default function ProductDetail({ productId, onBack, onAddToCart }) {
           : data.mainImage;
         setActiveImage(mainImg);
 
-        // Preseleccionar la primera talla disponible que tenga stock (S/M/L)
-        const sizesList = ['S', 'M', 'L'];
+        // Obtener tallas dinámicas desde el backend (o usar S, M, L como respaldo visual en modo mock)
+        const sizesList = data.sizes && data.sizes.length > 0 
+          ? data.sizes.map(s => s.size)
+          : ['S', 'M', 'L'];
+          
         const firstAvailable = sizesList.find(size => {
           const stock = data.sizes?.find(s => s.size === size)?.stock || 0;
           return stock > 0;
-        }) || 'S';
+        }) || sizesList[0];
+        setSelectedSize(firstAvailable);
         setSelectedSize(firstAvailable);
 
       } catch (err) {
@@ -148,7 +152,7 @@ export default function ProductDetail({ productId, onBack, onAddToCart }) {
 
         {/* Columna Derecha: Información y Compra */}
         <div className="detail-info">
-          <span className="brand-subtitle">nikka the brand</span>
+          <span className="brand-subtitle">{product.collection?.name?.toLowerCase() || 'nikka the brand'}</span>
           <h1 className="detail-product-name">{product.name.toLowerCase()}</h1>
           
           <div className="price-status-row">
@@ -171,32 +175,47 @@ export default function ProductDetail({ productId, onBack, onAddToCart }) {
 
           <div className="divider-dotted"></div>
 
-          {/* Selector de Tallas Completo (XS, S, M, L) */}
+          {/* Selector de Tallas Dinámico */}
           <div className="size-selector-section">
             <span className="section-label">talla</span>
             <div className="size-buttons">
-              {['S', 'M', 'L'].map((size) => {
-                const stock = getStockForSize(size);
-                const isOutOfStock = stock <= 0;
+              {(() => {
+                const availableSizes = product.sizes && product.sizes.length > 0 
+                  ? product.sizes.map(s => s.size) 
+                  : ['S', 'M', 'L'];
+                  
+                return availableSizes.map((size) => {
+                  const stock = getStockForSize(size);
+                  const isOutOfStock = stock <= 0;
 
-                return (
-                  <button
-                    key={size}
-                    disabled={isOutOfStock}
-                    className={`size-btn ${selectedSize === size ? 'selected' : ''} ${isOutOfStock ? 'out-of-stock' : ''}`}
-                    onClick={() => setSelectedSize(size)}
-                    title={isOutOfStock ? `Talla ${size} sin existencias` : `Talla ${size} disponible`}
-                  >
-                    {size}
-                  </button>
-                );
-              })}
+                  // Formatear visualmente "U" o variaciones a "talla única" para mayor claridad
+                  const isOneSize = availableSizes.length === 1;
+                  const displaySize = isOneSize && (size.toUpperCase() === 'U' || size.toLowerCase().includes('unica')) 
+                    ? 'talla única' 
+                    : size;
+
+                  return (
+                    <button
+                      key={size}
+                      disabled={isOutOfStock}
+                      className={`size-btn ${selectedSize === size ? 'selected' : ''} ${isOutOfStock ? 'out-of-stock' : ''} ${isOneSize ? 'one-size-btn' : ''}`}
+                      onClick={() => setSelectedSize(size)}
+                      title={isOutOfStock ? `Talla ${displaySize} sin existencias` : `Talla ${displaySize} disponible`}
+                    >
+                      {displaySize.toLowerCase()}
+                    </button>
+                  );
+                });
+              })()}
             </div>
           </div>
 
           {/* Botón de Añadir al Carrito */}
           {(() => {
-            const isAllOutOfStock = ['S', 'M', 'L'].every(size => getStockForSize(size) <= 0);
+            const sizeArray = product.sizes && product.sizes.length > 0 
+              ? product.sizes.map(s => s.size) 
+              : ['S', 'M', 'L'];
+            const isAllOutOfStock = sizeArray.every(size => getStockForSize(size) <= 0);
             return (
               <button 
                 className={`add-to-cart-btn ${addedFeedback ? 'added' : ''} ${isAllOutOfStock ? 'disabled-btn' : ''}`}

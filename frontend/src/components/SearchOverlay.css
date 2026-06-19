@@ -1,0 +1,142 @@
+.search-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(255, 255, 255, 0.96);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 4rem 2rem;
+  box-sizing: border-box;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  backdrop-filter: blur(8px);
+}
+
+.search-overlay.open {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.search-close-btn {
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+  background: none;
+  border: none;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  text-transform: lowercase;
+  color: #385B93;
+  cursor: pointer;
+  letter-spacing: 0.05em;
+  padding: 0.5rem;
+}
+
+.search-close-btn:hover {
+  text-decoration: underline;
+}
+
+.search-input-container {
+  width: 100%;
+  max-width: 800px;
+  margin-top: 2rem;
+  position: relative;
+}
+
+.search-input {
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid #385B93;
+  background: transparent;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 3rem;
+  color: #385B93;
+  padding: 0.5rem 0;
+  outline: none;
+  text-transform: lowercase;
+}
+
+.search-input::placeholder {
+  color: rgba(56, 91, 147, 0.4);
+}
+
+.search-results-container {
+  width: 100%;
+  max-width: 1000px;
+  margin-top: 4rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 2rem;
+  overflow-y: auto;
+  padding-bottom: 2rem;
+}
+
+.search-result-card {
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.2s ease;
+}
+
+.search-result-card:hover {
+  transform: translateY(-5px);
+}
+
+.search-result-image {
+  width: 100%;
+  aspect-ratio: 3/4;
+  object-fit: cover;
+  margin-bottom: 1rem;
+}
+
+.search-result-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.search-result-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.2rem;
+  color: #385B93;
+  text-transform: lowercase;
+  margin-bottom: 0.2rem;
+}
+
+.search-result-price {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.search-empty-state {
+  margin-top: 4rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  color: #666;
+  text-transform: lowercase;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+  .search-input {
+    font-size: 2rem;
+  }
+  
+  .search-results-container {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+  
+  .search-overlay {
+    padding: 4rem 1rem;
+  }
+}
