@@ -133,6 +133,9 @@
     aspect-ratio: 1.2 / 1; /* Imagen más apaisada en móvil */
     height: auto;
   }
+  .history-img {
+    object-position: center 85%; /* Mueve el enfoque hacia abajo para revelar la caja y la cinta */
+  }
   .history-sub-section.spacing-top {
     margin-top: 30px;
   }

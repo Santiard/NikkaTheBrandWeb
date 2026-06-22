@@ -102,10 +102,10 @@ export default function GiftCard({ onAddToCart }) {
           {/* Descripciones en gris legibilidad */}
           <div className="giftcard-description">
             <p>
-              Las tarjetas de regalo electrónicas (E-gift cards) pueden utilizarse para comprar cualquier artículo en nikka.
+              Las tarjetas de regalo electrónicas (E-gift Cards) pueden canjearse por cualquier producto disponible en Nikka.
             </p>
             <p>
-              Estas Gift Cards pueden usarse en cualquier momento y no tienen fecha de vencimiento.
+              Además, no tienen fecha de vencimiento, por lo que podrás utilizarlas cuando desees.
             </p>
           </div>
 

@@ -44,10 +44,17 @@
 }
 
 @media (max-width: 768px) {
+  .footer {
+    padding: 1rem;
+  }
   .footer-links {
     justify-content: center;
-    flex-direction: column;
-    gap: 0.75rem;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0.8rem;
     text-align: center;
+  }
+  .footer-link {
+    font-size: 0.9rem;
   }
 }

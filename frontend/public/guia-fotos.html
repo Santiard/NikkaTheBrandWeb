@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía de Fotografía - Nikka The Brand</title>
+    <style>
+        :root {
+            --primary: #385B93;
+            --bg: #fafafa;
+            --text: #333;
+            --safe-zone: #4CAF50;
+            --crop-zone: #F44336;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            color: var(--primary);
+            font-family: Georgia, serif;
+            font-style: italic;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        p.subtitle {
+            text-align: center;
+            max-width: 600px;
+            margin-bottom: 50px;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .guide-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 60px;
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        /* Caso Ideal (4:5) */
+        .box-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .box-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .box-desc {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 20px;
+            text-align: center;
+            max-width: 320px;
+        }
+
+        /* Contenedor simulado 4:5 */
+        .canvas {
+            position: relative;
+            background-color: #fff;
+            border: 2px solid var(--primary);
+            width: 320px;
+            height: 400px; /* 4:5 aspect ratio */
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .canvas-label {
+            position: absolute;
+            top: -30px;
+            font-size: 0.8rem;
+            color: var(--primary);
+            font-weight: bold;
+            width: 100%;
+            text-align: center;
+        }
+
+        /* Zona de exportación ideal */
+        .export-box {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: 2px dashed #999;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            padding-bottom: 15px;
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        /* Safe Zone */
+        .safe-zone {
+            position: absolute;
+            width: 80%; /* 10% padding en cada lado */
+            height: 85%; /* 7.5% padding arriba/abajo */
+            border: 2px solid var(--safe-zone);
+            background-color: rgba(76, 175, 80, 0.1);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .safe-zone span {
+            color: var(--safe-zone);
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+
+        .safe-zone small {
+            color: #2e7d32;
+            font-size: 0.8rem;
+            line-height: 1.4;
+        }
+
+        /* Margen de Zoom */
+        .zoom-margin {
+            position: absolute;
+            width: 103%;
+            height: 103%;
+            border: 1px dashed rgba(244, 67, 54, 0.5);
+            background-color: rgba(244, 67, 54, 0.05);
+            pointer-events: none;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding-top: 5px;
+            color: rgba(244, 67, 54, 0.8);
+            font-size: 0.7rem;
+            font-weight: bold;
+            box-sizing: border-box;
+        }
+
+        /* Caso Problemático (Foto Cuadrada 1:1) */
+        .canvas-square {
+            position: relative;
+            width: 320px;
+            height: 400px;
+            border: 2px solid var(--primary);
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #fff;
+        }
+
+        .square-photo {
+            position: absolute;
+            width: 400px; /* Se estira la altura a 400px, por ende el ancho se vuelve 400px (1:1) */
+            height: 400px;
+            border: 3px dashed var(--crop-zone);
+            background-color: rgba(244, 67, 54, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-sizing: border-box;
+        }
+
+        .crop-warning {
+            width: 40px; /* Lo que queda fuera del contenedor 320px (400-320 = 80 -> 40 por lado) */
+            height: 100%;
+            background-color: rgba(244, 67, 54, 0.3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .square-center {
+            text-align: center;
+            color: var(--crop-zone);
+            font-weight: bold;
+        }
+
+        .legend {
+            margin-top: 60px;
+            max-width: 800px;
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border-top: 4px solid var(--primary);
+        }
+
+        .legend h3 {
+            margin-top: 0;
+            color: var(--primary);
+            font-family: Georgia, serif;
+            font-style: italic;
+        }
+
+        .legend ul {
+            padding-left: 20px;
+            line-height: 1.8;
+        }
+
+        .legend li {
+            margin-bottom: 10px;
+        }
+
+        .highlight {
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+    </style>
+</head>
+<body>
+
+    <h1>Guía de Fotografía Nikka</h1>
+    <p class="subtitle">Envíale este enlace a la persona encargada de diseño/fotografía para que todas las fotos encajen perfectamente en la tienda sin recortes extraños.</p>
+
+    <div class="guide-container">
+
+        <!-- Caso 1: Exportación Ideal -->
+        <div class="box-wrapper">
+            <div class="box-title">✅ Formato Ideal (Recomendado)</div>
+            <div class="box-desc">Exportar en proporción 4:5. La imagen ocupará exactamente el espacio del cuadro sin recortes.</div>
+            
+            <div style="position: relative; margin-top: 30px;">
+                <div class="canvas-label">Lienzo Total (1080 x 1350 px)</div>
+                <div class="canvas">
+                    <div class="export-box">Contenedor Web 4:5</div>
+                    
+                    <!-- Representación del Zoom al hacer hover -->
+                    <div class="zoom-margin">Expansión del Zoom (Se pierden ~16px por lado)</div>
+
+                    <div class="safe-zone">
+                        <span>ZONA SEGURA<br>(900 x 1100 px)</span>
+                        <small>El bolso, los detalles y logotipos deben estar dentro de esta caja verde. Deja "aire" alrededor para que el efecto Zoom no amontone el producto.</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Caso 2: El error común (Foto Cuadrada) -->
+        <div class="box-wrapper">
+            <div class="box-title">❌ Formato Cuadrado (1:1)</div>
+            <div class="box-desc">Si se sube una foto cuadrada, el sistema estirará el alto a 1350px y recortará 135px a cada lado.</div>
+            
+            <div style="position: relative; margin-top: 30px;">
+                <div class="canvas-label">Lienzo Total (1080 x 1350 px)</div>
+                <div class="canvas-square">
+                    <div class="square-photo">
+                        <div class="crop-warning">SE CORTA (135px)</div>
+                        <div class="square-center">
+                            Foto Cuadrada Original (1080x1080)<br><br>
+                            <span style="font-size: 0.8rem; font-weight: normal; color: #333;">Solo se verá esta zona central<br>(810 x 1080 px escalados)</span>
+                        </div>
+                        <div class="crop-warning">SE CORTA (135px)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="legend">
+        <h3>Resumen de Reglas para Diseño</h3>
+        <ul>
+            <li><span class="highlight">Resolución de Exportación:</span> Siempre exportar las fotos en proporción <strong>4:5</strong> (vertical). El tamaño ideal en píxeles es <strong>1080px de ancho por 1350px de alto</strong>.</li>
+            <li><span class="highlight">Encuadre del Producto:</span> Nunca pegues el producto o la modelo a los bordes de la foto. Deja un margen de respiración del 10% a 15% por todos los lados (Safe Zone).</li>
+            <li><span class="highlight">Efecto Zoom Interactivo:</span> Al cliente pasar el mouse por encima de la foto en la web, esta hace un sutil zoom (se expande un 3%). Por eso es vital dejar el "aire" alrededor, para que al hacer zoom la prenda principal no se esconda.</li>
+            <li><span class="highlight">¿Por qué usar el recorte automático de la web?</span> Porque garantiza que todas las fotos en el catálogo de Nikka se vean uniformes, logrando el look editorial de alta costura que caracteriza a la marca.</li>
+        </ul>
+    </div>
+
+</body>
+</html>

@@ -180,6 +180,12 @@
    RESPONSIVIDAD PREMIUM
    =================================================================== */
 @media (max-width: 900px) {
+  .contact-section {
+    height: auto;
+    min-height: calc(100vh - 160px);
+    overflow: visible;
+    padding: 40px 16px 140px 16px;
+  }
   .contact-container {
     flex-direction: column; /* Pasa a 1 columna vertical en móvil y tablet */
     gap: 40px;

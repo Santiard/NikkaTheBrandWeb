@@ -124,19 +124,21 @@
 /* Responsivo para móviles */
 @media (max-width: 768px) {
   .home-container {
-    padding-top: 2rem; /* Menos espacio superior en móvil */
-    padding-bottom: 4rem;
+    padding-top: 1rem;
+    padding-bottom: 2rem;
   }
   .home-carousel-container {
     padding: 0.5rem 1rem;
   }
   .home-carousel-track {
-    gap: 1.5rem;
+    gap: 1rem;
+    justify-content: flex-start; /* Permite scroll infinito sin comprimir al centro */
   }
   .grid-card {
-    width: 160px; /* Aún más compacto en móvil */
+    width: 120px; /* Tamaño ideal para móvil */
+    flex-shrink: 0; /* Evita que las tarjetas se aplasten */
   }
   .lambs-image {
-    width: 180px;
+    width: 160px;
   }
 }

@@ -63,3 +63,12 @@
 .sidebar-item:hover {
   opacity: 0.6;
 }
+
+/* Mobile Responsiveness */
+@media (max-width: 480px) {
+  .sidebar {
+    width: 85vw;
+    max-width: 320px;
+    padding: 1.5rem;
+  }
+}
