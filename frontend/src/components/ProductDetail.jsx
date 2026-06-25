@@ -247,18 +247,6 @@ export default function ProductDetail({ productId, onBack, onAddToCart }) {
             )}
           </div>
 
-          {/* Video de Corderos Animados en la esquina inferior */}
-          <div className="detail-lambs-container">
-            <video 
-              src={lambsVideo} 
-              className="detail-lambs-img" 
-              autoPlay 
-              loop 
-              muted 
-              playsInline 
-              draggable="false"
-            />
-          </div>
         </div>
       </div>
     </section>

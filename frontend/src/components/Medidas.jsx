@@ -8,6 +8,7 @@ import img35 from '../images/medidas/35.webp';
 import guidePjSets from '../images/medidas/pj set talla.webp';
 import guideBags from '../images/medidas/medidas puffer.webp';
 import guideCoinPurses from '../images/medidas/guiacp.webp';
+import guideMb from '../images/medidas/mb.webp';
 import guideMiniBags from '../images/medidas/guiami.webp';
 
 import './Medidas.css';
@@ -22,19 +23,19 @@ export default function Medidas() {
   const guidesData = {
     'pj-sets': {
       title: 'pj sets',
-      img: guidePjSets,
+      images: [guidePjSets],
     },
     'bags': {
       title: 'bags & totes',
-      img: guideBags,
+      images: [guideBags],
     },
     'coin-purses': {
       title: 'coin purses',
-      img: guideCoinPurses,
+      images: [guideCoinPurses, guideMb],
     },
     'mini-bags': {
       title: 'mini bags',
-      img: guideMiniBags,
+      images: [guideMiniBags],
     }
   };
 
@@ -48,13 +49,16 @@ export default function Medidas() {
             ← volver
           </button>
           
-          <div className="medidas-detail-img-wrapper">
-            <img 
-              src={guide.img} 
-              alt={`Guía de medidas de ${guide.title}`} 
-              className="medidas-detail-img"
-              draggable="false"
-            />
+          <div className="medidas-detail-img-wrapper" style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+            {guide.images.map((image, index) => (
+              <img 
+                key={index}
+                src={image} 
+                alt={`Guía de medidas de ${guide.title}`} 
+                className="medidas-detail-img"
+                draggable="false"
+              />
+            ))}
           </div>
         </div>
       </section>

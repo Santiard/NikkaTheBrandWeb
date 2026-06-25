@@ -55,18 +55,16 @@ export default function Catalog({ categoryFilter, onProductClick }) {
     return product.category.toLowerCase() === filterLower;
   });
 
-  // Si el filtro es 'new', ordenar de ID más nuevo a más viejo, priorizando los que TIENEN STOCK
-  if (categoryFilter && categoryFilter.toLowerCase() === 'new') {
-    filteredProducts = [...filteredProducts].sort((a, b) => {
-      const aStock = isProductInStock(a) ? 1 : 0;
-      const bStock = isProductInStock(b) ? 1 : 0;
-      
-      if (aStock !== bStock) {
-        return bStock - aStock; // 1 (in stock) va primero que 0
-      }
-      return b.id - a.id; // Luego ordenar por más nuevo
-    });
-  }
+  // Ordenar SIEMPRE priorizando los que TIENEN STOCK. Dentro del mismo estado de stock, ordenar del más nuevo al más viejo.
+  filteredProducts = [...filteredProducts].sort((a, b) => {
+    const aStock = isProductInStock(a) ? 1 : 0;
+    const bStock = isProductInStock(b) ? 1 : 0;
+    
+    if (aStock !== bStock) {
+      return bStock - aStock; // 1 (in stock) va primero que 0
+    }
+    return b.id - a.id; // Luego ordenar por más nuevo
+  });
 
   // Si cambia el filtro de categoría, reiniciar la paginación a 8
   useEffect(() => {
