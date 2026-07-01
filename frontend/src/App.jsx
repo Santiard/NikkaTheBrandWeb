@@ -357,6 +357,7 @@ function App() {
           productId={selectedProductId} 
           onBack={() => handleNavigate('catalog', selectedCategory || 'ver todo')} 
           onAddToCart={handleAddToCart}
+          onNavigate={handleNavigate}
         />
       )}
 

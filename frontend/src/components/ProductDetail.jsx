@@ -3,7 +3,7 @@ import { apiService } from '../services/api';
 import lambsVideo from '../images/lambs_video.mp4';
 import './ProductDetail.css';
 
-export default function ProductDetail({ productId, onBack, onAddToCart }) {
+export default function ProductDetail({ productId, onBack, onAddToCart, onNavigate }) {
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -245,6 +245,17 @@ export default function ProductDetail({ productId, onBack, onAddToCart }) {
                 <p key={`desc-${idx}`}>{paragraph}</p>
               ))
             )}
+          </div>
+
+          {/* Enlace a Guía de Tallas */}
+          <div style={{ marginTop: '30px', fontSize: '0.9rem', color: '#666', fontFamily: 'var(--font-serif)', fontStyle: 'italic' }}>
+            Si tienes duda con tu talla mira la{' '}
+            <span 
+              onClick={() => onNavigate && onNavigate('medidas')}
+              style={{ color: 'var(--color-primary)', textDecoration: 'underline', cursor: 'pointer', fontWeight: 'bold' }}
+            >
+              guía de tallas
+            </span>
           </div>
 
         </div>
