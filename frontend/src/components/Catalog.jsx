@@ -98,7 +98,7 @@ export default function Catalog({ categoryFilter, onProductClick }) {
     'the farmhouse': '“Incluso en lo cotidiano, ya hay abundancia”. Piezas bordadas con pequeños recuerdos que nos llevan a lo simple y esencial.',
     'sunday morning': 'Piezas clásicas, diseñadas para envolver tu manera más honesta de habitarte.',
     'duvet': 'For carrying comfort everywhere.',
-    'daydream': 'Made for slow moments, crafted in delicate pointelle for slow mornings, cozy nights and everything in between.'
+    'daydream': 'Delicate pointelle for everyday dreaming.'
   };
 
   const displayDescription = collectionDescriptions[displayTitle];

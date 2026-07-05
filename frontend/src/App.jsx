@@ -19,7 +19,7 @@ import { apiService } from './services/api'
 
 // Mockup Images
 import newInImg from './images/new in.webp'
-import sundayMorningImg from './images/sunday morning.webp'
+import daydreamImg from './images/daydream.webp'
 import theFarmhouseImg from './images/THE FARMHOUSE.webp'
 import duvetImg from './images/puffer bag/duvet.JPG'
 import toteBagsImg from './images/tote bags y mini bags.webp'
@@ -29,7 +29,7 @@ import lambsVideo from './images/lambs_video.mp4'
 // Data for the 6 cards matching the mockup
 const cardsData = [
   { id: 'new-in', className: 'card-new-in', img: newInImg, title: 'new in' },
-  { id: 'sunday-morning', className: 'card-sunday-morning', img: sundayMorningImg, title: 'sunday morning' },
+  { id: 'daydream', className: 'card-daydream', img: daydreamImg, title: 'daydream' },
   { id: 'the-farmhouse', className: 'card-the-farmhouse', img: theFarmhouseImg, title: 'THE FARMHOUSE' },
   { id: 'duvet', className: 'card-duvet', img: duvetImg, title: 'duvet nikka x nc' },
   { id: 'tote-bags', className: 'card-tote-bags', img: toteBagsImg, title: 'tote bags y mini bags' },
@@ -189,8 +189,8 @@ function App() {
 
     if (cardId === 'new-in') {
       handleNavigate('catalog', 'new');
-    } else if (cardId === 'sunday-morning') {
-      handleNavigate('catalog', 'col:sunday morning');
+    } else if (cardId === 'daydream') {
+      handleNavigate('catalog', 'col:daydream');
     } else if (cardId === 'duvet') {
       handleNavigate('catalog', 'col:duvet');
     } else if (cardId === 'tote-bags') {
