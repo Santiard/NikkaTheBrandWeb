@@ -133,10 +133,10 @@ public class OrderService {
             sb.append("* ").append(item.getQuantity()).append("x ")
               .append(item.getProduct().getName())
               .append(" - Talla: ").append(item.getSize())
-              .append(" - C/U: $").append(item.getUnitPrice().setScale(2)).append(" USD\n");
+              .append(" - C/U: $").append(item.getUnitPrice().setScale(0)).append(" COP\n");
         }
 
-        sb.append("\nTOTAL A PAGAR: $").append(order.getTotalAmount().setScale(2)).append(" USD");
+        sb.append("\nTOTAL A PAGAR: $").append(order.getTotalAmount().setScale(0)).append(" COP");
 
         String encodedText = URLEncoder.encode(sb.toString(), StandardCharsets.UTF_8);
         return "https://api.whatsapp.com/send?phone=" + whatsappPhone + "&text=" + encodedText;
