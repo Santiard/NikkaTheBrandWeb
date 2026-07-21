@@ -127,7 +127,7 @@ public class OrderService {
         sb.append("* Dirección: ").append(c.getAddress()).append("\n");
         sb.append("* Ciudad: ").append(c.getCity()).append("\n\n");
 
-        sb.append("\uD83E\uDDFACDETALLE DE TU COMPRA (Orden #").append(order.getId()).append("):\n");
+        sb.append("\uD83E\uDDFA DETALLE DE TU COMPRA (Orden #").append(order.getId()).append("):\n");
 
         for (OrderItem item : order.getOrderItems()) {
             sb.append("* ").append(item.getQuantity()).append("x ")
