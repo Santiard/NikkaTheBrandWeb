@@ -5,6 +5,7 @@ import img34 from '../images/medidas/34.webp';
 import img35 from '../images/medidas/35.webp';
 
 // Importación de las guías de medidas respectivas
+import guidePjSets3 from '../images/medidas/pj set talla 3.WEBP';
 import guidePjSets from '../images/medidas/pj set talla.webp';
 import guidePjSets2 from '../images/medidas/pj set talla 2.webp';
 import guideBata from '../images/medidas/bata.webp';
@@ -25,7 +26,7 @@ export default function Medidas() {
   const guidesData = {
     'pj-sets': {
       title: 'pj sets',
-      images: [guidePjSets, guidePjSets2, guideBata],
+      images: [guidePjSets3, guidePjSets, guidePjSets2, guideBata],
     },
     'bags': {
       title: 'bags & totes',

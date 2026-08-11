@@ -58,9 +58,7 @@ export default function AdminDashboard({ onBackToStore, initialTab, onTabChange 
     category: 'intimates',
     active: true,
     mainImageUrl: '',
-    detailImageUrl1: '',
-    detailImageUrl2: '',
-    detailImageUrl3: '',
+    detailImages: ['', '', ''],
     stockS: '10',
     stockM: '10',
     stockL: '5',
@@ -166,9 +164,7 @@ export default function AdminDashboard({ onBackToStore, initialTab, onTabChange 
       category: categories[0]?.name || '',
       active: true,
       mainImageUrl: '',
-      detailImageUrl1: '',
-      detailImageUrl2: '',
-      detailImageUrl3: '',
+      detailImages: ['', '', ''],
       isOneSize: false,
       stockS: '10',
       stockM: '10',
@@ -198,9 +194,7 @@ export default function AdminDashboard({ onBackToStore, initialTab, onTabChange 
       category: product.category,
       active: product.active,
       mainImageUrl: mainImg,
-      detailImageUrl1: detailImgs[0]?.imageUrl || '',
-      detailImageUrl2: detailImgs[1]?.imageUrl || '',
-      detailImageUrl3: detailImgs[2]?.imageUrl || '',
+      detailImages: detailImgs.length > 0 ? detailImgs.map(img => img.imageUrl) : ['', '', ''],
       
       // Detectar si es talla única
       isOneSize: product.sizes?.length === 1 && (product.sizes[0].size.toUpperCase() === 'U' || product.sizes[0].size.toLowerCase().includes('unica')),
@@ -220,20 +214,15 @@ export default function AdminDashboard({ onBackToStore, initialTab, onTabChange 
     e.preventDefault();
     setError(null);
     try {
-      // 1. Construir las imágenes
       const imagesList = [];
       if (productForm.mainImageUrl.trim()) {
         imagesList.push({ imageUrl: productForm.mainImageUrl.trim(), imageType: 'MAIN' });
       }
-      if (productForm.detailImageUrl1.trim()) {
-        imagesList.push({ imageUrl: productForm.detailImageUrl1.trim(), imageType: 'DETAIL' });
-      }
-      if (productForm.detailImageUrl2.trim()) {
-        imagesList.push({ imageUrl: productForm.detailImageUrl2.trim(), imageType: 'DETAIL' });
-      }
-      if (productForm.detailImageUrl3.trim()) {
-        imagesList.push({ imageUrl: productForm.detailImageUrl3.trim(), imageType: 'DETAIL' });
-      }
+      productForm.detailImages.forEach(url => {
+        if (url.trim()) {
+          imagesList.push({ imageUrl: url.trim(), imageType: 'DETAIL' });
+        }
+      });
 
       // 2. Construir existencias
       let sizesList = [];
@@ -1029,24 +1018,48 @@ export default function AdminDashboard({ onBackToStore, initialTab, onTabChange 
                     required
                   />
                 </div>
-                <div className="admin-form-group">
-                  <label>url imagen detalle 1</label>
-                  <input 
-                    type="text" 
-                    value={productForm.detailImageUrl1}
-                    onChange={(e) => setProductForm(p => ({ ...p, detailImageUrl1: e.target.value }))}
-                    placeholder="/src/images/pj set/Tezza-3399.jpg"
-                  />
-                </div>
-                <div className="admin-form-group">
-                  <label>url imagen detalle 2</label>
-                  <input 
-                    type="text" 
-                    value={productForm.detailImageUrl2}
-                    onChange={(e) => setProductForm(p => ({ ...p, detailImageUrl2: e.target.value }))}
-                    placeholder="/src/images/pj set/Tezza-7563.jpg"
-                  />
-                </div>
+                {productForm.detailImages.map((url, idx) => (
+                  <div className="admin-form-group" key={`detail-img-${idx}`}>
+                    <label style={{ display: 'flex', justifyContent: 'space-between' }}>
+                      <span>url imagen detalle {idx + 1}</span>
+                      {productForm.detailImages.length > 1 && (
+                        <span 
+                          style={{ color: '#d9534f', cursor: 'pointer', textTransform: 'lowercase', fontSize: '0.8rem', fontFamily: 'var(--font-serif)' }}
+                          onClick={() => {
+                            setProductForm(p => {
+                              const newImages = [...p.detailImages];
+                              newImages.splice(idx, 1);
+                              return { ...p, detailImages: newImages };
+                            });
+                          }}
+                        >
+                          x quitar
+                        </span>
+                      )}
+                    </label>
+                    <input 
+                      type="text" 
+                      value={url}
+                      onChange={(e) => {
+                        setProductForm(p => {
+                          const newImages = [...p.detailImages];
+                          newImages[idx] = e.target.value;
+                          return { ...p, detailImages: newImages };
+                        });
+                      }}
+                      placeholder={`/src/images/pj set/foto-${idx+1}.jpg`}
+                    />
+                  </div>
+                ))}
+                
+                <button 
+                  type="button" 
+                  className="admin-action-btn-main"
+                  style={{ width: '100%', marginBottom: '15px', background: 'transparent', color: 'var(--color-primary)', border: '1px dashed var(--color-primary)', boxShadow: 'none' }}
+                  onClick={() => setProductForm(p => ({ ...p, detailImages: [...p.detailImages, ''] }))}
+                >
+                  + añadir otra foto de detalle
+                </button>
 
                 <div className="modal-divider-dotted"></div>
 
