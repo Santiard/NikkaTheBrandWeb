@@ -23,6 +23,15 @@ export const apiService = {
   // ===================================================================
 
   /**
+   * Obtiene las tarjetas del carrusel de inicio
+   */
+  async getCarouselCards() {
+    const response = await fetch(`${BASE_URL}/carousel`, { headers: getHeaders() });
+    if (!response.ok) throw new Error('Error al obtener el carrusel.');
+    return response.json();
+  },
+
+  /**
    * Obtiene todos los productos activos (filtrados por categoría si se proporciona)
    */
   async getProducts(category = null) {
@@ -96,6 +105,40 @@ export const apiService = {
   // ===================================================================
   // ENDPOINTS ADMINISTRATIVOS PROTEGIDOS (REQUIEREN CREDENCIALES ADMIN)
   // ===================================================================
+
+  async adminGetCarouselCards(auth) {
+    const response = await fetch(`${BASE_URL}/nikiadministradora/carousel`, { headers: getHeaders(auth) });
+    if (!response.ok) throw new Error('Error al obtener carrusel.');
+    return response.json();
+  },
+
+  async adminCreateCarouselCard(card, auth) {
+    const response = await fetch(`${BASE_URL}/nikiadministradora/carousel`, {
+      method: 'POST',
+      headers: getHeaders(auth),
+      body: JSON.stringify(card)
+    });
+    if (!response.ok) throw new Error('Error al crear tarjeta del carrusel.');
+    return response.json();
+  },
+
+  async adminUpdateCarouselCard(id, card, auth) {
+    const response = await fetch(`${BASE_URL}/nikiadministradora/carousel/${id}`, {
+      method: 'PUT',
+      headers: getHeaders(auth),
+      body: JSON.stringify(card)
+    });
+    if (!response.ok) throw new Error('Error al actualizar tarjeta del carrusel.');
+    return response.json();
+  },
+
+  async adminDeleteCarouselCard(id, auth) {
+    const response = await fetch(`${BASE_URL}/nikiadministradora/carousel/${id}`, {
+      method: 'DELETE',
+      headers: getHeaders(auth)
+    });
+    if (!response.ok) throw new Error('Error al eliminar tarjeta del carrusel.');
+  },
 
   /**
    * Obtiene todos los productos sin filtrar (activos e inactivos)

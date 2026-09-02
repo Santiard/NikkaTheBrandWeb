@@ -1,3 +1,4 @@
+com\nikkathebrand\backend\model\CarouselCard$CarouselCardBuilder.class
 com\nikkathebrand\backend\model\SizeInventory.class
 com\nikkathebrand\backend\repository\OrderRepository.class
 com\nikkathebrand\backend\controller\ProductController.class
@@ -18,6 +19,7 @@ com\nikkathebrand\backend\model\Collection.class
 com\nikkathebrand\backend\model\Order.class
 com\nikkathebrand\backend\repository\ProductRepository.class
 com\nikkathebrand\backend\model\OrderItem.class
+com\nikkathebrand\backend\controller\AdminCarouselCardController.class
 com\nikkathebrand\backend\dto\CartItemRequest.class
 com\nikkathebrand\backend\config\SecurityConfig.class
 com\nikkathebrand\backend\controller\OrderController.class
@@ -29,11 +31,14 @@ com\nikkathebrand\backend\controller\CategoryController.class
 com\nikkathebrand\backend\dto\OrderRequest$OrderRequestBuilder.class
 com\nikkathebrand\backend\dto\OrderRequest.class
 com\nikkathebrand\backend\BackendApplication.class
+com\nikkathebrand\backend\repository\CarouselCardRepository.class
 com\nikkathebrand\backend\model\OrderItem$OrderItemBuilder.class
 com\nikkathebrand\backend\dto\OrderResponse.class
 com\nikkathebrand\backend\controller\AdminCategoryController.class
+com\nikkathebrand\backend\model\CarouselCard.class
 com\nikkathebrand\backend\model\Customer.class
 com\nikkathebrand\backend\model\Customer$CustomerBuilder.class
+com\nikkathebrand\backend\controller\CarouselCardController.class
 com\nikkathebrand\backend\model\SizeInventory$SizeInventoryBuilder.class
 com\nikkathebrand\backend\controller\CollectionController.class
 com\nikkathebrand\backend\dto\OrderResponse$OrderResponseBuilder.class

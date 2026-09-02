@@ -77,6 +77,18 @@ export default function AdminDashboard({ onBackToStore, initialTab, onTabChange 
     selectedProducts: []
   });
 
+  // Estado del Carrusel
+  const [carouselCards, setCarouselCards] = useState([]);
+  const [isCarouselModalOpen, setIsCarouselModalOpen] = useState(false);
+  const [editingCarousel, setEditingCarousel] = useState(null);
+  const [carouselForm, setCarouselForm] = useState({
+    title: '',
+    imageUrl: '',
+    targetPage: 'catalog',
+    targetFilter: '',
+    displayOrder: 1
+  });
+
   // Cargar datos cuando el admin esté autenticado y cambie de pestaña
   useEffect(() => {
     if (auth) {
@@ -102,6 +114,9 @@ export default function AdminDashboard({ onBackToStore, initialTab, onTabChange 
         setPromotions(data);
         const prodData = await apiService.adminGetProducts(auth);
         setProducts(prodData);
+      } else if (activeTab === 'carousel') {
+        const carouselData = await apiService.adminGetCarouselCards(auth);
+        setCarouselCards(carouselData);
       } else if (activeTab === 'users') {
         const data = await apiService.adminGetCustomers(auth);
         setCustomers(data);
@@ -438,6 +453,35 @@ export default function AdminDashboard({ onBackToStore, initialTab, onTabChange 
     }
   };
 
+  const handleCarouselFormSubmit = async (e) => {
+    e.preventDefault();
+    setError(null);
+    try {
+      if (editingCarousel) {
+        await apiService.adminUpdateCarouselCard(editingCarousel.id, carouselForm, auth);
+      } else {
+        await apiService.adminCreateCarouselCard(carouselForm, auth);
+      }
+      setIsCarouselModalOpen(false);
+      fetchData();
+    } catch (err) {
+      console.error(err);
+      setError(err.message || 'Error al guardar la tarjeta del carrusel.');
+    }
+  };
+
+  const handleDeleteCarousel = async (id) => {
+    if (!window.confirm('¿Seguro que deseas eliminar esta tarjeta del carrusel?')) return;
+    setError(null);
+    try {
+      await apiService.adminDeleteCarouselCard(id, auth);
+      fetchData();
+    } catch (err) {
+      console.error(err);
+      setError(err.message || 'Error al eliminar la tarjeta.');
+    }
+  };
+
   return (
     <div className="admin-container">
       {/* VISTA 1: LOGIN ADMINISTRATIVO */}
@@ -508,6 +552,12 @@ export default function AdminDashboard({ onBackToStore, initialTab, onTabChange 
                 promociones
               </button>
               <button 
+                className={`admin-nav-item ${activeTab === 'carousel' ? 'active' : ''}`}
+                onClick={() => handleTabClick('carousel')}
+              >
+                carrusel de inicio
+              </button>
+              <button 
                 className={`admin-nav-item ${activeTab === 'users' ? 'active' : ''}`}
                 onClick={() => handleTabClick('users')}
               >
@@ -538,12 +588,22 @@ export default function AdminDashboard({ onBackToStore, initialTab, onTabChange 
             <header className="admin-main-header">
               <h1>{activeTab === 'products' ? 'gestión de catálogo' :
                    activeTab === 'promotions' ? 'campañas y promociones' :
+                   activeTab === 'carousel' ? 'carrusel de inicio' :
                    activeTab === 'users' ? 'usuarios y clientes' :
                    activeTab === 'analytics' ? 'centro de analíticas' :
                    'categorías & colecciones'}</h1>
               {activeTab === 'products' && (
                 <button className="admin-action-btn-main" onClick={handleNewProductClick}>
                   + agregar producto nuevo
+                </button>
+              )}
+              {activeTab === 'carousel' && (
+                <button className="admin-action-btn-main" onClick={() => {
+                  setEditingCarousel(null);
+                  setCarouselForm({ title: '', imageUrl: '', targetPage: 'catalog', targetFilter: '', displayOrder: carouselCards.length + 1 });
+                  setIsCarouselModalOpen(true);
+                }}>
+                  + agregar tarjeta
                 </button>
               )}
             </header>
@@ -705,6 +765,44 @@ export default function AdminDashboard({ onBackToStore, initialTab, onTabChange 
                       </tbody>
                     </table>
                   )}
+                </div>
+              )}
+
+              {/* TAB: CARRUSEL DE INICIO */}
+              {activeTab === 'carousel' && (
+                <div className="admin-list-container">
+                  <table className="admin-table">
+                    <thead>
+                      <tr>
+                        <th style={{ width: '80px' }}>orden</th>
+                        <th>imagen</th>
+                        <th>título</th>
+                        <th>redirige a</th>
+                        <th style={{ textAlign: 'right' }}>acciones</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {carouselCards.map(card => (
+                        <tr key={card.id}>
+                          <td className="admin-bold text-center">{card.displayOrder}</td>
+                          <td>
+                            <img src={card.imageUrl} alt={card.title} style={{ height: '50px', borderRadius: '4px', objectFit: 'cover' }} />
+                          </td>
+                          <td className="admin-bold">{card.title}</td>
+                          <td className="admin-italic">{card.targetPage} {card.targetFilter ? `(${card.targetFilter})` : ''}</td>
+                          <td style={{ textAlign: 'right' }}>
+                            <button className="admin-icon-btn edit" onClick={() => { setEditingCarousel(card); setCarouselForm(card); setIsCarouselModalOpen(true); }} title="Editar tarjeta">✎</button>
+                            <button className="admin-icon-btn delete" onClick={() => handleDeleteCarousel(card.id)} title="Eliminar tarjeta">✕</button>
+                          </td>
+                        </tr>
+                      ))}
+                      {carouselCards.length === 0 && (
+                        <tr>
+                          <td colSpan="5" className="admin-empty-row">no hay tarjetas en el carrusel.</td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
                 </div>
               )}
 
@@ -1237,6 +1335,77 @@ export default function AdminDashboard({ onBackToStore, initialTab, onTabChange 
               <footer className="admin-modal-footer">
                 <button type="button" className="modal-btn-cancel" onClick={() => setIsPromoModalOpen(false)}>cancelar</button>
                 <button type="submit" className="modal-btn-submit">{editingPromo ? 'guardar cambios' : 'crear campaña'}</button>
+              </footer>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL: CARRUSEL */}
+      {isCarouselModalOpen && (
+        <div className="admin-modal-overlay" onClick={() => setIsCarouselModalOpen(false)}>
+          <div className="admin-modal-content" onClick={e => e.stopPropagation()}>
+            <header className="admin-modal-header">
+              <h2>{editingCarousel ? 'editar tarjeta de carrusel' : 'nueva tarjeta de carrusel'}</h2>
+              <button className="close-btn" onClick={() => setIsCarouselModalOpen(false)}>✕</button>
+            </header>
+            <form onSubmit={handleCarouselFormSubmit}>
+              <div className="admin-modal-body">
+                <div className="admin-form-group">
+                  <label>título de la tarjeta</label>
+                  <input 
+                    type="text" 
+                    value={carouselForm.title}
+                    onChange={(e) => setCarouselForm(p => ({ ...p, title: e.target.value }))}
+                    placeholder="ej. new in" 
+                    required 
+                  />
+                </div>
+                <div className="admin-form-group">
+                  <label>url de la imagen</label>
+                  <input 
+                    type="text" 
+                    value={carouselForm.imageUrl}
+                    onChange={(e) => setCarouselForm(p => ({ ...p, imageUrl: e.target.value }))}
+                    placeholder="/src/images/ejemplo.webp" 
+                    required 
+                  />
+                </div>
+                <div className="admin-form-row">
+                  <div className="admin-form-group half">
+                    <label>página de destino</label>
+                    <select 
+                      value={carouselForm.targetPage}
+                      onChange={(e) => setCarouselForm(p => ({ ...p, targetPage: e.target.value }))}
+                    >
+                      <option value="catalog">Catálogo</option>
+                      <option value="medidas">Guía de Tallas</option>
+                      <option value="contact">Contacto</option>
+                    </select>
+                  </div>
+                  <div className="admin-form-group half">
+                    <label>filtro (opcional)</label>
+                    <input 
+                      type="text" 
+                      value={carouselForm.targetFilter}
+                      onChange={(e) => setCarouselForm(p => ({ ...p, targetFilter: e.target.value }))}
+                      placeholder="ej. new, col:daydream, bags" 
+                    />
+                  </div>
+                </div>
+                <div className="admin-form-group">
+                  <label>orden de visualización (número)</label>
+                  <input 
+                    type="number" 
+                    value={carouselForm.displayOrder}
+                    onChange={(e) => setCarouselForm(p => ({ ...p, displayOrder: parseInt(e.target.value) || 1 }))}
+                    required 
+                  />
+                </div>
+              </div>
+              <footer className="admin-modal-footer">
+                <button type="button" className="modal-btn-cancel" onClick={() => setIsCarouselModalOpen(false)}>cancelar</button>
+                <button type="submit" className="modal-btn-submit">{editingCarousel ? 'guardar cambios' : 'crear tarjeta'}</button>
               </footer>
             </form>
           </div>

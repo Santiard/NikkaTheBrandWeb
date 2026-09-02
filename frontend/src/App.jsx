@@ -17,24 +17,7 @@ import Medidas from './components/Medidas'
 import SearchOverlay from './components/SearchOverlay'
 import { apiService } from './services/api'
 
-// Mockup Images
-import newInImg from './images/new in.webp'
-import daydreamImg from './images/daydream.webp'
-import theFarmhouseImg from './images/THE FARMHOUSE.webp'
-import duvetImg from './images/puffer bag/duvet.JPG'
-import toteBagsImg from './images/tote bags y mini bags.webp'
-import sizeGuideImg from './images/sizes.webp'
 import lambsVideo from './images/lambs_video.mp4'
-
-// Data for the 6 cards matching the mockup
-const cardsData = [
-  { id: 'new-in', className: 'card-new-in', img: newInImg, title: 'new in' },
-  { id: 'daydream', className: 'card-daydream', img: daydreamImg, title: 'daydream' },
-  { id: 'the-farmhouse', className: 'card-the-farmhouse', img: theFarmhouseImg, title: 'THE FARMHOUSE' },
-  { id: 'duvet', className: 'card-duvet', img: duvetImg, title: 'duvet nikka x nc' },
-  { id: 'tote-bags', className: 'card-tote-bags', img: toteBagsImg, title: 'tote bags y mini bags' },
-  { id: 'size-guide', className: 'card-size-guide', img: sizeGuideImg, title: 'sizes' },
-];
 
 function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -44,6 +27,9 @@ function App() {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedProductId, setSelectedProductId] = useState('bonnie-set');
   const [adminTab, setAdminTab] = useState('products');
+  
+  // Carrusel Dinámico
+  const [carouselCards, setCarouselCards] = useState([]);
 
   // Estado del Carrito Global
   const [cartItems, setCartItems] = useState([]);
@@ -54,7 +40,7 @@ function App() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [allProducts, setAllProducts] = useState([]);
 
-  // Consultar si existen promociones activas al cambiar de página y almacenar productos
+  // Consultar si existen promociones activas y cargar carrusel
   useEffect(() => {
     if (activePage !== 'admin') {
       apiService.getProducts()
@@ -64,6 +50,10 @@ function App() {
           setHasActivePromotions(hasDiscount);
         })
         .catch(err => console.error('Error checking active promotions:', err));
+
+      apiService.getCarouselCards()
+        .then(data => setCarouselCards(data))
+        .catch(err => console.error('Error loading carousel:', err));
     }
   }, [activePage]);
 
@@ -183,23 +173,10 @@ function App() {
   };
 
   // Card click handler inside carousel
-  const handleCardClick = (e, cardId) => {
+  const handleCardClick = (e, card) => {
     e.preventDefault();
     if (isDragging) return; // Prevent navigation if user was just dragging
-
-    if (cardId === 'new-in') {
-      handleNavigate('catalog', 'new');
-    } else if (cardId === 'daydream') {
-      handleNavigate('catalog', 'col:daydream');
-    } else if (cardId === 'duvet') {
-      handleNavigate('catalog', 'col:duvet');
-    } else if (cardId === 'tote-bags') {
-      handleNavigate('catalog', 'bags');
-    } else if (cardId === 'the-farmhouse') {
-      handleNavigate('catalog', 'col:the farmhouse');
-    } else if (cardId === 'size-guide') {
-      handleNavigate('medidas');
-    }
+    handleNavigate(card.targetPage, card.targetFilter);
   };
 
   // ===================================================================
@@ -308,17 +285,17 @@ function App() {
           >
             <div className="home-carousel-track">
               {/* Set Único de Tarjetas */}
-              {cardsData.map((card, idx) => (
+              {carouselCards.map((card, idx) => (
                 <a 
-                  key={`set-${card.id}-${idx}`} 
+                  key={`card-${card.id}-${idx}`} 
                   href="#" 
-                  className={`grid-card ${card.className}`}
-                  onClick={(e) => handleCardClick(e, card.id)}
+                  className="grid-card"
+                  onClick={(e) => handleCardClick(e, card)}
                   onDragStart={(e) => e.preventDefault()}
                 >
                   <div className="image-wrapper">
                     <img 
-                      src={card.img} 
+                      src={card.imageUrl} 
                       alt={card.title} 
                       draggable="false" 
                       onDragStart={(e) => e.preventDefault()} 
