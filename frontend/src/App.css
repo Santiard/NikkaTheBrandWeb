@@ -40,23 +40,26 @@
   display: flex;
   flex-direction: row;
   gap: 2%; /* Gap proporcional a la pantalla */
-  width: 100%; /* Toma todo el ancho disponible del contenedor */
-  justify-content: center; /* Centra todo el bloque */
+  width: max-content; /* Crece con las tarjetas */
+  min-width: 100%; /* Si son poquitas, ocupa toda la pantalla para centrar */
+  justify-content: center; /* Centra el bloque si son pocas */
   align-items: flex-start; /* Alinea todas las cabeceras perfectamente en una línea horizontal */
   padding-bottom: 1rem;
   margin: 0 auto;
 }
 
-/* Grid Card Styles inside Carousel – Ancho compacto ideal */
+/* Grid Card Styles inside Carousel – Escalabilidad coherente */
 .grid-card {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   text-decoration: none;
   color: inherit;
-  /* 6 tarjetas y 5 espacios del 2% (10%). Dividimos el 90% restante en 6 */
-  width: calc(90% / 6); 
-  flex-shrink: 1; /* Permite que se encojan en celulares */
+  /* Ancho base proporcional, pero con límites para no aplastarse ni volverse gigantes */
+  width: 14vw; 
+  min-width: 130px;
+  max-width: 220px;
+  flex-shrink: 0; /* Evita que se aplasten si hay más de 6 */
   user-select: none;
   -webkit-user-drag: none;
 }

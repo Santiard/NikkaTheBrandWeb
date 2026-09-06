@@ -10,9 +10,12 @@ import guidePjSets from '../images/medidas/pj set talla.webp';
 import guidePjSets2 from '../images/medidas/pj set talla 2.webp';
 import guideBata from '../images/medidas/bata.webp';
 import guideBags from '../images/medidas/medidas puffer.webp';
+import guideCarryAllBag from '../images/medidas/carryallbag.webp';
+import guideEverydayBag from '../images/medidas/everydaybag.webp';
 import guideCoinPurses from '../images/medidas/guiacp.webp';
 import guideMb from '../images/medidas/mb.webp';
 import guideMiniBags from '../images/medidas/guiami.webp';
+import guidePetiteBag from '../images/medidas/petitebag.webp';
 
 import './Medidas.css';
 
@@ -30,7 +33,7 @@ export default function Medidas() {
     },
     'bags': {
       title: 'bags & totes',
-      images: [guideBags],
+      images: [guideBags, guideCarryAllBag, guideEverydayBag],
     },
     'coin-purses': {
       title: 'coin purses',
@@ -38,7 +41,7 @@ export default function Medidas() {
     },
     'mini-bags': {
       title: 'mini bags',
-      images: [guideMiniBags],
+      images: [guideMiniBags, guidePetiteBag],
     }
   };
 

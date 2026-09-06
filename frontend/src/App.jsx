@@ -17,7 +17,23 @@ import Medidas from './components/Medidas'
 import SearchOverlay from './components/SearchOverlay'
 import { apiService } from './services/api'
 
+// Mockup Images (Fallback por defecto)
+import newInImg from './images/new in.webp'
+import daydreamImg from './images/daydream.webp'
+import theFarmhouseImg from './images/THE FARMHOUSE.webp'
+import duvetImg from './images/puffer bag/duvet.JPG'
+import toteBagsImg from './images/tote bags y mini bags.webp'
+import sizeGuideImg from './images/sizes.webp'
 import lambsVideo from './images/lambs_video.mp4'
+
+const defaultCardsData = [
+  { id: 'new-in', imageUrl: newInImg, title: 'new in', targetPage: 'catalog', targetFilter: 'new' },
+  { id: 'daydream', imageUrl: daydreamImg, title: 'daydream', targetPage: 'catalog', targetFilter: 'col:daydream' },
+  { id: 'the-farmhouse', imageUrl: theFarmhouseImg, title: 'THE FARMHOUSE', targetPage: 'catalog', targetFilter: 'col:the farmhouse' },
+  { id: 'duvet', imageUrl: duvetImg, title: 'duvet nikka x nc', targetPage: 'catalog', targetFilter: 'col:duvet' },
+  { id: 'tote-bags', imageUrl: toteBagsImg, title: 'tote bags y mini bags', targetPage: 'catalog', targetFilter: 'bags' },
+  { id: 'size-guide', imageUrl: sizeGuideImg, title: 'sizes', targetPage: 'medidas', targetFilter: '' },
+];
 
 function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -28,8 +44,8 @@ function App() {
   const [selectedProductId, setSelectedProductId] = useState('bonnie-set');
   const [adminTab, setAdminTab] = useState('products');
   
-  // Carrusel Dinámico
-  const [carouselCards, setCarouselCards] = useState([]);
+  // Carrusel Dinámico (Inicializado con el fallback por defecto)
+  const [carouselCards, setCarouselCards] = useState(defaultCardsData);
 
   // Estado del Carrito Global
   const [cartItems, setCartItems] = useState([]);
@@ -52,7 +68,13 @@ function App() {
         .catch(err => console.error('Error checking active promotions:', err));
 
       apiService.getCarouselCards()
-        .then(data => setCarouselCards(data))
+        .then(data => {
+          if (data && data.length > 0) {
+            setCarouselCards(data);
+          } else {
+            setCarouselCards(defaultCardsData); // Fallback si está vacío
+          }
+        })
         .catch(err => console.error('Error loading carousel:', err));
     }
   }, [activePage]);
