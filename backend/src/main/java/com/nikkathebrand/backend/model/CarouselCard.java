@@ -22,10 +22,8 @@ public class CarouselCard {
     @Column(nullable = false, length = 1000)
     private String imageUrl;
 
-    @Column(nullable = false)
-    private String targetPage;
-
-    private String targetFilter;
+    @Column(nullable = false, length = 1000)
+    private String targetUrl;
 
     @Column(nullable = false)
     private Integer displayOrder;

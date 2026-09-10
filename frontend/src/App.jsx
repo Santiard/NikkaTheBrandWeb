@@ -21,18 +21,18 @@ import { apiService } from './services/api'
 import newInImg from './images/new in.webp'
 import daydreamImg from './images/daydream.webp'
 import theFarmhouseImg from './images/THE FARMHOUSE.webp'
-import duvetImg from './images/puffer bag/duvet.JPG'
+import heirloomImg from './images/MINIBAGSS_1.webp'
 import toteBagsImg from './images/tote bags y mini bags.webp'
 import sizeGuideImg from './images/sizes.webp'
 import lambsVideo from './images/lambs_video.mp4'
 
 const defaultCardsData = [
-  { id: 'new-in', imageUrl: newInImg, title: 'new in', targetPage: 'catalog', targetFilter: 'new' },
-  { id: 'daydream', imageUrl: daydreamImg, title: 'daydream', targetPage: 'catalog', targetFilter: 'col:daydream' },
-  { id: 'the-farmhouse', imageUrl: theFarmhouseImg, title: 'THE FARMHOUSE', targetPage: 'catalog', targetFilter: 'col:the farmhouse' },
-  { id: 'duvet', imageUrl: duvetImg, title: 'duvet nikka x nc', targetPage: 'catalog', targetFilter: 'col:duvet' },
-  { id: 'tote-bags', imageUrl: toteBagsImg, title: 'tote bags y mini bags', targetPage: 'catalog', targetFilter: 'bags' },
-  { id: 'size-guide', imageUrl: sizeGuideImg, title: 'sizes', targetPage: 'medidas', targetFilter: '' },
+  { id: 'new-in', imageUrl: newInImg, title: 'new in', targetUrl: '/catalog?category=new' },
+  { id: 'daydream', imageUrl: daydreamImg, title: 'daydream', targetUrl: '/catalog?category=col:daydream' },
+  { id: 'the-farmhouse', imageUrl: theFarmhouseImg, title: 'THE FARMHOUSE', targetUrl: '/catalog?category=col:the farmhouse' },
+  { id: 'heirloom', imageUrl: heirloomImg, title: 'the heirloom', targetUrl: '/catalog?category=col:the heirloom' },
+  { id: 'tote-bags', imageUrl: toteBagsImg, title: 'tote bags y mini bags', targetUrl: '/catalog?category=bags' },
+  { id: 'size-guide', imageUrl: sizeGuideImg, title: 'sizes', targetUrl: '/medidas' },
 ];
 
 function App() {
@@ -198,7 +198,14 @@ function App() {
   const handleCardClick = (e, card) => {
     e.preventDefault();
     if (isDragging) return; // Prevent navigation if user was just dragging
-    handleNavigate(card.targetPage, card.targetFilter);
+    
+    if (card.targetUrl) {
+      if (card.targetUrl.startsWith('http://') || card.targetUrl.startsWith('https://')) {
+        window.open(card.targetUrl, '_blank');
+      } else {
+        window.location.href = card.targetUrl;
+      }
+    }
   };
 
   // ===================================================================
@@ -310,7 +317,7 @@ function App() {
               {carouselCards.map((card, idx) => (
                 <a 
                   key={`card-${card.id}-${idx}`} 
-                  href="#" 
+                  href={card.targetUrl || '#'} 
                   className="grid-card"
                   onClick={(e) => handleCardClick(e, card)}
                   onDragStart={(e) => e.preventDefault()}

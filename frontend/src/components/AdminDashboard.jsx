@@ -84,8 +84,7 @@ export default function AdminDashboard({ onBackToStore, initialTab, onTabChange 
   const [carouselForm, setCarouselForm] = useState({
     title: '',
     imageUrl: '',
-    targetPage: 'catalog',
-    targetFilter: '',
+    targetUrl: '',
     displayOrder: 1
   });
 
@@ -600,7 +599,7 @@ export default function AdminDashboard({ onBackToStore, initialTab, onTabChange 
               {activeTab === 'carousel' && (
                 <button className="admin-action-btn-main" onClick={() => {
                   setEditingCarousel(null);
-                  setCarouselForm({ title: '', imageUrl: '', targetPage: 'catalog', targetFilter: '', displayOrder: carouselCards.length + 1 });
+                  setCarouselForm({ title: '', imageUrl: '', targetUrl: '', displayOrder: carouselCards.length + 1 });
                   setIsCarouselModalOpen(true);
                 }}>
                   + agregar tarjeta
@@ -789,7 +788,7 @@ export default function AdminDashboard({ onBackToStore, initialTab, onTabChange 
                             <img src={card.imageUrl} alt={card.title} style={{ height: '50px', borderRadius: '4px', objectFit: 'cover' }} />
                           </td>
                           <td className="admin-bold">{card.title}</td>
-                          <td className="admin-italic">{card.targetPage} {card.targetFilter ? `(${card.targetFilter})` : ''}</td>
+                          <td className="admin-italic" style={{ wordBreak: 'break-all' }}>{card.targetUrl}</td>
                           <td style={{ textAlign: 'right' }}>
                             <button className="admin-icon-btn edit" onClick={() => { setEditingCarousel(card); setCarouselForm(card); setIsCarouselModalOpen(true); }} title="Editar tarjeta">✎</button>
                             <button className="admin-icon-btn delete" onClick={() => handleDeleteCarousel(card.id)} title="Eliminar tarjeta">✕</button>
@@ -1371,27 +1370,15 @@ export default function AdminDashboard({ onBackToStore, initialTab, onTabChange 
                     required 
                   />
                 </div>
-                <div className="admin-form-row">
-                  <div className="admin-form-group half">
-                    <label>página de destino</label>
-                    <select 
-                      value={carouselForm.targetPage}
-                      onChange={(e) => setCarouselForm(p => ({ ...p, targetPage: e.target.value }))}
-                    >
-                      <option value="catalog">Catálogo</option>
-                      <option value="medidas">Guía de Tallas</option>
-                      <option value="contact">Contacto</option>
-                    </select>
-                  </div>
-                  <div className="admin-form-group half">
-                    <label>filtro (opcional)</label>
-                    <input 
-                      type="text" 
-                      value={carouselForm.targetFilter}
-                      onChange={(e) => setCarouselForm(p => ({ ...p, targetFilter: e.target.value }))}
-                      placeholder="ej. new, col:daydream, bags" 
-                    />
-                  </div>
+                <div className="admin-form-group">
+                  <label>url de destino</label>
+                  <input 
+                    type="text" 
+                    value={carouselForm.targetUrl}
+                    onChange={(e) => setCarouselForm(p => ({ ...p, targetUrl: e.target.value }))}
+                    placeholder="ej. /catalog?category=new o https://youtube.com/..." 
+                    required 
+                  />
                 </div>
                 <div className="admin-form-group">
                   <label>orden de visualización (número)</label>
