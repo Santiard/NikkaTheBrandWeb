@@ -25,6 +25,7 @@ public class AdminCarouselCardController {
 
     @PostMapping
     public ResponseEntity<CarouselCard> createCarouselCard(@RequestBody CarouselCard carouselCard) {
+        reorderCards(carouselCard, true);
         CarouselCard saved = carouselCardRepository.save(carouselCard);
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
@@ -42,6 +43,7 @@ public class AdminCarouselCardController {
         existing.setTargetUrl(details.getTargetUrl());
         existing.setDisplayOrder(details.getDisplayOrder());
 
+        reorderCards(existing, false);
         CarouselCard updated = carouselCardRepository.save(existing);
         return ResponseEntity.ok(updated);
     }
@@ -53,5 +55,34 @@ public class AdminCarouselCardController {
         }
         carouselCardRepository.deleteById(id);
         return ResponseEntity.noContent().build();
+    }
+
+    private void reorderCards(CarouselCard targetCard, boolean isNew) {
+        List<CarouselCard> allCards = carouselCardRepository.findAllByOrderByDisplayOrderAsc();
+        if (!isNew) {
+            allCards.removeIf(c -> c.getId().equals(targetCard.getId()));
+        }
+
+        int insertIndex = 0;
+        for (int i = 0; i < allCards.size(); i++) {
+            if (allCards.get(i).getDisplayOrder() >= targetCard.getDisplayOrder()) {
+                insertIndex = i;
+                break;
+            }
+            insertIndex = i + 1;
+        }
+
+        allCards.add(insertIndex, targetCard);
+
+        for (int i = 0; i < allCards.size(); i++) {
+            CarouselCard c = allCards.get(i);
+            int expectedOrder = i + 1;
+            if (c.getDisplayOrder() == null || c.getDisplayOrder() != expectedOrder) {
+                c.setDisplayOrder(expectedOrder);
+                if (c.getId() != null && !c.getId().equals(targetCard.getId())) {
+                    carouselCardRepository.save(c);
+                }
+            }
+        }
     }
 }

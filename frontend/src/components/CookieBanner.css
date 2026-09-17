@@ -1,0 +1,80 @@
+.cookie-banner-overlay {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.95);
+  border-top: 1px solid rgba(56, 91, 147, 0.15);
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 15px 24px;
+  backdrop-filter: blur(5px);
+  transform: translateY(100%);
+  animation: slideUpCookie 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+  animation-delay: 1s;
+}
+
+.cookie-banner-content {
+  max-width: 1200px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+.cookie-text {
+  font-family: var(--font-serif);
+  font-size: 0.85rem;
+  color: var(--color-text-gray);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.cookie-link {
+  color: var(--color-primary);
+  text-decoration: underline;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.cookie-accept-btn {
+  background-color: var(--color-primary);
+  color: #fff;
+  border: none;
+  padding: 8px 24px;
+  font-family: var(--font-heading), sans-serif;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+  white-space: nowrap;
+}
+
+.cookie-accept-btn:hover {
+  opacity: 0.8;
+}
+
+@keyframes slideUpCookie {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+@media (max-width: 768px) {
+  .cookie-banner-content {
+    flex-direction: column;
+    text-align: center;
+    gap: 15px;
+  }
+  .cookie-text {
+    font-size: 0.8rem;
+  }
+  .cookie-accept-btn {
+    width: 100%;
+    padding: 12px;
+  }
+}

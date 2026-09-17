@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { apiService } from '../services/api';
 import './Cart.css';
 
-export default function Cart({ isOpen, onClose, cartItems, onUpdateQuantity, onRemoveItem, onClearCart }) {
+export default function Cart({ isOpen, onClose, cartItems, onUpdateQuantity, onRemoveItem, onClearCart, onNavigate }) {
   const [shippingData, setShippingData] = useState({
     customerName: '',
     customerPhone: '',
@@ -12,7 +12,8 @@ export default function Cart({ isOpen, onClose, cartItems, onUpdateQuantity, onR
   });
   
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState('');
+  const [acceptedPrivacy, setAcceptedPrivacy] = useState(false);
 
   if (!isOpen) return null;
 
@@ -214,10 +215,24 @@ export default function Cart({ isOpen, onClose, cartItems, onUpdateQuantity, onR
                     <span className="total-val">${Math.round(calculateSubtotal()).toLocaleString('es-CO')}</span>
                   </div>
 
+                  <div className="privacy-checkbox-group" style={{ display: 'flex', alignItems: 'center', gap: '10px', marginTop: '20px', marginBottom: '20px', fontSize: '0.8rem', fontFamily: "'Mont-ExtraLightDEMO', sans-serif" }}>
+                    <input 
+                      type="checkbox" 
+                      id="privacyConsent" 
+                      checked={acceptedPrivacy}
+                      onChange={(e) => setAcceptedPrivacy(e.target.checked)}
+                      required 
+                      style={{ cursor: 'pointer' }}
+                    />
+                    <label htmlFor="privacyConsent" style={{ cursor: 'pointer', lineHeight: '1.4' }}>
+                      he leído y acepto la <a href="#" onClick={(e) => { e.preventDefault(); onClose(); if(onNavigate) onNavigate('privacidad'); }} style={{ color: '#2e3b84', textDecoration: 'underline', fontWeight: 'bold' }}>política de privacidad</a> para el tratamiento de mis datos de envío.
+                    </label>
+                  </div>
+
                   <button 
                     type="submit" 
                     className="submit-checkout-btn" 
-                    disabled={loading || cartItems.length === 0}
+                    disabled={loading || cartItems.length === 0 || !acceptedPrivacy}
                   >
                     {loading ? 'procesando compra...' : 'finalizar compra (por whatsapp)'}
                   </button>

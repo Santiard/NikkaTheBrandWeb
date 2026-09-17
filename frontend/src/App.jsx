@@ -14,6 +14,8 @@ import Contact from './components/Contact'
 import Faqs from './components/Faqs'
 import GiftCard from './components/GiftCard'
 import Medidas from './components/Medidas'
+import Privacidad from './components/Privacidad'
+import CookieBanner from './components/CookieBanner'
 import SearchOverlay from './components/SearchOverlay'
 import { apiService } from './services/api'
 
@@ -121,6 +123,8 @@ function App() {
         setActivePage('giftcard');
       } else if (path === '/medidas') {
         setActivePage('medidas');
+      } else if (path === '/privacidad') {
+        setActivePage('privacidad');
       } else {
         // Por defecto regresa al home
         setActivePage('home');
@@ -253,10 +257,12 @@ function App() {
           const subMap = {
             'products': 'catalogo',
             'promotions': 'promociones',
+            'carousel': 'carrusel',
             'users': 'usuarios',
-            'analytics': 'analiticas'
+            'analytics': 'analiticas',
+            'categories': 'categorias'
           };
-          window.history.pushState(null, '', `/nikiadministradora/${subMap[tab]}`);
+          window.history.pushState(null, '', `/nikiadministradora/${subMap[tab] || tab}`);
         }}
         onBackToStore={() => handleNavigate('home')} 
       />
@@ -290,6 +296,7 @@ function App() {
         onUpdateQuantity={handleUpdateCartQuantity}
         onRemoveItem={handleRemoveCartItem}
         onClearCart={handleClearCart}
+        onNavigate={handleNavigate}
       />
 
       {/* Buscador de Productos */}
@@ -396,8 +403,15 @@ function App() {
         <Medidas />
       )}
 
+      {activePage === 'privacidad' && (
+        <Privacidad onNavigate={handleNavigate} />
+      )}
+
       {/* Footer Links */}
       <Footer onNavigate={handleNavigate} />
+
+      {/* Cookie Banner Global */}
+      <CookieBanner onNavigate={handleNavigate} />
     </>
   )
 }

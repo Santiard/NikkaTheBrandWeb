@@ -18,6 +18,7 @@ export default function Footer({ onNavigate }) {
         <a href="#" className="footer-link" onClick={(e) => handleLinkClick(e, 'history')}>nuestra historia</a>
         <a href="#" className="footer-link" onClick={(e) => { e.preventDefault(); window.open('https://www.instagram.com/nikkathebrand?igsh=MWdkOGdydmJqcWI3bg%3D%3D', '_blank'); }}>instagram</a>
         <a href="#" className="footer-link" onClick={(e) => { e.preventDefault(); window.open('https://www.tiktok.com/@nikkathebrand?_r=1&_t=ZS-96iM6cjOBjl', '_blank'); }}>tiktok</a>
+        <a href="#" className="footer-link" onClick={(e) => handleLinkClick(e, 'privacidad')}>política de privacidad</a>
         <span className="footer-brand">nikkathebrand 2026</span>
       </div>
     </footer>
