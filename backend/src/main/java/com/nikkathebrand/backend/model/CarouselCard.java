@@ -27,4 +27,8 @@ public class CarouselCard {
 
     @Column(nullable = false)
     private Integer displayOrder;
+
+    @Column(nullable = false)
+    @Builder.Default
+    private Boolean isActive = true;
 }

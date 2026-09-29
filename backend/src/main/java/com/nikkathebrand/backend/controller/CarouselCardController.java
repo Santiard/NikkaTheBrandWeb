@@ -18,6 +18,6 @@ public class CarouselCardController {
 
     @GetMapping
     public ResponseEntity<List<CarouselCard>> getCarouselCards() {
-        return ResponseEntity.ok(carouselCardRepository.findAllByOrderByDisplayOrderAsc());
+        return ResponseEntity.ok(carouselCardRepository.findByIsActiveTrueOrderByDisplayOrderAsc());
     }
 }

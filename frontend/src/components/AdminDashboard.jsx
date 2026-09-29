@@ -481,6 +481,16 @@ export default function AdminDashboard({ onBackToStore, initialTab, onTabChange 
     }
   };
 
+  const handleToggleCarouselActive = async (card) => {
+    try {
+      await apiService.adminUpdateCarouselCard(card.id, { ...card, isActive: !card.isActive }, auth);
+      fetchData();
+    } catch (err) {
+      console.error(err);
+      alert('Error al cambiar el estado de la tarjeta.');
+    }
+  };
+
   return (
     <div className="admin-container">
       {/* VISTA 1: LOGIN ADMINISTRATIVO */}
@@ -599,7 +609,7 @@ export default function AdminDashboard({ onBackToStore, initialTab, onTabChange 
               {activeTab === 'carousel' && (
                 <button className="admin-action-btn-main" onClick={() => {
                   setEditingCarousel(null);
-                  setCarouselForm({ title: '', imageUrl: '', targetUrl: '', displayOrder: carouselCards.length + 1 });
+                  setCarouselForm({ title: '', imageUrl: '', targetUrl: '', displayOrder: carouselCards.length + 1, isActive: true });
                   setIsCarouselModalOpen(true);
                 }}>
                   + agregar tarjeta
@@ -777,6 +787,7 @@ export default function AdminDashboard({ onBackToStore, initialTab, onTabChange 
                         <th>imagen</th>
                         <th>título</th>
                         <th>redirige a</th>
+                        <th>estado</th>
                         <th style={{ textAlign: 'right' }}>acciones</th>
                       </tr>
                     </thead>
@@ -789,6 +800,16 @@ export default function AdminDashboard({ onBackToStore, initialTab, onTabChange 
                           </td>
                           <td className="admin-bold">{card.title}</td>
                           <td className="admin-italic" style={{ wordBreak: 'break-all' }}>{card.targetUrl}</td>
+                          <td>
+                            <label className="admin-switch">
+                              <input 
+                                type="checkbox" 
+                                checked={card.isActive} 
+                                onChange={() => handleToggleCarouselActive(card)}
+                              />
+                              <span className="admin-slider"></span>
+                            </label>
+                          </td>
                           <td style={{ textAlign: 'right' }}>
                             <button className="admin-icon-btn edit" onClick={() => { setEditingCarousel(card); setCarouselForm(card); setIsCarouselModalOpen(true); }} title="Editar tarjeta">✎</button>
                             <button className="admin-icon-btn delete" onClick={() => handleDeleteCarousel(card.id)} title="Eliminar tarjeta">✕</button>
@@ -1388,6 +1409,16 @@ export default function AdminDashboard({ onBackToStore, initialTab, onTabChange 
                     onChange={(e) => setCarouselForm(p => ({ ...p, displayOrder: parseInt(e.target.value) || 1 }))}
                     required 
                   />
+                </div>
+                <div className="admin-form-group checkbox-group" style={{ marginTop: '10px' }}>
+                  <label className="checkbox-label-retro">
+                    <input 
+                      type="checkbox" 
+                      checked={carouselForm.isActive}
+                      onChange={(e) => setCarouselForm(p => ({ ...p, isActive: e.target.checked }))}
+                    />
+                    activar en la tienda
+                  </label>
                 </div>
               </div>
               <footer className="admin-modal-footer">

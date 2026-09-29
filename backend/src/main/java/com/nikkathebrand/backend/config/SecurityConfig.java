@@ -57,6 +57,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/api/products", "/api/products/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/collections", "/api/collections/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/categories", "/api/categories/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/carousel").permitAll()
                 .requestMatchers("/api/orders/checkout").permitAll()
                 
                 // Acceso libre a la consola de H2 para desarrollo

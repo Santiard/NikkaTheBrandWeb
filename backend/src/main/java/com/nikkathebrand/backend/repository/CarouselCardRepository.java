@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface CarouselCardRepository extends JpaRepository<CarouselCard, Long> {
     List<CarouselCard> findAllByOrderByDisplayOrderAsc();
+    List<CarouselCard> findByIsActiveTrueOrderByDisplayOrderAsc();
 }

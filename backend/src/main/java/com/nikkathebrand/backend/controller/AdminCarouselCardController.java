@@ -42,6 +42,9 @@ public class AdminCarouselCardController {
         existing.setImageUrl(details.getImageUrl());
         existing.setTargetUrl(details.getTargetUrl());
         existing.setDisplayOrder(details.getDisplayOrder());
+        if (details.getIsActive() != null) {
+            existing.setIsActive(details.getIsActive());
+        }
 
         reorderCards(existing, false);
         CarouselCard updated = carouselCardRepository.save(existing);
