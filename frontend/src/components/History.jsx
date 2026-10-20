@@ -42,7 +42,7 @@ export default function History({ onBackToCatalog }) {
             <h2 className="history-col-title">produccion</h2>
             <div className="history-text-content">
               <p>
-                Todas nuestras piezas son producidas en Colombia. Nos enfocamos en crear productos con atención al detalle, priorizando la calidad y el acabado de cada pieza.
+                Nos enfocamos en crear productos con atención al detalle, priorizando la calidad y el acabado de cada pieza.
               </p>
               <p>
                 Trabajamos en cantidades limitadas, manteniendo la esencia exclusiva de cada colección. Una vez una colección se agota, normalmente no vuelve a producirse.

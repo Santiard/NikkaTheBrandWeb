@@ -29,7 +29,7 @@ export default function Faqs({ onBackToCatalog }) {
           <div className="faq-item">
             <h3 className="faq-question">Costos de envío</h3>
             <p className="faq-answer">
-              El valor del envío a ciudades principales es de $18.000 COP.
+              El valor del envío a ciudades principales es de $18.500 COP.
             </p>
           </div>
 
