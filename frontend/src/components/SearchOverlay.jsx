@@ -27,16 +27,17 @@ export default function SearchOverlay({ isOpen, onClose, products, onNavigate })
 
     const searchTerm = query.toLowerCase().trim();
     const filtered = products.filter(product => {
-      // Buscar en nombre, descripción y categoría
+      // Buscar en nombre, descripción, categoría y nombre de colección
       const inName = product.name?.toLowerCase().includes(searchTerm);
       const inDesc = product.description?.toLowerCase().includes(searchTerm);
       const inCat = product.category?.toLowerCase().includes(searchTerm);
+      const inCol = product.collection?.name?.toLowerCase().includes(searchTerm);
       
-      // Filtrado por colección o etiquetas (ej: new in, lanzamiento)
+      // Filtrado por etiquetas de oferta / lanzamiento
       const isNew = searchTerm.includes('new') || searchTerm.includes('nuevo') || searchTerm.includes('lanzamiento');
-      const inCollection = isNew && product.discountPercentage > 0; // Ejemplo lógico, o usar un flag real
+      const inTag = isNew && product.discountPercentage > 0;
 
-      return inName || inDesc || inCat || inCollection;
+      return inName || inDesc || inCat || inCol || inTag;
     });
 
     setResults(filtered);
